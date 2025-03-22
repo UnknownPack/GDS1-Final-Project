@@ -17,7 +17,8 @@ public class SpikeCobntroiller : MonoBehaviour
     void Start()
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
-        Debug.Log(lineRenderer);
+        UpdateVerticies();
+        
     }
 
     // Update is called once per frame
@@ -29,7 +30,6 @@ public class SpikeCobntroiller : MonoBehaviour
     public void UpdateVerticies() {
         sliderValue = slider.value;
         float finalSpan = span * sliderValue;
-        float finalHeight = height * sliderValue;
         int finalVerticiesAmount = (int)(sliderValue * verticiesAmount) + 1;
         Debug.Log(finalVerticiesAmount);
         if (finalVerticiesAmount <= 2) {
@@ -43,14 +43,16 @@ public class SpikeCobntroiller : MonoBehaviour
             verticies = new Vector3[finalVerticiesAmount];
             for (int i = 1; i < finalVerticiesAmount; i += 2) {
                 x = (float)(Math.PI / (2 * finalSpan)) + (float)(2 * Math.PI * ((i - 1)/2)) / finalSpan;
-                verticies[i] = new Vector3(x + gameObject.transform.position.x, 1 * finalHeight + gameObject.transform.position.y, 0);
+                verticies[i] = new Vector3(x + gameObject.transform.position.x, 1 * height + gameObject.transform.position.y, 0);
             }
             for (int i = 0; i < finalVerticiesAmount; i += 2) {
                 x = (float)( - Math.PI / (2 * finalSpan)) + (float)(2 * Math.PI * (i/2)) / finalSpan;
-                verticies[i] = new Vector3(x + gameObject.transform.position.x, -1 * finalHeight + gameObject.transform.position.y, 0);
+                verticies[i] = new Vector3(x + gameObject.transform.position.x, -1 * height + gameObject.transform.position.y, 0);
             }
             lineRenderer.positionCount = finalVerticiesAmount;
             lineRenderer.SetPositions(verticies);
+            lineRenderer.startColor = Color.red;
+            lineRenderer.endColor = Color.red;
         }
 
     }
