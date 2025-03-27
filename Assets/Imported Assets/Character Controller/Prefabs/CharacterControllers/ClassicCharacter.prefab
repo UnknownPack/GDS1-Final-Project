@@ -14942,7 +14942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 2147483643
+    m_Bits: 51
   m_MinimumViableVelocity: 0.01
   m_CapsuleMovingColliderSolver: {fileID: 11488960}
   m_Length: 0.2
