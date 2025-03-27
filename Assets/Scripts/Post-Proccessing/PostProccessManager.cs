@@ -9,6 +9,9 @@ public class PostProccessManager : MonoBehaviour
 {
     [SerializeField] private Light2D light2D;
     [SerializeField] private Slider brightnessSlider;
+    [SerializeField] private Slider antiAlyiasingSlider;
+    [SerializeField] private Volume volume;
+    [SerializeField] private UniversalRenderPipelineAsset urpAsset;
     private float brightnessValue;
     public float finalBrightness = 1.0f;
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
@@ -16,14 +19,17 @@ public class PostProccessManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        light2D = light2D.GetComponent<Light2D>();
-        brightnessSlider = brightnessSlider.GetComponent<Slider>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ChangeAntiAlyasing () {
+        urpAsset.renderScale = antiAlyiasingSlider.value;
     }
 
     public void ChangeBrightness() {
