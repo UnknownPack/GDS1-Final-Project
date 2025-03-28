@@ -1,0 +1,35 @@
+.sliderHotKey {
+    bottom: -150px;
+    background-color: rgb(39, 197, 28);
+    width: 80px;
+    -unity-text-align: upper-left;
+    -unity-font-style: bold;
+    font-size: 15px;
+    border-left-color: rgb(116, 226, 149);
+    border-right-color: rgb(116, 226, 149);
+    border-top-color: rgb(116, 226, 149);
+    border-bottom-color: rgb(116, 226, 149);
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in;
+}
+
+.sliderHotKey:hover {
+    bottom: -150px;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
+    background-color: rgb(139, 237, 132);
+}
+
+.sliderHotKey:focus {
+    bottom: 0;
+    transition-timing-function: ease-out;
+    transition-duration: 0.5s;
+}
