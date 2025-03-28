@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     [Header("Player Movement")]
@@ -8,34 +9,34 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MovementSpeed = 1.1f;
     [SerializeField] private float MaxMovementSpeedSpeed = 1.1f;
     [SerializeField] private float JumpForce = 1.1f;
+    [SerializeField] private bool canJump = false;
 
     private Vector2 currentMovementVector;
     private float currentSpeed;
     
     private Collider2D collider2D;
     private Rigidbody2D rigidbody2D;
-    private InputActionAsset inputActions;
+    private UnityEngine.InputSystem.PlayerInput playerInput;
     private InputAction moveAction, jumpAction;
     private Vector2 currentVector;
-
-    void InializeActions()
-    {
-        inputActions = GetComponent<InputActionAsset>();
-        moveAction = inputActions.FindAction("Move");
-        moveAction.Enable();
-        jumpAction = inputActions.FindAction("Jump");
-        jumpAction.Enable(); 
-        jumpAction.performed += OnJumpAction;
-    }
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+ 
     void Start()
     {
-        InializeActions();
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        collider2D = GetComponent<Collider2D>();
+        playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>(); 
+        moveAction = playerInput.actions.FindAction("Move");
+        jumpAction = playerInput.actions.FindAction("Jump");  
+        
+        moveAction.Enable(); 
+        if(canJump)
+        {
+            jumpAction.Enable();
+            jumpAction.performed += OnJumpAction;
+        }
 
     }
-
-    // Update is called once per frame
+ 
     void Update()
     {
         currentMovementVector = moveAction.ReadValue<Vector2>(); 
