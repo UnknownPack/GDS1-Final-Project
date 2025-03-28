@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
     
     private Dictionary<PostProcessingEffect, float> CurrentPostProcessingEffectValues;
-    private HotBarPair[] CurrentHotBar = new HotBarPair[2];
-    private Slider[] slider = new Slider[2];
+    private HotBarPair[] CurrentHotBar = new HotBarPair[3];
+    private Slider[] slider = new Slider[3];
 
     private PostProccessManager postProccessManager; 
     UIDocument quickAccessDocument; 
@@ -61,7 +61,13 @@ public class GameManager : MonoBehaviour
         quickAccessDocument = GetComponent<UIDocument>();
         slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotKeyOne");
         slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotKeyTwo");
-        #endregion 
+        slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotKeyThree");
+        #endregion
+
+        for (int i = 0; i < 3; i++)
+        {
+            SetSlider(i, slider[i], postProcessingSliderValues[i]);
+        } 
     }
 
     // Update is called once per frame
@@ -72,8 +78,7 @@ public class GameManager : MonoBehaviour
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
-        CurrentHotBar[index] = hotBarPair;
-        slider.label = hotBarPair.type.ToString();
+        CurrentHotBar[index] = hotBarPair; 
         slider.value = CurrentPostProcessingEffectValues[hotBarPair.type];
         slider.lowValue = hotBarPair.data.MinValue;
         slider.highValue = hotBarPair.data.MaxValue;
@@ -81,7 +86,7 @@ public class GameManager : MonoBehaviour
 
     void ManageSliderProcessingValuess()
     {
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             postProccessManager.AdjustValue(CurrentHotBar[i].type, slider[i].value);
             CurrentPostProcessingEffectValues[CurrentHotBar[i].type] = slider[i].value;
