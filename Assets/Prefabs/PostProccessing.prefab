@@ -62,19 +62,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaf262110492cdd45b94647c3a899a05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PostProcessingSliderValues:
-  - name: 0
-    minValue: 0
-    maxValue: 0
-    defaultValue: 0.5
-  - name: 1
-    minValue: 0
-    maxValue: 0
-    defaultValue: 0.5
-  - name: 2
-    minValue: 0
-    maxValue: 0
-    defaultValue: 0.5
+  postProcessingSliderValues:
+  - type: 0
+    data:
+      minValue: 0
+      maxValue: 0
+      defaultValue: 1
+  - type: 1
+    data:
+      minValue: 0
+      maxValue: 0
+      defaultValue: 1
+  - type: 2
+    data:
+      minValue: 0
+      maxValue: 0
+      defaultValue: 1
 --- !u!114 &1271383266522604289
 MonoBehaviour:
   m_ObjectHideFlags: 0

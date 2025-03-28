@@ -22,14 +22,8 @@
 }
 
 .sliderHotKey:hover {
-    bottom: -150px;
+    bottom: 0;
     transition-duration: 0.1s;
     transition-timing-function: ease-in-out;
     background-color: rgb(139, 237, 132);
-}
-
-.sliderHotKey:focus {
-    bottom: 0;
-    transition-timing-function: ease-out;
-    transition-duration: 0.5s;
 }

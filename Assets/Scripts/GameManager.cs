@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
@@ -36,7 +37,21 @@ public class GameManager : MonoBehaviour
          }
          instance = this;
          DontDestroyOnLoad(gameObject);
+         SceneManager.sceneLoaded += OnSceneLoaded;
      }
+     
+     private void OnDestroy()
+     {
+         // Always unsubscribe to avoid memory leaks
+         SceneManager.sceneLoaded -= OnSceneLoaded;
+     }
+     
+     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+     {
+         Debug.Log("Scene loaded: " + scene.name);
+         InitalizeDefaultSliderValues();
+     }
+     
      #endregion
  
     void Start()
@@ -52,14 +67,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ManageSliderProcessingValuess();
+        //ManageSliderProcessingValuess();
     }
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
         CurrentHotBar[index] = hotBarPair;
         slider.label = hotBarPair.type.ToString();
-        //slider.value = hotBarPair.data.DefaultValue;
+        slider.value = CurrentPostProcessingEffectValues[hotBarPair.type];
         slider.lowValue = hotBarPair.data.MinValue;
         slider.highValue = hotBarPair.data.MaxValue;
     }
@@ -69,15 +84,36 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             postProccessManager.AdjustValue(CurrentHotBar[i].type, slider[i].value);
+            CurrentPostProcessingEffectValues[CurrentHotBar[i].type] = slider[i].value;
         }
     }
 
+    // intalize default values at  the start of each scene
     void InitalizeDefaultSliderValues()
     {
-        
+        CurrentPostProcessingEffectValues = new Dictionary<PostProcessingEffect, float>();
+        foreach (HotBarPair hotBarPair in postProcessingSliderValues)
+        {
+            CurrentPostProcessingEffectValues.Add(hotBarPair.type, hotBarPair.data.DefaultValue);
+        }
     }
     
+    #region Public Methods
+
+    public float GetPostProcessingValue(PostProcessingEffect postProcessingEffect)
+    {
+        foreach (HotBarPair hotBarPair in postProcessingSliderValues)
+        {
+            if(hotBarPair.type == postProcessingEffect)
+                return CurrentPostProcessingEffectValues[postProcessingEffect] / hotBarPair.data.MaxValue;
+        } 
+        Debug.LogError("No Post Processing Effect found: " + postProcessingEffect);
+        return 0;
+    } 
+    #endregion
     
+    
+    #region Custom Structs
     [System.Serializable] private struct HotBarPair
     {
         public PostProcessingEffect type;
@@ -91,17 +127,18 @@ public class GameManager : MonoBehaviour
         MotionBlur,
     }
 
-    [System.Serializable]private struct PostProcessingEffectData
+    [System.Serializable]public struct PostProcessingEffectData
     { 
         [SerializeField, Tooltip("minimum value the slider can change for the value.")]
         private float minValue;
         [SerializeField, Tooltip("maximum value the slider can change for the value.")]
         private float maxValue;
         [SerializeField, Tooltip("Default value, the slider and value is set to at the start of a new scene")]
-        private float currentValue;
+        private float defaultValue;
         
         public float MinValue => minValue;
         public float MaxValue => maxValue;
-        public float CurrentValue => currentValue;
+        public float DefaultValue => defaultValue;
     }
+    #endregion
 }
