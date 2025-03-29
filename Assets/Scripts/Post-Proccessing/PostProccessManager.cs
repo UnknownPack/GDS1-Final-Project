@@ -13,6 +13,7 @@ public class PostProccessManager : MonoBehaviour
     private Volume volume;
     private MotionBlur motionBlur;
     [SerializeField] private UniversalRenderPipelineAsset urpAsset;
+    private PlayerTrail playerTrail;
     public float finalBrightness = 1.0f;
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
 
@@ -31,6 +32,7 @@ public class PostProccessManager : MonoBehaviour
     
     void Start()
     {
+        playerTrail = GetComponent<PlayerTrail>();
         light2D = GetComponent<Light2D>();
         volume = GetComponent<Volume>();
         Debug.Log(volume);
@@ -56,8 +58,9 @@ public class PostProccessManager : MonoBehaviour
         light2D.intensity = value;
     }
 
-    public void ChangeMotionBlur (float value) {
+    public void ChangeMotionBlur (float value) {    
         motionBlur.intensity.value = value;
+        playerTrail.trailLifetime = value;
     }
 
     // public void AdjustValue(GameManager.PostProcessingEffect effect, float value)

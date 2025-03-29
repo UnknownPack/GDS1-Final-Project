@@ -63,10 +63,11 @@ public class PlayerTrail : MonoBehaviour
     void CreateTrail(TrailObject original)
     {
         GameObject trail = new GameObject("Trail");
-        trail.transform.SetParent(transform.parent);
+        trail.transform.SetParent(gameObject.transform);
         SpriteRenderer trailRenderer = trail.AddComponent<SpriteRenderer>();
+        trailRenderer.sortingOrder = -1;
         trailRenderer.sprite = original.spriteRenderer.sprite;
-        trailRenderer.color = new Color(1, 1, 1, startOpacity);
+        trailRenderer.color = new Color(original.spriteRenderer.color.r, original.spriteRenderer.color.g, original.spriteRenderer.color.b, startOpacity);
         trail.transform.position = original.spriteRenderer.transform.position;
         trail.transform.rotation = original.spriteRenderer.transform.rotation;
         if (original.collider != null) {
