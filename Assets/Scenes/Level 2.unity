@@ -431,6 +431,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: placeholders_6
       objectReference: {fileID: 0}
+    - target: {fileID: 3348310186765199046, guid: 92129fe1a7d7bea40be0a8a48847d519, type: 3}
+      propertyPath: m_Size.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3348310186765199046, guid: 92129fe1a7d7bea40be0a8a48847d519, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4192845117885125095, guid: 92129fe1a7d7bea40be0a8a48847d519, type: 3}
       propertyPath: m_Size.y
       value: 3
