@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
         CurrentHotBar[index] = hotBarPair; 
+        slider.label = hotBarPair.type.ToString();
         slider.value = CurrentPostProcessingEffectValues[hotBarPair.type];
         slider.lowValue = hotBarPair.data.MinValue;
         slider.highValue = hotBarPair.data.MaxValue;
