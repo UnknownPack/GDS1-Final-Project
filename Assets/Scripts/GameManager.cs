@@ -84,7 +84,6 @@ public class GameManager : MonoBehaviour
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
-        Debug.Log(slider);
         CurrentHotBar[index] = hotBarPair; 
         slider.value = CurrentPostProcessingEffectValues[hotBarPair.type];
         slider.lowValue = hotBarPair.data.MinValue;
@@ -121,7 +120,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void OnMotionBlurChanged(ChangeEvent<float> evt) {
-        // PostProccessManager.Instance.ChangeMotionBlur(value);
+        PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
     }
 
     #endregion

@@ -10,7 +10,8 @@ public class PostProccessManager : MonoBehaviour
 
     public static PostProccessManager Instance { get; private set; }
     private Light2D light2D;
-    [SerializeField] private Volume volume;
+    private Volume volume;
+    private MotionBlur motionBlur;
     [SerializeField] private UniversalRenderPipelineAsset urpAsset;
     public float finalBrightness = 1.0f;
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
@@ -31,6 +32,9 @@ public class PostProccessManager : MonoBehaviour
     void Start()
     {
         light2D = GetComponent<Light2D>();
+        volume = GetComponent<Volume>();
+        Debug.Log(volume);
+        volume.profile.TryGet(out motionBlur);
     }
 
      
@@ -50,6 +54,10 @@ public class PostProccessManager : MonoBehaviour
             value = ScaleBrightness(value, finalBrightness);
         }
         light2D.intensity = value;
+    }
+
+    public void ChangeMotionBlur (float value) {
+        motionBlur.intensity.value = value;
     }
 
     // public void AdjustValue(GameManager.PostProcessingEffect effect, float value)
