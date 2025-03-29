@@ -113,14 +113,17 @@ public class GameManager : MonoBehaviour
 
     private void OnBrightnessChanged(ChangeEvent<float> evt) {
         PostProccessManager.Instance.ChangeBrightness(evt.newValue);
+        CurrentPostProcessingEffectValues[PostProcessingEffect.Brightness] = evt.newValue;
     }
 
     private void OnAntiAliasingChanged(ChangeEvent<float> evt) {
         PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
+        CurrentPostProcessingEffectValues[PostProcessingEffect.AntiAliasing] = evt.newValue;
     }
 
     private void OnMotionBlurChanged(ChangeEvent<float> evt) {
         PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
+        CurrentPostProcessingEffectValues[PostProcessingEffect.MotionBlur] = evt.newValue;
     }
 
     #endregion
