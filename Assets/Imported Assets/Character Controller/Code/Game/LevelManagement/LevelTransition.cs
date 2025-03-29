@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 //--------------------------------------------------------------------
 public class LevelTransition : MonoBehaviour {
 
-    [SerializeField] int m_Index = 0;
+    [SerializeField, Tooltip("loads the scene that is named")] string SceneName;
 
    public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            SceneManager.LoadScene(m_Index);
+            SceneManager.LoadScene(SceneName);
         }
     }
 }

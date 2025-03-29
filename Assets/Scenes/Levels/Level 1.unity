@@ -2792,9 +2792,13 @@ PrefabInstance:
       propertyPath: m_Index
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1663183879585110332, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      propertyPath: SceneName
+      value: Level 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3048559084950410238, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
       propertyPath: m_Name
-      value: placeholders_3
+      value: Door
       objectReference: {fileID: 0}
     - target: {fileID: 6632765895184719283, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
       propertyPath: m_IsTrigger
