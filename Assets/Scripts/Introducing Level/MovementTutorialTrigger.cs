@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class MovementTutorialTrigger : MonoBehaviour
 {
@@ -20,14 +21,20 @@ public class MovementTutorialTrigger : MonoBehaviour
         if (!hasTriggered && other.CompareTag("Player"))
         {
             hasTriggered = true;
-            if (movementTutorialText != null)
-            {
-                movementTutorialText.SetActive(false);
-            }
-            if (sliderTutorialText != null)
-            {
-                sliderTutorialText.SetActive(true);
-            }
+            StartCoroutine(DelayedSwitch());
+        }
+    }
+
+    private IEnumerator DelayedSwitch()
+    {
+        yield return new WaitForSeconds(3f); 
+        if (movementTutorialText != null)
+        {
+            movementTutorialText.SetActive(false);
+        }
+        if (sliderTutorialText != null)
+        {
+            sliderTutorialText.SetActive(true);
         }
     }
 }
