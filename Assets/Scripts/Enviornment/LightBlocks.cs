@@ -17,7 +17,11 @@ public class LightBlocks : MonoBehaviour
     void Update()
     {
         Color colour = spriteRenderer.color;
+<<<<<<< HEAD
         float percentage = GameManager.Instance.GetPostProcessingValue(GameManager.PostProcessingEffect.Brightness); 
+=======
+        float percentage = GameManager.Instance.GetPostProcessingValue_AsPercentage(GameManager.PostProcessingEffect.Brightness);
+>>>>>>> 49602d7089c1f27c3e9a00aedfae213ee7e97d1f
         if (OnlyShowInDark)
         {
             float alpha = 1f - percentage;
