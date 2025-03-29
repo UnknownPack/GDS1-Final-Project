@@ -16,6 +16,8 @@ public class PostProccessManager : MonoBehaviour
     private PlayerTrail playerTrail;
     public float finalBrightness = 1.0f;
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
+    float ScaleAntiAliasing(float x) =>  (0.9f + (x * (1.5f - 0.9f)));
+    float ScaleAntiAliasing2(float x) =>  (1f + (x * (100f - 1f)));
 
       private void Awake()
     {
@@ -46,7 +48,16 @@ public class PostProccessManager : MonoBehaviour
     }
 
     public void ChangeAntiAlyasing (float value) {
-        urpAsset.renderScale = value;
+        urpAsset.renderScale = ScaleAntiAliasing(value);
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Spikes");
+        foreach (GameObject obj in objects)
+        {
+            SpikeCobntroiller spikeCobntroiller = obj.GetComponent<SpikeCobntroiller>();
+            if (spikeCobntroiller != null)
+            {
+                spikeCobntroiller.UpdateVerticies(ScaleAntiAliasing2(value));
+            }
+        }
     }
 
     public void ChangeBrightness (float value) {

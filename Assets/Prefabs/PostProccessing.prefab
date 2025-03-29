@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4807484681728770711}
   - component: {fileID: 1502191259899643197}
   - component: {fileID: 1419742284433337191}
+  - component: {fileID: 3083590068151271766}
   - component: {fileID: 1271383266522604289}
   - component: {fileID: -5448054180017331462}
-  - component: {fileID: 2878720672879409970}
+  - component: {fileID: 822940017041940693}
   m_Layer: 0
   m_Name: PostProccessing
   m_TagString: Untagged
@@ -48,7 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0545b6185175341d1990625d437012d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: {fileID: 0}
   urpAsset: {fileID: 11400000, guid: 681886c5eb7344803b6206f758bf0b1c, type: 2}
   finalBrightness: 20
 --- !u!114 &1419742284433337191
@@ -72,13 +72,30 @@ MonoBehaviour:
   - type: 1
     data:
       minValue: 0
-      maxValue: 2
-      defaultValue: 1
+      maxValue: 1
+      defaultValue: 0
   - type: 2
     data:
       minValue: 0
-      maxValue: 2
-      defaultValue: 1
+      maxValue: 1
+      defaultValue: 0
+--- !u!114 &3083590068151271766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4308902281476771174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6547fd2b592a67887fd37af4fcc7d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noHitboxTag: Player
+  hitboxTag: MovingPlatform
+  trailLifetime: 0
+  spawnInterval: 0.01
+  startOpacity: 0.1
 --- !u!114 &1271383266522604289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +165,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
---- !u!114 &2878720672879409970
+--- !u!114 &822940017041940693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

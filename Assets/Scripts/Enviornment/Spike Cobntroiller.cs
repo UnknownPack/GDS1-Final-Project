@@ -12,7 +12,6 @@ public class SpikeCobntroiller : MonoBehaviour
     public float height;
     public float heightScaleFactor;
     private float x;
-    [SerializeField] private Slider slider;
     private float sliderValue;
     private Transform point1;
     private Transform point2;
@@ -24,17 +23,17 @@ public class SpikeCobntroiller : MonoBehaviour
         
         point1 = gameObject.transform.GetChild(0);
         point2 = gameObject.transform.GetChild(1);
-        UpdateVerticies();
+        UpdateVerticies(0);
         
     }
 
     // Update is called once per frame
     void Update()
     {   
-        UpdateVerticies();
+
     }
 
-    public void UpdateVerticies() {
+    public void UpdateVerticies(float value) {
         // sliderValue = slider.value;
         // float finalSpan = span * sliderValue;
         // int finalVerticiesAmount = (int)(sliderValue * verticiesAmount) + 1;
@@ -61,7 +60,7 @@ public class SpikeCobntroiller : MonoBehaviour
         //     lineRenderer.startColor = Color.red;
         //     lineRenderer.endColor = Color.red;
         // }
-        sliderValue = slider.value;
+        sliderValue = value;
         int finalVerticiesAmount = (int)((sliderValue/heightScaleFactor) * verticiesAmount) + verticiesAmount;
         finalVerticiesAmount = (finalVerticiesAmount % 2 == 0) ? finalVerticiesAmount + 1 : finalVerticiesAmount;
 

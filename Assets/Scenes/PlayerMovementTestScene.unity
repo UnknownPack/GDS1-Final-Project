@@ -3427,26 +3427,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: PostProcessingSliderValues.Array.data[1].type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: PostProcessingSliderValues.Array.data[2].type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: PostProcessingSliderValues.Array.data[0].maxValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: postProcessingSliderValues.Array.data[0].data.maxValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: postProcessingSliderValues.Array.data[1].data.maxValue
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: postProcessingSliderValues.Array.data[2].data.maxValue
       value: 1
       objectReference: {fileID: 0}
@@ -3501,55 +3481,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1211632780}
-    - targetCorrespondingSourceObject: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1211632774}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
---- !u!1 &1211632773 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-  m_PrefabInstance: {fileID: 1211632772}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1211632774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211632773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: a51822bed94138840a6b5aff69917e7b, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: b00e917cd99995741b086a639c0799b9, type: 3}
-  m_SortingOrder: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
---- !u!114 &1211632780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211632773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6547fd2b592a67887fd37af4fcc7d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  noHitboxTag: Player
-  hitboxTag: MovingPlatform
-  trailLifetime: 1
-  spawnInterval: 0.01
-  startOpacity: 0.5
 --- !u!1 &1354240291
 GameObject:
   m_ObjectHideFlags: 0
