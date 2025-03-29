@@ -1,34 +1,66 @@
+using System;
 using UnityEngine;
 
 public class LightBlocks : MonoBehaviour
 {
     [Header("light Block Settings")] 
-    [SerializeField, Tooltip("if true, square will be transparent in when completly dark. If false, the inverse will be true ")] 
-    private bool OnlyShowInDark;
+    [SerializeField, Tooltip("Sets when the block will be activated")] 
+    private Activation activationState;
+
+    [SerializeField, Tooltip("Sets the starting state of the block ")]
+    private LightBlockState startingState;
+    
     SpriteRenderer spriteRenderer;
     Collider2D collider2D;
+    private float currentAlpha;
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<Collider2D>();
-    }
 
+        switch (startingState)
+        {
+            case LightBlockState.DefaultEnabled:
+                currentAlpha = 1f;
+                collider2D.enabled = true;
+                break;
+            case LightBlockState.DefaultDisabled:
+                currentAlpha = 0f;
+                collider2D.enabled = false;
+                break;
+        }
+ 
+        Color colour = spriteRenderer.color;
+        spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha);
+    }
 
     void Update()
-    {
+    { 
+        float brightness = GameManager.Instance.GetPostProcessingValue(GameManager.PostProcessingEffect.Brightness); 
+        if (activationState == Activation.FullLight) 
+            currentAlpha = 1f - brightness;  
+        else 
+            currentAlpha = brightness;  
+        
         Color colour = spriteRenderer.color;
-        float percentage = GameManager.Instance.GetPostProcessingValue(GameManager.PostProcessingEffect.Brightness); 
-        if (OnlyShowInDark)
-        {
-            float alpha = 1f - percentage;
-            spriteRenderer.color = new Color(colour.r, colour.g, colour.b, alpha);
-            collider2D.enabled = alpha > 0f;
-        }
-        else
-        {
-            float alpha = percentage;
-            spriteRenderer.color = new Color(colour.r, colour.g, colour.b, alpha);
-            collider2D.enabled = alpha > 0f;
-        }
+        spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
+        
+        if (Mathf.Approximately(currentAlpha, 1f)) 
+            collider2D.enabled = true; 
+        else if (Mathf.Approximately(currentAlpha, 0f)) 
+            collider2D.enabled = false; 
+
+    }
+    
+    private enum LightBlockState{
+        DefaultEnabled,
+        DefaultDisabled,
+    }
+
+    private enum Activation
+    {
+        FullDark,
+        FullLight,
     }
 }
+
