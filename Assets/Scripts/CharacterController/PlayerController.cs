@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
         currentMovementVector = moveAction.ReadValue<Vector2>(); 
         currentSpeed = currentMovementVector.x * MovementSpeed * 10f; 
         rigidbody2D.AddForce(new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeedSpeed, MaxMovementSpeedSpeed), 0));
+        Camera.main.transform.position = transform.position;
     }
     
     private void OnJumpAction(InputAction.CallbackContext context) 
