@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,10 +18,14 @@ public class GameManager : MonoBehaviour
     private Slider[] slider = new Slider[3];
 
     private PostProccessManager postProccessManager; 
-    UIDocument quickAccessDocument; 
-    
+    UIDocument quickAccessDocument;
+
+    [Header("Tutorial UI (Only for Introducing-Level)")]
+    public GameObject sliderTutorialText;
+    private Coroutine sliderTutorialCoroutine;
+
     #region Persistant Game Manager Instancing 
-     public static GameManager Instance {
+    public static GameManager Instance {
          get {
              if (instance == null) {
                  GameObject gameManagerobject = new GameObject("GameManager");
@@ -50,7 +55,17 @@ public class GameManager : MonoBehaviour
      {
          Debug.Log("Scene loaded: " + scene.name);
          InitalizeDefaultSliderValues();
-     }
+        if (scene.name == "Introducing-Level")
+        {
+            if (sliderTutorialText != null)
+                sliderTutorialText.SetActive(true); 
+        }
+        else
+        {
+            if (sliderTutorialText != null)
+                sliderTutorialText.SetActive(false);
+        }
+    }
      
      #endregion
  
@@ -115,20 +130,47 @@ public class GameManager : MonoBehaviour
     private void OnBrightnessChanged(ChangeEvent<float> evt) {
         PostProccessManager.Instance.ChangeBrightness(evt.newValue);
         CurrentPostProcessingEffectValues[PostProcessingEffect.Brightness] = evt.newValue;
+        ResetSliderTutorialTimer();
     }
 
     private void OnAntiAliasingChanged(ChangeEvent<float> evt) {
         PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
         CurrentPostProcessingEffectValues[PostProcessingEffect.AntiAliasing] = evt.newValue;
+        ResetSliderTutorialTimer();
     }
 
     private void OnMotionBlurChanged(ChangeEvent<float> evt) {
         PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
         CurrentPostProcessingEffectValues[PostProcessingEffect.MotionBlur] = evt.newValue;
+        ResetSliderTutorialTimer();
     }
 
     #endregion
-    
+
+    #region Slider Tutorial Timer
+    private void ResetSliderTutorialTimer()
+    {
+        if (SceneManager.GetActiveScene().name != "Introducing-Level")
+            return;
+
+        if (sliderTutorialText != null)
+        {
+            if (sliderTutorialCoroutine != null)
+            {
+                StopCoroutine(sliderTutorialCoroutine);
+            }
+            sliderTutorialCoroutine = StartCoroutine(HideSliderTutorialAfterDelay(3f));
+        }
+    }
+    private IEnumerator HideSliderTutorialAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (sliderTutorialText != null)
+            sliderTutorialText.SetActive(false);
+        sliderTutorialCoroutine = null;
+    }
+    #endregion
+
     #region Public Methods
 
     public float GetPostProcessingValue(PostProcessingEffect postProcessingEffect)
