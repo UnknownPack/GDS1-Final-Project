@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
     
     #region Public Methods
 
-    public float GetPostProcessingValue(PostProcessingEffect postProcessingEffect)
+    public float GetPostProcessingValue_AsPercentage(PostProcessingEffect postProcessingEffect)
     {
         foreach (HotBarPair hotBarPair in postProcessingSliderValues)
         {
@@ -137,6 +137,16 @@ public class GameManager : MonoBehaviour
         Debug.LogError("No Post Processing Effect found: " + postProcessingEffect);
         return 0;
     } 
+
+    public float GetPostProcessingValue_AsFloat(PostProcessingEffect postProcessingEffect){
+        foreach (HotBarPair hotBarPair in postProcessingSliderValues)
+        {
+            if(hotBarPair.type == postProcessingEffect)
+                return CurrentPostProcessingEffectValues[postProcessingEffect];
+        } 
+        Debug.LogError("No Post Processing Effect found: " + postProcessingEffect);
+        return 0;
+    }
     #endregion
     
     
