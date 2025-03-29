@@ -7,12 +7,25 @@ using UnityEngine.UI;
 
 public class PostProccessManager : MonoBehaviour
 {
+
+    public static PostProccessManager Instance { get; private set; }
     private Light2D light2D;
     [SerializeField] private Volume volume;
     [SerializeField] private UniversalRenderPipelineAsset urpAsset;
-    private float brightnessValue;
     public float finalBrightness = 1.0f;
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
+
+      private void Awake()
+    {
+        // Singleton setup
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        Instance = this;
+    }
 
     
     void Start()
@@ -26,28 +39,28 @@ public class PostProccessManager : MonoBehaviour
         
     }
 
-    public void ChangeAntiAlyasing () {
-        //urpAsset.renderScale = antiAlyiasingSlider.value;
+    public void ChangeAntiAlyasing (float value) {
+        urpAsset.renderScale = value;
     }
 
-    public void ChangeBrightness() {
+    public void ChangeBrightness (float value) {
         //float brightnessValue = brightnessSlider.value;
-        if (brightnessValue > 1) {
+        if (value > 1) {
             // brightnessValue = 1 + (brightnessValue - 1)/;
-            brightnessValue = ScaleBrightness(brightnessValue, finalBrightness);
+            value = ScaleBrightness(value, finalBrightness);
         }
-        light2D.intensity = brightnessValue;
+        light2D.intensity = value;
     }
 
-    public void AdjustValue(GameManager.PostProcessingEffect effect, float value)
-    {
-        if(effect == GameManager.PostProcessingEffect.Brightness)   
-            light2D.intensity = value;
-        if (effect == GameManager.PostProcessingEffect.AntiAliasing)
-            urpAsset.renderScale = value;
-        if (effect == GameManager.PostProcessingEffect.MotionBlur)
-        {
-            /*TODO: IMmplemnt value change here*/
-        }
-    }
+    // public void AdjustValue(GameManager.PostProcessingEffect effect, float value)
+    // {
+    //     if(effect == GameManager.PostProcessingEffect.Brightness)   
+    //         light2D.intensity = value;
+    //     if (effect == GameManager.PostProcessingEffect.AntiAliasing)
+    //         urpAsset.renderScale = value;
+    //     if (effect == GameManager.PostProcessingEffect.MotionBlur)
+    //     {
+    //         /*TODO: IMmplemnt value change here*/
+    //     }
+    // }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1419742284433337191}
   - component: {fileID: 1271383266522604289}
   - component: {fileID: -5448054180017331462}
+  - component: {fileID: 2878720672879409970}
   m_Layer: 0
   m_Name: PostProccessing
   m_TagString: Untagged
@@ -66,17 +67,17 @@ MonoBehaviour:
   - type: 0
     data:
       minValue: 0
-      maxValue: 0
+      maxValue: 2
       defaultValue: 1
   - type: 1
     data:
       minValue: 0
-      maxValue: 0
+      maxValue: 2
       defaultValue: 1
   - type: 2
     data:
       minValue: 0
-      maxValue: 0
+      maxValue: 2
       defaultValue: 1
 --- !u!114 &1271383266522604289
 MonoBehaviour:
@@ -147,3 +148,22 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &2878720672879409970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4308902281476771174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: a51822bed94138840a6b5aff69917e7b, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: b00e917cd99995741b086a639c0799b9, type: 3}
+  m_SortingOrder: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080

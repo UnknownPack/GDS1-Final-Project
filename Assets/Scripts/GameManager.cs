@@ -56,18 +56,24 @@ public class GameManager : MonoBehaviour
  
     void Start()
     { 
+        InitalizeDefaultSliderValues();
         postProccessManager = GetComponent<PostProccessManager>();
         #region Ui Intalization for variables  
         quickAccessDocument = GetComponent<UIDocument>();
-        slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotKeyOne");
-        slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotKeyTwo");
-        slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotKeyThree");
+        slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
+        slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
+        slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyThree");
         #endregion
 
         for (int i = 0; i < 3; i++)
         {
             SetSlider(i, slider[i], postProcessingSliderValues[i]);
-        } 
+        }
+
+        //change later to work with changing sliders
+        slider[0].RegisterValueChangedCallback(OnBrightnessChanged);
+        slider[1].RegisterValueChangedCallback(OnAntiAliasingChanged);
+        slider[2].RegisterValueChangedCallback(OnMotionBlurChanged);
     }
 
     // Update is called once per frame
@@ -78,20 +84,21 @@ public class GameManager : MonoBehaviour
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
+        Debug.Log(slider);
         CurrentHotBar[index] = hotBarPair; 
         slider.value = CurrentPostProcessingEffectValues[hotBarPair.type];
         slider.lowValue = hotBarPair.data.MinValue;
         slider.highValue = hotBarPair.data.MaxValue;
     }
 
-    void ManageSliderProcessingValuess()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            postProccessManager.AdjustValue(CurrentHotBar[i].type, slider[i].value);
-            CurrentPostProcessingEffectValues[CurrentHotBar[i].type] = slider[i].value;
-        }
-    }
+    // void ManageSliderProcessingValuess()
+    // {
+    //     for (int i = 0; i < 3; i++)
+    //     {
+    //         postProccessManager.AdjustValue(CurrentHotBar[i].type, slider[i].value);
+    //         CurrentPostProcessingEffectValues[CurrentHotBar[i].type] = slider[i].value;
+    //     }
+    // }
 
     // intalize default values at  the start of each scene
     void InitalizeDefaultSliderValues()
@@ -102,6 +109,22 @@ public class GameManager : MonoBehaviour
             CurrentPostProcessingEffectValues.Add(hotBarPair.type, hotBarPair.data.DefaultValue);
         }
     }
+
+    #region Listener Methods
+
+    private void OnBrightnessChanged(ChangeEvent<float> evt) {
+        PostProccessManager.Instance.ChangeBrightness(evt.newValue);
+    }
+
+    private void OnAntiAliasingChanged(ChangeEvent<float> evt) {
+        PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
+    }
+
+    private void OnMotionBlurChanged(ChangeEvent<float> evt) {
+        // PostProccessManager.Instance.ChangeMotionBlur(value);
+    }
+
+    #endregion
     
     #region Public Methods
 
