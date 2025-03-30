@@ -4,5 +4,8 @@
         <engine:Slider label="Effect 1" value="50" high-value="100" direction="Vertical" name="hotkeyOne" focusable="false" class="sliderHotKey" style="height: 200px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 45px; top: 0;" />
         <engine:Slider label="Effect 2" value="50" high-value="100" direction="Vertical" name="hotkeyTwo" focusable="false" class="sliderHotKey" style="height: 200px; margin-left: 45px; margin-bottom: 0; margin-right: 0; margin-top: 0; top: 0;" />
         <engine:Slider label="Effect 2" value="50" high-value="100" direction="Vertical" name="hotkeyThree" focusable="false" class="sliderHotKey" style="height: 200px; margin-left: 45px; margin-bottom: 0; margin-right: 0; margin-top: 0; top: 0;" />
+        <engine:ProgressBar value="22" title="my-progress" name="deviationBudgetBar" style="height: 63px; width: 172px; top: 0; position: relative; left: auto;">
+            <engine:Label text="Label" name="deviationBudgetLabel" style="position: relative; top: 0; left: 0;" />
+        </engine:ProgressBar>
     </engine:VisualElement>
 </engine:UXML>
