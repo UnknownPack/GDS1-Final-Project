@@ -214,4 +214,10 @@ public class GameManager : MonoBehaviour
         public float DefaultValue => defaultValue;
     }
     #endregion
+
+    public void RestartLevel() 
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
 }
