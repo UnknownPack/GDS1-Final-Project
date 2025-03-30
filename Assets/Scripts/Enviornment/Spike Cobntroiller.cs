@@ -15,51 +15,30 @@ public class SpikeCobntroiller : MonoBehaviour
     private float sliderValue;
     private Transform point1;
     private Transform point2;
+    private BoxCollider2D boxCollider2D;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         lineRenderer = gameObject.GetComponent<LineRenderer>();
-        
+        boxCollider2D = GetComponent<BoxCollider2D>();
         point1 = gameObject.transform.GetChild(0);
         point2 = gameObject.transform.GetChild(1);
         UpdateVerticies(0);
+        boxCollider2D.offset = (point1.transform.position + point2.transform.position) / 2f;
+        boxCollider2D.size = new Vector2(Vector2.Distance(point1.transform.position, point2.transform.position), height * 2);
+        boxCollider2D.isTrigger = true;
         
     }
 
     // Update is called once per frame
     void Update()
     {   
-
+        
     }
 
     public void UpdateVerticies(float value) {
-        // sliderValue = slider.value;
-        // float finalSpan = span * sliderValue;
-        // int finalVerticiesAmount = (int)(sliderValue * verticiesAmount) + 1;
-        // Debug.Log(finalVerticiesAmount);
-        // if (finalVerticiesAmount <= 2) {
-        //     verticies = new Vector3[2];
-        //     verticies[0] = new Vector3(gameObject.transform.position.x ,gameObject.transform.position.y, 0);
-        //     verticies[1] = new Vector3(1/finalSpan + gameObject.transform.position.x ,gameObject.transform.position.y, 0);
-        //     lineRenderer.positionCount = 2;
-        //     lineRenderer.SetPositions(verticies);
-        // }
-        // else {
-        //     verticies = new Vector3[finalVerticiesAmount];
-        //     for (int i = 1; i < finalVerticiesAmount; i += 2) {
-        //         x = (float)(Math.PI / (2 * finalSpan)) + (float)(2 * Math.PI * ((i - 1)/2)) / finalSpan;
-        //         verticies[i] = new Vector3(x + gameObject.transform.position.x, 1 * height + gameObject.transform.position.y, 0);
-        //     }
-        //     for (int i = 0; i < finalVerticiesAmount; i += 2) {
-        //         x = (float)( - Math.PI / (2 * finalSpan)) + (float)(2 * Math.PI * (i/2)) / finalSpan;
-        //         verticies[i] = new Vector3(x + gameObject.transform.position.x, -1 * height + gameObject.transform.position.y, 0);
-        //     }
-        //     lineRenderer.positionCount = finalVerticiesAmount;
-        //     lineRenderer.SetPositions(verticies);
-        //     lineRenderer.startColor = Color.red;
-        //     lineRenderer.endColor = Color.red;
-        // }
+
         sliderValue = value;
         int finalVerticiesAmount = (int)((sliderValue/heightScaleFactor) * verticiesAmount) + verticiesAmount;
         finalVerticiesAmount = (finalVerticiesAmount % 2 == 0) ? finalVerticiesAmount + 1 : finalVerticiesAmount;
@@ -75,6 +54,8 @@ public class SpikeCobntroiller : MonoBehaviour
         }
         lineRenderer.positionCount = finalVerticiesAmount;
         lineRenderer.SetPositions(verticies);
-
+        temp = Mathf.Max(Math.Abs(temp), 0.01f);
+        boxCollider2D.size = new Vector2(Vector2.Distance(point1.transform.position, point2.transform.position), temp * 2);
+        boxCollider2D.isTrigger = value <= 95;
     }
 }
