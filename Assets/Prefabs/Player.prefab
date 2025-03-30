@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundCheckDistance: 1.1
-  MovementSpeed: 2
-  MaxMovementSpeedSpeed: 4
+  MovementSpeed: 5
+  MaxMovementSpeedSpeed: 10
   JumpForce: 5
   canJump: 0
 --- !u!114 &5609071412945821210
