@@ -311,7 +311,7 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator HideSliderTutorialAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(1f);
         if (sliderTutorialText != null)
             sliderTutorialText.SetActive(false);
         sliderTutorialCoroutine = null;
