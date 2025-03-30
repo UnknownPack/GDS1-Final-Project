@@ -79,7 +79,7 @@ MonoBehaviour:
       minValue: 0
       maxValue: 1
       defaultValue: 0
-  maxTotalDeviationBudget: 1
+  maxTotalDeviationBudget: 1.5
   currentDeviationUsed: 0
   resetBudgetOnSceneLoad: 0
   sliderTutorialText: {fileID: 0}

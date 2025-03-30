@@ -99,10 +99,10 @@ public class GameManager : MonoBehaviour
         #region UI Initialization
         quickAccessDocument = GetComponent<UIDocument>();
         slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
+        if (slider[0] == null) Debug.LogError("Could not find hotkeyOne Slider");
         slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
         slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyThree");
         
-        // Get resource UI elements (you'll need to add these to your UI)
         resourceBar = quickAccessDocument.rootVisualElement.Q<ProgressBar>("deviationBudgetBar");
         resourceLabel = quickAccessDocument.rootVisualElement.Q<Label>("deviationBudgetLabel");
         #endregion
@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
         
         if (resourceLabel != null)
         {
-            resourceLabel.text = $"Adjustment Budget: {(maxTotalDeviationBudget - currentDeviationUsed).ToString("F2")}/{maxTotalDeviationBudget.ToString("F2")}";
+            resourceLabel.text = $"Computational Power: {((maxTotalDeviationBudget - currentDeviationUsed) * 100) .ToString("F2")}/{(maxTotalDeviationBudget* 100).ToString("F2")}";
         }
         
         // Disable all sliders if budget is fully depleted (except for returning to default)
@@ -245,7 +245,10 @@ public class GameManager : MonoBehaviour
             
             // Enable sliders if there's budget OR if they're not at default (so they can return)
             bool canMove = hasRemainingBudget || !Mathf.Approximately(currentValue, defaultValue);
-            slider[i].SetEnabled(canMove);
+            if (slider[i] != null) {
+                slider[i].SetEnabled(canMove);
+            }
+            
         }
     }
     
