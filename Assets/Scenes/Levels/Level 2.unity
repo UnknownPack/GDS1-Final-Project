@@ -2030,6 +2030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: placeholders_4 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1743109485946993572, guid: 93de85d80217cb545a290c27cf9b26f4, type: 3}
+      propertyPath: m_TagString
+      value: Spikes
+      objectReference: {fileID: 0}
     - target: {fileID: 3636990244107211883, guid: 93de85d80217cb545a290c27cf9b26f4, type: 3}
       propertyPath: m_Size.x
       value: 5
