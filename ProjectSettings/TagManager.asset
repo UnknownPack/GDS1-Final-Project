@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TrailObject
   - MovingPlatform
+  - Spikes
   layers:
   - Default
   - TransparentFX

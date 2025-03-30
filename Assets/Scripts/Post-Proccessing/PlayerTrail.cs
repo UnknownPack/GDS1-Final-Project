@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PlayerTrail : MonoBehaviour
@@ -10,14 +11,24 @@ public class PlayerTrail : MonoBehaviour
     public float trailLifetime = 0f;
     public float spawnInterval = 0.1f;
     public float startOpacity = 0.5f;
-    private SpriteRenderer playerSprite;
-    private List<GameObject> trailPool = new List<GameObject>();
     private List<TrailObject> objectsWithTrails = new List<TrailObject>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StopAllCoroutines();
+        objectsWithTrails = new List<TrailObject>();
         FindTrailObjects();
-        playerSprite = GetComponentInParent<SpriteRenderer>();
         StartCoroutine(SpawnTrails());
     }
 
@@ -52,7 +63,7 @@ public class PlayerTrail : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
             foreach (TrailObject trailObject in objectsWithTrails)
             {
-                if (trailObject != null)
+                if (trailObject.spriteRenderer != null)
                 {
                     CreateTrail(trailObject);
                 }

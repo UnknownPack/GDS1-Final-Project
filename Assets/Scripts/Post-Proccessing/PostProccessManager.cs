@@ -37,7 +37,6 @@ public class PostProccessManager : MonoBehaviour
         playerTrail = GetComponent<PlayerTrail>();
         light2D = GetComponent<Light2D>();
         volume = GetComponent<Volume>();
-        Debug.Log(volume);
         volume.profile.TryGet(out motionBlur);
     }
 
