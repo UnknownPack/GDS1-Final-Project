@@ -52,4 +52,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool IsGrounded() { return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, ~LayerMask.GetMask("Player", "Ignore Raycast")); }
+
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
+        if (other.CompareTag("Spikes")) 
+        {
+            Debug.Log("Player hit spikes");
+            GameManager.Instance.RestartLevel();
+        }
+    }
 }
