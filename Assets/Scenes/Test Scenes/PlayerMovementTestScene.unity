@@ -4858,6 +4858,14 @@ PrefabInstance:
       propertyPath: canJump
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6983919345069499035, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
+      propertyPath: maxCharge
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6983919345069499035, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
+      propertyPath: chargeRate
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9098276512336608361, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
       propertyPath: m_Name
       value: Player

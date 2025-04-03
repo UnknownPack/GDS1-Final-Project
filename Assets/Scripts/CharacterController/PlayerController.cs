@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
             isCharging = currentMovementVector.x != 0;   
             if (isCharging)
             {
-                Debug.Log($"Current charge: {currentJumpCharge}/{maxCharge}");
+                //Debug.Log($"Current charge: {currentJumpCharge}/{maxCharge}");
                 currentJumpDirection = currentMovementVector.x;
                 currentJumpCharge += chargeRate * Time.deltaTime;
                 currentJumpCharge = Mathf.Clamp(currentJumpCharge, 0f, maxCharge); 

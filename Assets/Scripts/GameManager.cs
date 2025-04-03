@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [Header("Post Processing Sliders")]
     [Tooltip("This list stores the min, max and current values a slider for a post-porcessing effect can have")]
     [SerializeField]private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
+
+    private int currentLevel = 0;
     
     private Dictionary<PostProcessingEffect, float> CurrentPostProcessingEffectValues;
     private HotBarPair[] CurrentHotBar = new HotBarPair[3];
@@ -55,6 +57,7 @@ public class GameManager : MonoBehaviour
      {
          Debug.Log("Scene loaded: " + scene.name);
          InitalizeDefaultSliderValues();
+         currentLevel = SceneManager.GetActiveScene().buildIndex;
         if (scene.name == "Introducing-Level")
         {
             if (sliderTutorialText != null)
@@ -188,6 +191,8 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public int GetCurrentLevel() { return currentLevel; }
 
     #endregion
     
