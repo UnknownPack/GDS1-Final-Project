@@ -117,12 +117,12 @@ public class GameManager : MonoBehaviour
 
     // intalize default values at  the start of each scene
     void InitalizeDefaultSliderValues()
-    {
+    { 
         CurrentPostProcessingEffectValues = new Dictionary<PostProcessingEffect, float>();
         foreach (HotBarPair hotBarPair in postProcessingSliderValues)
         {
             CurrentPostProcessingEffectValues.Add(hotBarPair.type, hotBarPair.data.DefaultValue);
-        }
+        }  
     }
 
     #region Listener Methods
@@ -183,6 +183,12 @@ public class GameManager : MonoBehaviour
         Debug.LogError("No Post Processing Effect found: " + postProcessingEffect);
         return 0;
     } 
+    
+    public void RestartLevel() 
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     #endregion
     
     
@@ -214,10 +220,5 @@ public class GameManager : MonoBehaviour
         public float DefaultValue => defaultValue;
     }
     #endregion
-
-    public void RestartLevel() 
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
+ 
 }

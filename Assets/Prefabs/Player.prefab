@@ -168,10 +168,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundCheckDistance: 1.1
-  MovementSpeed: 2
-  MaxMovementSpeedSpeed: 4
-  JumpForce: 5
+  MovementSpeed: 7
+  MaxMovementSpeed: 7
   canJump: 0
+  chargeRate: 2.5
+  maxCharge: 2
+  jumpForceVertical: 15
+  jumpForceHorizontal: 10
+  defaultGravityScale: 4
 --- !u!114 &5609071412945821210
 MonoBehaviour:
   m_ObjectHideFlags: 0
