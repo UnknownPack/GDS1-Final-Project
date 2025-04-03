@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MovementSpeed = 1.1f;
     [SerializeField] private float MaxMovementSpeed = 1.1f; 
     [SerializeField] private bool canJump = false;
+    [SerializeField] float defaultGravityScale = 1f; 
 
     [Header("JumpStats")]
     [SerializeField] private float chargeRate = 2.5f;
