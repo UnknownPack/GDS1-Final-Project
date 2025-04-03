@@ -1,13 +1,14 @@
 using UnityEngine;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Player Movement")]
     [SerializeField] private float groundCheckDistance = 1.1f;
-    [SerializeField] private float MovementSpeed = 1.1f;
-    [SerializeField] private float MaxMovementSpeed = 1.1f; 
+    [SerializeField] private float MovementSpeed = 1.1f; 
+    [SerializeField] private float MaxMovementSpeed = 1.1f;
+    [SerializeField] private float JumpForce = 1.1f;
     [SerializeField] private bool canJump = false;
     [SerializeField] float defaultGravityScale = 1f; 
 
@@ -19,14 +20,14 @@ public class PlayerController : MonoBehaviour
     
     private Vector2 currentMovementVector;
     private float currentSpeed, currentJumpCharge = 0, currentJumpDirection = 0;
-    private bool isCharging = false;
+    private bool isCharging = false; 
 
     private Collider2D collider2D;
     private Rigidbody2D rigidbody2D;
     private UnityEngine.InputSystem.PlayerInput playerInput;
     private InputAction moveAction, jumpAction;
-    private Vector2 currentVector;
- 
+    private Vector2 currentVector; 
+
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
