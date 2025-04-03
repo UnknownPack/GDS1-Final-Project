@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     private Collider2D collider2D;
     private Rigidbody2D rigidbody2D;
     private UnityEngine.InputSystem.PlayerInput playerInput;
-    private InputAction moveAction, jumpAction;
+    private InputAction moveAction;
     private Vector2 currentVector; 
 
     void Start()
