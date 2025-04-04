@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SimplePieMenu;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     public GameObject sliderTutorialText;
     private Coroutine sliderTutorialCoroutine;
 
+
     #region Persistant Game Manager Instancing 
     public static GameManager Instance {
          get {
@@ -54,6 +56,7 @@ public class GameManager : MonoBehaviour
          instance = this;
          DontDestroyOnLoad(gameObject);
          SceneManager.sceneLoaded += OnSceneLoaded;
+
      }
      
      private void OnDestroy()
@@ -121,6 +124,8 @@ public class GameManager : MonoBehaviour
         
         UpdateResourceUI();
     }
+
+    
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
