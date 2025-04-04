@@ -44,10 +44,10 @@ public class PlayerController : MonoBehaviour
         currentSpeed = currentMovementVector.x * MovementSpeed * 10f; 
 
         // Update the rigidbody's velocity instead of using AddForce for smoother movement
-        rigidbody2D.velocity = new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeed, MaxMovementSpeed), rigidbody2D.velocity.y);
+        rigidbody2D.linearVelocity = new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeed, MaxMovementSpeed), rigidbody2D.linearVelocity.y);
         
         // Turn gravity off if the player is grounded and standing still
-        if (IsGrounded() && Mathf.Abs(rigidbody2D.velocity.x) < 0.1f && Mathf.Abs(rigidbody2D.velocity.y) < 0.1f)
+        if (IsGrounded() && Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f)
         {
             rigidbody2D.gravityScale = 0; // Set gravity scale to 0 when standing still on the ground
         }
