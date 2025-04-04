@@ -188,57 +188,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e28af4a03d7dce4380c3e1538f95e02, type: 3}
---- !u!1 &129076202
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 129076204}
-  - component: {fileID: 129076203}
-  m_Layer: 0
-  m_Name: TypingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &129076203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 129076202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ecf5aa46695a2546b03343532bc324f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 2079221367}
-  audioSource: {fileID: 0}
-  typingSound: {fileID: 8300000, guid: bcac108ef6b85a84a9df03780b94f8c3, type: 3}
-  fullText: Press A/D to move the character
-  typingSpeed: 0.05
-  cursorChar: _
-  cursorBlinkInterval: 0.5
---- !u!4 &129076204
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 129076202}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1059926, y: 2.597339, z: -0.012020797}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &149165810 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 682295897834431726, guid: 6e28af4a03d7dce4380c3e1538f95e02, type: 3}
@@ -2760,6 +2709,7 @@ GameObject:
   - component: {fileID: 2079221366}
   - component: {fileID: 2079221368}
   - component: {fileID: 2079221367}
+  - component: {fileID: 2079221369}
   m_Layer: 5
   m_Name: 'movementTutorialText '
   m_TagString: Untagged
@@ -2885,6 +2835,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079221365}
   m_CullTransparentMesh: 1
+--- !u!114 &2079221369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079221365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ecf5aa46695a2546b03343532bc324f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullText: Press A/D to move the character
+  typingSpeed: 0.05
+  playOnStart: 1
+  cursorChar: _
+  cursorBlinkInterval: 0.5
+  typingAudio: {fileID: 0}
+  typingSound: {fileID: 8300000, guid: bcac108ef6b85a84a9df03780b94f8c3, type: 3}
 --- !u!4 &2124736030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 682295897834431726, guid: 6e28af4a03d7dce4380c3e1538f95e02, type: 3}
@@ -3104,5 +3073,4 @@ SceneRoots:
   - {fileID: 670027174}
   - {fileID: 718083243}
   - {fileID: 1373071672}
-  - {fileID: 129076204}
   - {fileID: 1639882135}

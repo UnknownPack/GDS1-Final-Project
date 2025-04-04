@@ -2,30 +2,44 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class TypingEffect : MonoBehaviour
 {
-    [Header("References")]
-    public TextMeshProUGUI textComponent;     
-    public AudioSource audioSource;           
-    public AudioClip typingSound;             
-
-    [Header("Typing Settings")]
     [TextArea]
-    public string fullText = "THIS IS A TYPING EFFECT USING TEXTMESH PRO!";
+    public string fullText = "Default typing text...";
     public float typingSpeed = 0.05f;
+    public bool playOnStart = true;
+
+    private TextMeshProUGUI textComponent;
+    private string currentTypedText = "";
+    private Coroutine cursorCoroutine;
+    private bool showCursor = true;
+    private bool isTyping = false;
 
     [Header("Cursor Settings")]
-    public string cursorChar = "|";            
+    public string cursorChar = "|";
     public float cursorBlinkInterval = 0.5f;
 
-    private string currentTypedText = "";
-    private bool isTyping = false;
-    private bool showCursor = true;
+    [Header("Audio (Optional)")]
+    public AudioSource typingAudio;
+    public AudioClip typingSound;
 
-    private Coroutine cursorCoroutine;
+    void Awake()
+    {
+        textComponent = GetComponent<TextMeshProUGUI>();
+    }
 
     void Start()
     {
+        if (playOnStart)
+        {
+            StartTyping();
+        }
+    }
+
+    public void StartTyping()
+    {
+        if (isTyping) return;
         StartCoroutine(TypeText());
     }
 
@@ -42,8 +56,8 @@ public class TypingEffect : MonoBehaviour
         {
             currentTypedText += c;
 
-            if (typingSound && audioSource && c != ' ')
-                audioSource.PlayOneShot(typingSound);
+            if (typingAudio && typingSound && c != ' ')
+                typingAudio.PlayOneShot(typingSound);
 
             UpdateTextWithCursor();
             yield return new WaitForSeconds(typingSpeed);
