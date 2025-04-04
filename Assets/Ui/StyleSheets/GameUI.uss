@@ -20,3 +20,36 @@
     transition-duration: 0.5s;
     transition-timing-function: ease-in;
 }
+
+/* Matrix Progress Bar Container */
+#deviationBudgetBar {
+    background-color: rgba(0, 20, 0, 0.9);
+    border: 1px solid #00ff41;
+    box-shadow: 0 0 5px #00ff41;
+    height: 24px;
+    border-radius: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Progress Bar Track */
+#unity-progress-bar {
+    background-color: rgba(0, 30, 0, 0.8);
+}
+
+
+/* Active State Animation */
+#deviationBudgetBar:active #unity-progress-bar > VisualElement {
+    box-shadow: 0 0 20px #00ff41;
+    opacity: 1;
+}
+
+
+/* Label Styling */
+#deviationBudgetLabel {
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    text-shadow: 0 0 5px #00ff41;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}

@@ -1434,6 +1434,14 @@ PrefabInstance:
       propertyPath: sliderTutorialText
       value: 
       objectReference: {fileID: 212685904}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: resetBudgetOnSceneLoad
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: maxTotalDeviationBudget
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_Name
       value: PostProccessing
