@@ -27,6 +27,10 @@ public class PlayerTrail : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         StopAllCoroutines();
+        foreach (Transform child in gameObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
         objectsWithTrails = new List<TrailObject>();
         FindTrailObjects();
         StartCoroutine(SpawnTrails());
