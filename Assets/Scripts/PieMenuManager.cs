@@ -7,23 +7,16 @@ public class PieMenuManager : MonoBehaviour
 
     [SerializeField] PieMenu pieMenu;
     private PieMenuDisplayer displayer;
-    List<int> menuItemsIds = new List<int>();
-    public int amountShown = 0;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private int menuItemId = 1;
+
 
     void Awake()
     {
         displayer = GetComponent<PieMenuDisplayer>();
-        pieMenu.OnPieMenuFullyInitialized += HideMenuItem;
     }
     void Start()
     {
         
-    }
-
-    void OnDestroy()
-    {
-        pieMenu.OnPieMenuFullyInitialized -= HideMenuItem;
     }
 
     // Update is called once per frame
@@ -38,31 +31,43 @@ public class PieMenuManager : MonoBehaviour
         {
             displayer.ShowPieMenu(pieMenu);
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            amountShown += 1;
-            HideMenuItem();
-            
+        if (Input.GetKeyDown(KeyCode.P)) {
+            DisableMenuItem(1);
         }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            amountShown -= 1;
-
-            ShowMenuItem();
+        if (Input.GetKeyDown(KeyCode.O)) {
+            EnableMenuItem(1);
         }
-
     }
 
-    private void HideMenuItem () {
-        menuItemsIds = new();
-        for (int i = amountShown; i > 0; i--) {
-            menuItemsIds.Add(i);
-        }
-        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu, menuItemsIds);
+    private void DisableMenuItem(int menuItemId) {
+        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu, new List<int> {menuItemId});
+        Redraw();    
     }
 
-    private void ShowMenuItem () {
-        PieMenuShared.References.MenuItemsManager.MenuItemHider.Restore(pieMenu);
-        HideMenuItem();
+    private void EnableMenuItem(int menuItemId) {
+        PieMenuShared.References.MenuItemsManager.MenuItemHider.Restore(pieMenu, new List<int> {menuItemId});
+        Redraw();    
+    }
+
+    private void Redraw() {
+        // Transform menuItemsDir = pieMenu.PieMenuElements.MenuItemsDir;
+
+        // var settingsHandler = PieMenuShared.References.GeneralSettingsHandler;
+        // var pieMenuInfo = pieMenu.PieMenuInfo;
+        // int menuItemCount = menuItemsDir.childCount;
+        // int menuItemspacing = pieMenuInfo.MenuItemSpacing;
+        // int rotation = pieMenuInfo.Rotation;
+
+        // settingsHandler.HandleRotationChange(pieMenu, 0);
+
+        // pieMenu.MenuItemsTracker.Initialize(menuItemsDir);
+
+        // settingsHandler.UpdateButtons(pieMenu, menuItemCount, menuItemspacing);
+
+        // // ManageMenuItemspacing(pieMenu);
+        // settingsHandler.HandleRotationChange(pieMenu, rotation);
+        // RotationCalculator.CalculateNewRotation(pieMenu.MenuItemsTracker.PieMenuItems.Count, pieMenu.PieMenuInfo.MenuItemSpacing);
+        var generalSettingsHandler = PieMenuShared.References.GeneralSettingsHandler;
+        generalSettingsHandler.HandleRotationChange(pieMenu, 0);
     }
 }
