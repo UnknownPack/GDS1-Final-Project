@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     
     private Dictionary<PostProcessingEffect, float> CurrentPostProcessingEffectValues;
     private Dictionary<PostProcessingEffect, float> DefaultPostProcessingEffectValues;
-    private HotBarPair[] CurrentHotBar = new HotBarPair[3];
-    private Slider[] slider = new Slider[3];
+    private HotBarPair[] CurrentHotBar = new HotBarPair[7];
+    private Slider[] slider = new Slider[7];
 
     // Resource UI elements
     private ProgressBar resourceBar;
@@ -99,9 +99,12 @@ public class GameManager : MonoBehaviour
         #region UI Initialization
         quickAccessDocument = GetComponent<UIDocument>();
         slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
-        if (slider[0] == null) Debug.LogError("Could not find hotkeyOne Slider");
         slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
         slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyThree");
+        slider[3] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyFour");
+        slider[4] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyFive");
+        slider[5] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeySix");
+        slider[6] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeySeven");
         
         resourceBar = quickAccessDocument.rootVisualElement.Q<ProgressBar>("deviationBudgetBar");
         resourceLabel = quickAccessDocument.rootVisualElement.Q<Label>("deviationBudgetLabel");
@@ -110,14 +113,12 @@ public class GameManager : MonoBehaviour
         // Initialize deviation budget
         ResetDeviationBudget();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 7; i++)
         {
             SetSlider(i, slider[i], postProcessingSliderValues[i]);
+            var sliderType = postProcessingSliderValues[i].type;
+            slider[i].RegisterValueChangedCallback(evt => OnSliderChanged(evt, sliderType));
         }
-
-        slider[0].RegisterValueChangedCallback(OnBrightnessChanged);
-        slider[1].RegisterValueChangedCallback(OnAntiAliasingChanged);
-        slider[2].RegisterValueChangedCallback(OnMotionBlurChanged);
         
         UpdateResourceUI();
     }
@@ -237,7 +238,7 @@ public class GameManager : MonoBehaviour
         
         // Disable all sliders if budget is fully depleted (except for returning to default)
         bool hasRemainingBudget = currentDeviationUsed < maxTotalDeviationBudget;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 7; i++)
         {
             PostProcessingEffect effect = CurrentHotBar[i].type;
             float currentValue = CurrentPostProcessingEffectValues[effect];
@@ -256,44 +257,43 @@ public class GameManager : MonoBehaviour
 
     #region Listener Methods
 
-    private void OnBrightnessChanged(ChangeEvent<float> evt) {
-        if (TryAdjustSlider(PostProcessingEffect.Brightness, evt.newValue))
+    private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect)
+{
+    if (TryAdjustSlider(effect, evt.newValue))
+    {
+        switch (effect)
         {
-            PostProccessManager.Instance.ChangeBrightness(evt.newValue);
-            ResetSliderTutorialTimer();
+            case PostProcessingEffect.Brightness:
+                PostProccessManager.Instance.ChangeBrightness(evt.newValue);
+                break;
+            case PostProcessingEffect.AntiAliasing:
+                PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
+                break;
+            case PostProcessingEffect.MotionBlur:
+                PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
+                break;
+            case PostProcessingEffect.FilmGrain:
+                PostProccessManager.Instance.ChangeFilmGrain(evt.newValue);
+                break;
+            case PostProcessingEffect.ColorCorrection:
+                PostProccessManager.Instance.ChangeColorCorrection(evt.newValue);
+                break;
+            case PostProcessingEffect.ChromaticAberration:
+                PostProccessManager.Instance.ChangeChromaticAberration(evt.newValue);
+                break;
+            case PostProcessingEffect.Bloom:
+                PostProccessManager.Instance.ChangeBloom(evt.newValue);
+                break;
         }
-        else
-        {
-            // Revert the slider to previous value if not enough budget
-            slider[0].SetValueWithoutNotify(CurrentPostProcessingEffectValues[PostProcessingEffect.Brightness]);
-        }
-    }
 
-    private void OnAntiAliasingChanged(ChangeEvent<float> evt) {
-        if (TryAdjustSlider(PostProcessingEffect.AntiAliasing, evt.newValue))
-        {
-            PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
-            ResetSliderTutorialTimer();
-        }
-        else
-        {
-            // Revert the slider to previous value if not enough budget
-            slider[1].SetValueWithoutNotify(CurrentPostProcessingEffectValues[PostProcessingEffect.AntiAliasing]);
-        }
+        ResetSliderTutorialTimer();
     }
-
-    private void OnMotionBlurChanged(ChangeEvent<float> evt) {
-        if (TryAdjustSlider(PostProcessingEffect.MotionBlur, evt.newValue))
-        {
-            PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
-            ResetSliderTutorialTimer();
-        }
-        else
-        {
-            // Revert the slider to previous value if not enough budget
-            slider[2].SetValueWithoutNotify(CurrentPostProcessingEffectValues[PostProcessingEffect.MotionBlur]);
-        }
+    else
+    {
+        // Revert the slider to previous value if not enough budget
+        slider[0].SetValueWithoutNotify(CurrentPostProcessingEffectValues[effect]);
     }
+}
 
     #endregion
 
@@ -346,7 +346,7 @@ public class GameManager : MonoBehaviour
     
     public void ResetAllSlidersToDefault()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 7; i++)
         {
             PostProcessingEffect effect = CurrentHotBar[i].type;
             float defaultValue = DefaultPostProcessingEffectValues[effect];
@@ -388,6 +388,10 @@ public class GameManager : MonoBehaviour
         Brightness,
         AntiAliasing,
         MotionBlur,
+        FilmGrain,
+        ColorCorrection,
+        ChromaticAberration,
+        Bloom
     }
 
     [System.Serializable]public struct PostProcessingEffectData
