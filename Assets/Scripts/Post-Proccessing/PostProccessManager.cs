@@ -19,6 +19,8 @@ public class PostProccessManager : MonoBehaviour
     [SerializeField] private UniversalRenderPipelineAsset urpAsset;
     private PlayerTrail playerTrail;
     public float finalBrightness = 1.0f;
+    private GameObject player;
+    private PlayerController playerController;
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
     float ScaleAntiAliasing(float x) =>  (0.9f + (x * (1.5f - 0.9f)));
     float ScaleAntiAliasing2(float x) =>  (1f + (x * (100f - 1f)));
@@ -84,6 +86,29 @@ public class PostProccessManager : MonoBehaviour
     public void ChangeFilmGrain(float value)
     {
         filmGrain.intensity.value = value;
+        bool shouldEnableJump = value > 0.95f;
+    
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+            if (player == null)
+            {
+                Debug.LogError("No GameObject with tag 'Player' found!");
+                return;
+            }
+        }
+
+        if (playerController == null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogError("PlayerScript component not found on player!");
+                return;
+            }
+    }
+    //maybe change to a method
+    playerController.canJump = shouldEnableJump;
     }
     public void ChangeColorCorrection(float value)
     {
@@ -140,9 +165,12 @@ public class PostProccessManager : MonoBehaviour
     public void ChangeChromaticAberration(float value)
     {
         chromaticAberration.intensity.value = value;
+
+        //add method to change to zero gravity
     }
     public void ChangeBloom(float value)
     {
         bloom.intensity.value = value;
+        //add method to crash
     }
 }

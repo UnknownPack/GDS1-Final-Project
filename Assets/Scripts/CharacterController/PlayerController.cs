@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MovementSpeed = 1.1f;
     [SerializeField] private float MaxMovementSpeed = 1.1f;
     [SerializeField] private float JumpForce = 1.1f;
-    [SerializeField] private bool canJump = false;
+    [SerializeField] public bool canJump = false;
 
     private Vector2 currentMovementVector;
     private float currentSpeed;
