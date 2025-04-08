@@ -79,6 +79,26 @@ MonoBehaviour:
       minValue: 0
       maxValue: 1
       defaultValue: 0
+  - type: 3
+    data:
+      minValue: 0
+      maxValue: 1
+      defaultValue: 0
+  - type: 4
+    data:
+      minValue: -1
+      maxValue: 1
+      defaultValue: 0
+  - type: 5
+    data:
+      minValue: 0
+      maxValue: 1
+      defaultValue: 0
+  - type: 6
+    data:
+      minValue: 0
+      maxValue: 1
+      defaultValue: 0
   maxTotalDeviationBudget: 1.5
   currentDeviationUsed: 0
   resetBudgetOnSceneLoad: 0
