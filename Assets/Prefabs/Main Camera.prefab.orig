@@ -1,6 +1,10 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD
+--- !u!1 &4032091551742926038
+=======
 --- !u!1 &5556746180461066777
+>>>>>>> new-Dev-Branch
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +12,19 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1145340416125944480}
+  - component: {fileID: 6566026022014912889}
+  - component: {fileID: 6008289773473850297}
+  - component: {fileID: 1555959157929005846}
+  - component: {fileID: 7150989474023425148}
+=======
   - component: {fileID: 6155150530640408525}
   - component: {fileID: 8423418414564401628}
   - component: {fileID: 3790851524311630009}
   - component: {fileID: 4402968673622785104}
   - component: {fileID: 3386525989838619679}
+>>>>>>> new-Dev-Branch
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -20,28 +32,47 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
+--- !u!4 &1145340416125944480
+=======
 --- !u!4 &6155150530640408525
+>>>>>>> new-Dev-Branch
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 4032091551742926038}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -34.95, y: 27.75, z: -10}
+=======
   m_GameObject: {fileID: 5556746180461066777}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.0049788, y: -1.705, z: -1.25}
+>>>>>>> new-Dev-Branch
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+--- !u!20 &6566026022014912889
+=======
 --- !u!20 &8423418414564401628
+>>>>>>> new-Dev-Branch
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 4032091551742926038}
+=======
   m_GameObject: {fileID: 5556746180461066777}
+>>>>>>> new-Dev-Branch
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
@@ -86,21 +117,35 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+<<<<<<< HEAD
+--- !u!81 &6008289773473850297
+=======
 --- !u!81 &3790851524311630009
+>>>>>>> new-Dev-Branch
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 4032091551742926038}
+  m_Enabled: 1
+--- !u!114 &1555959157929005846
+=======
   m_GameObject: {fileID: 5556746180461066777}
   m_Enabled: 1
 --- !u!114 &4402968673622785104
+>>>>>>> new-Dev-Branch
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 4032091551742926038}
+=======
   m_GameObject: {fileID: 5556746180461066777}
+>>>>>>> new-Dev-Branch
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
@@ -117,7 +162,11 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
+<<<<<<< HEAD
+  m_RenderPostProcessing: 0
+=======
   m_RenderPostProcessing: 1
+>>>>>>> new-Dev-Branch
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -138,13 +187,21 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+<<<<<<< HEAD
+--- !u!114 &7150989474023425148
+=======
 --- !u!114 &3386525989838619679
+>>>>>>> new-Dev-Branch
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 4032091551742926038}
+=======
   m_GameObject: {fileID: 5556746180461066777}
+>>>>>>> new-Dev-Branch
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa4bf8a916809fb4fa5d95a90bffe996, type: 3}
