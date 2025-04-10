@@ -547,13 +547,11 @@ public class GameManager : MonoBehaviour
         // 4. Calculate new effect's deviation (will be 0 since we're setting to default)
         float newDeviation = 0f;
         currentDeviationUsed += newDeviation;
-        Debug.Log(sliderCallbacks[slotIndex]);
         // Unregister old callback
         if (sliderCallbacks[slotIndex] != null)
         {
             slider[slotIndex].UnregisterValueChangedCallback(sliderCallbacks[slotIndex]);
         }
-        Debug.Log(sliderCallbacks[slotIndex]);
 
         // Update the hotbar slot
         CurrentHotBar[slotIndex] = newPair;
