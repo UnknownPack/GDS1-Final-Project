@@ -1434,6 +1434,14 @@ PrefabInstance:
       propertyPath: sliderTutorialText
       value: 
       objectReference: {fileID: 212685904}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: resetBudgetOnSceneLoad
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: maxTotalDeviationBudget
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_Name
       value: PostProccessing
@@ -2622,6 +2630,7 @@ GameObject:
   - component: {fileID: 2079221366}
   - component: {fileID: 2079221368}
   - component: {fileID: 2079221367}
+  - component: {fileID: 2079221369}
   m_Layer: 5
   m_Name: 'movementTutorialText '
   m_TagString: Untagged
@@ -2670,8 +2679,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Press A/D to move the character
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d9e83d031bac2af4286c07c19384deef, type: 2}
+  m_sharedMaterial: {fileID: 2490124214338676753, guid: d9e83d031bac2af4286c07c19384deef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2747,6 +2756,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079221365}
   m_CullTransparentMesh: 1
+--- !u!114 &2079221369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079221365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ecf5aa46695a2546b03343532bc324f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullText: Press A/D to move the character
+  typingSpeed: 0.05
+  playOnStart: 1
+  cursorChar: _
+  cursorBlinkInterval: 0.5
+  typingAudio: {fileID: 0}
+  typingSound: {fileID: 0}
 --- !u!4 &2124736030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 682295897834431726, guid: 6e28af4a03d7dce4380c3e1538f95e02, type: 3}

@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
                 currentJumpCharge = 0f;
             }  
         }
+        // Update the rigidbody's velocity instead of using AddForce for smoother movement
+        rigidbody2D.linearVelocity = new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeed, MaxMovementSpeed), rigidbody2D.linearVelocity.y);
         
         // Turn gravity off if the player is grounded and standing still
         if (IsGrounded() && Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f)
