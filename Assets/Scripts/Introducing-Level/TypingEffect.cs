@@ -20,13 +20,22 @@ public class TypingEffect : MonoBehaviour
     public string cursorChar = "|";
     public float cursorBlinkInterval = 0.5f;
 
-    [Header("Audio (Optional)")]
-    public AudioSource typingAudio;
-    public AudioClip typingSound;
+    [Header("Audio")]
+    public AudioClip typingSound; // 预先指定的打字声音
+    private AudioSource audioSource;
 
     void Awake()
     {
         textComponent = GetComponent<TextMeshProUGUI>();
+
+        // 自动添加 AudioSource 组件并设置基础参数
+        if (typingSound)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.clip = typingSound;
+            audioSource.loop = true; // 设置为循环播放
+            audioSource.playOnAwake = false;
+        }
     }
 
     void Start()
@@ -49,22 +58,30 @@ public class TypingEffect : MonoBehaviour
         currentTypedText = "";
         textComponent.text = "";
 
+        // 开始播放连续打字声音
+        if (audioSource && typingSound)
+        {
+            audioSource.Play();
+        }
+
         if (cursorCoroutine == null)
             cursorCoroutine = StartCoroutine(BlinkCursor());
 
         foreach (char c in fullText)
         {
             currentTypedText += c;
-
-            if (typingAudio && typingSound && c != ' ')
-                typingAudio.PlayOneShot(typingSound);
-
             UpdateTextWithCursor();
             yield return new WaitForSeconds(typingSpeed);
         }
 
+        // 文字完全显示后，停止打字声音
+        if (audioSource && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+
         isTyping = false;
-        UpdateTextWithCursor(); 
+        UpdateTextWithCursor();
     }
 
     IEnumerator BlinkCursor()
