@@ -6,16 +6,27 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
-     
     private static GameManager instance;
     
     [Header("Post Processing Sliders")]
     [Tooltip("This list stores the min, max and current values a slider for a post-porcessing effect can have")]
-    [SerializeField]private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
+    [SerializeField] private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
+    
+    [Header("Slider Resource System")]
+    [Tooltip("Maximum deviation budget from default values across all sliders")]
+    [SerializeField] private float maxTotalDeviationBudget = 1.0f;
+    [SerializeField] private float currentDeviationUsed = 0f;
+    [Tooltip("Whether to reset deviation budget when loading a new scene")]
+    [SerializeField] private bool resetBudgetOnSceneLoad = true;
     
     private Dictionary<PostProcessingEffect, float> CurrentPostProcessingEffectValues;
+    private Dictionary<PostProcessingEffect, float> DefaultPostProcessingEffectValues;
     private HotBarPair[] CurrentHotBar = new HotBarPair[3];
     private Slider[] slider = new Slider[3];
+
+    // Resource UI elements
+    private ProgressBar resourceBar;
+    private Label resourceLabel;
 
     private PostProccessManager postProccessManager; 
     UIDocument quickAccessDocument;
@@ -55,17 +66,28 @@ public class GameManager : MonoBehaviour
      {
          Debug.Log("Scene loaded: " + scene.name);
          InitalizeDefaultSliderValues();
-        if (scene.name == "Introducing-Level")
-        {
-            if (sliderTutorialText != null)
-                sliderTutorialText.SetActive(true); 
-        }
-        else
-        {
-            if (sliderTutorialText != null)
-                sliderTutorialText.SetActive(false);
-        }
-    }
+         
+         if (resetBudgetOnSceneLoad)
+         {
+             ResetDeviationBudget();
+         }
+         else
+         {
+             // Recalculate current deviation based on saved values and new defaults
+             RecalculateCurrentDeviation();
+         }
+         
+         if (scene.name == "Introducing-Level")
+         {
+             if (sliderTutorialText != null)
+                 sliderTutorialText.SetActive(true); 
+         }
+         else
+         {
+             if (sliderTutorialText != null)
+                 sliderTutorialText.SetActive(false);
+         }
+     }
      
      #endregion
  
@@ -73,28 +95,31 @@ public class GameManager : MonoBehaviour
     { 
         InitalizeDefaultSliderValues();
         postProccessManager = GetComponent<PostProccessManager>();
-        #region Ui Intalization for variables  
+        
+        #region UI Initialization
         quickAccessDocument = GetComponent<UIDocument>();
         slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
+        if (slider[0] == null) Debug.LogError("Could not find hotkeyOne Slider");
         slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
         slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyThree");
+        
+        resourceBar = quickAccessDocument.rootVisualElement.Q<ProgressBar>("deviationBudgetBar");
+        resourceLabel = quickAccessDocument.rootVisualElement.Q<Label>("deviationBudgetLabel");
         #endregion
+
+        // Initialize deviation budget
+        ResetDeviationBudget();
 
         for (int i = 0; i < 3; i++)
         {
             SetSlider(i, slider[i], postProcessingSliderValues[i]);
         }
 
-        //change later to work with changing sliders
         slider[0].RegisterValueChangedCallback(OnBrightnessChanged);
         slider[1].RegisterValueChangedCallback(OnAntiAliasingChanged);
         slider[2].RegisterValueChangedCallback(OnMotionBlurChanged);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //ManageSliderProcessingValuess();
+        
+        UpdateResourceUI();
     }
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
@@ -106,43 +131,168 @@ public class GameManager : MonoBehaviour
         slider.highValue = hotBarPair.data.MaxValue;
     }
 
-    // void ManageSliderProcessingValuess()
-    // {
-    //     for (int i = 0; i < 3; i++)
-    //     {
-    //         postProccessManager.AdjustValue(CurrentHotBar[i].type, slider[i].value);
-    //         CurrentPostProcessingEffectValues[CurrentHotBar[i].type] = slider[i].value;
-    //     }
-    // }
-
-    // intalize default values at  the start of each scene
+    // Initialize default values at the start of each scene
     void InitalizeDefaultSliderValues()
     {
         CurrentPostProcessingEffectValues = new Dictionary<PostProcessingEffect, float>();
+        DefaultPostProcessingEffectValues = new Dictionary<PostProcessingEffect, float>();
+        
         foreach (HotBarPair hotBarPair in postProcessingSliderValues)
         {
-            CurrentPostProcessingEffectValues.Add(hotBarPair.type, hotBarPair.data.DefaultValue);
+            float defaultValue = hotBarPair.data.DefaultValue;
+            CurrentPostProcessingEffectValues.Add(hotBarPair.type, defaultValue);
+            DefaultPostProcessingEffectValues.Add(hotBarPair.type, defaultValue);
         }
     }
+
+    #region Resource System Methods
+    
+    private void ResetDeviationBudget()
+    {
+        currentDeviationUsed = 0f;
+        UpdateResourceUI();
+    }
+
+    private void RecalculateCurrentDeviation()
+    {
+        currentDeviationUsed = 0f;
+        foreach (KeyValuePair<PostProcessingEffect, float> kvp in CurrentPostProcessingEffectValues)
+        {
+            float defaultValue = DefaultPostProcessingEffectValues[kvp.Key];
+            float sliderRange = GetSliderRange(kvp.Key);
+            float normalizedDeviation = Mathf.Abs(kvp.Value - defaultValue) / sliderRange;
+            currentDeviationUsed += normalizedDeviation;
+        }
+        
+        UpdateResourceUI();
+    }
+    
+    private float GetSliderRange(PostProcessingEffect effect)
+    {
+        foreach (HotBarPair hotBarPair in postProcessingSliderValues)
+        {
+            if (hotBarPair.type == effect)
+            {
+                return hotBarPair.data.MaxValue - hotBarPair.data.MinValue;
+            }
+        }
+        
+        return 1.0f; // Default range if not found
+    }
+    
+    private bool TryAdjustSlider(PostProcessingEffect effect, float newValue)
+    {
+        float defaultValue = DefaultPostProcessingEffectValues[effect];
+        float currentValue = CurrentPostProcessingEffectValues[effect];
+        float sliderRange = GetSliderRange(effect);
+        
+        // Calculate the normalized deviation from default (as percentage of total range)
+        float currentNormalizedDeviation = Mathf.Abs(currentValue - defaultValue) / sliderRange;
+        float newNormalizedDeviation = Mathf.Abs(newValue - defaultValue) / sliderRange;
+        
+        // Calculate the change in deviation
+        float deviationChange = newNormalizedDeviation - currentNormalizedDeviation;
+        
+        // Special case: if returning closer to default, allow it
+        if (deviationChange < 0)
+        {
+            // Update the current deviation used
+            currentDeviationUsed += deviationChange; // This will be negative, reducing the total
+            
+            // Apply the new value
+            CurrentPostProcessingEffectValues[effect] = newValue;
+            UpdateResourceUI();
+            return true;
+        }
+        
+        // Check if there's enough budget for the adjustment
+        if (currentDeviationUsed + deviationChange > maxTotalDeviationBudget)
+        {
+            Debug.Log($"Not enough deviation budget! Need {deviationChange}, have {maxTotalDeviationBudget - currentDeviationUsed}");
+            return false;
+        }
+        
+        // Update the current deviation used
+        currentDeviationUsed += deviationChange;
+        
+        // Apply the new value
+        CurrentPostProcessingEffectValues[effect] = newValue;
+        UpdateResourceUI();
+        
+        return true;
+    }
+    
+    private void UpdateResourceUI()
+    {
+        if (resourceBar != null)
+        {
+            resourceBar.value = maxTotalDeviationBudget - currentDeviationUsed;
+            resourceBar.highValue = maxTotalDeviationBudget;
+        }
+        
+        if (resourceLabel != null)
+        {
+            resourceLabel.text = $"Computational Power: {((maxTotalDeviationBudget - currentDeviationUsed) * 100) .ToString("F2")}/{(maxTotalDeviationBudget* 100).ToString("F2")}";
+        }
+        
+        // Disable all sliders if budget is fully depleted (except for returning to default)
+        bool hasRemainingBudget = currentDeviationUsed < maxTotalDeviationBudget;
+        for (int i = 0; i < 3; i++)
+        {
+            PostProcessingEffect effect = CurrentHotBar[i].type;
+            float currentValue = CurrentPostProcessingEffectValues[effect];
+            float defaultValue = DefaultPostProcessingEffectValues[effect];
+            
+            // Enable sliders if there's budget OR if they're not at default (so they can return)
+            bool canMove = hasRemainingBudget || !Mathf.Approximately(currentValue, defaultValue);
+            if (slider[i] != null) {
+                slider[i].SetEnabled(canMove);
+            }
+            
+        }
+    }
+    
+    #endregion
 
     #region Listener Methods
 
     private void OnBrightnessChanged(ChangeEvent<float> evt) {
-        PostProccessManager.Instance.ChangeBrightness(evt.newValue);
-        CurrentPostProcessingEffectValues[PostProcessingEffect.Brightness] = evt.newValue;
-        ResetSliderTutorialTimer();
+        if (TryAdjustSlider(PostProcessingEffect.Brightness, evt.newValue))
+        {
+            PostProccessManager.Instance.ChangeBrightness(evt.newValue);
+            ResetSliderTutorialTimer();
+        }
+        else
+        {
+            // Revert the slider to previous value if not enough budget
+            slider[0].SetValueWithoutNotify(CurrentPostProcessingEffectValues[PostProcessingEffect.Brightness]);
+        }
     }
 
     private void OnAntiAliasingChanged(ChangeEvent<float> evt) {
-        PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
-        CurrentPostProcessingEffectValues[PostProcessingEffect.AntiAliasing] = evt.newValue;
-        ResetSliderTutorialTimer();
+        if (TryAdjustSlider(PostProcessingEffect.AntiAliasing, evt.newValue))
+        {
+            PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
+            ResetSliderTutorialTimer();
+        }
+        else
+        {
+            // Revert the slider to previous value if not enough budget
+            slider[1].SetValueWithoutNotify(CurrentPostProcessingEffectValues[PostProcessingEffect.AntiAliasing]);
+        }
     }
 
     private void OnMotionBlurChanged(ChangeEvent<float> evt) {
-        PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
-        CurrentPostProcessingEffectValues[PostProcessingEffect.MotionBlur] = evt.newValue;
-        ResetSliderTutorialTimer();
+        if (TryAdjustSlider(PostProcessingEffect.MotionBlur, evt.newValue))
+        {
+            PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
+            ResetSliderTutorialTimer();
+        }
+        else
+        {
+            // Revert the slider to previous value if not enough budget
+            slider[2].SetValueWithoutNotify(CurrentPostProcessingEffectValues[PostProcessingEffect.MotionBlur]);
+        }
     }
 
     #endregion
@@ -182,7 +332,47 @@ public class GameManager : MonoBehaviour
         } 
         Debug.LogError("No Post Processing Effect found: " + postProcessingEffect);
         return 0;
-    } 
+    }
+    
+    public float GetRemainingDeviationBudget()
+    {
+        return maxTotalDeviationBudget - currentDeviationUsed;
+    }
+    
+    public float GetDefaultValue(PostProcessingEffect effect)
+    {
+        return DefaultPostProcessingEffectValues[effect];
+    }
+    
+    public void ResetAllSlidersToDefault()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            PostProcessingEffect effect = CurrentHotBar[i].type;
+            float defaultValue = DefaultPostProcessingEffectValues[effect];
+            
+            // Set value directly to avoid callback loop
+            CurrentPostProcessingEffectValues[effect] = defaultValue;
+            slider[i].SetValueWithoutNotify(defaultValue);
+            
+            // Apply the effect
+            switch (effect)
+            {
+                case PostProcessingEffect.Brightness:
+                    PostProccessManager.Instance.ChangeBrightness(defaultValue);
+                    break;
+                case PostProcessingEffect.AntiAliasing:
+                    PostProccessManager.Instance.ChangeAntiAlyasing(defaultValue);
+                    break;
+                case PostProcessingEffect.MotionBlur:
+                    PostProccessManager.Instance.ChangeMotionBlur(defaultValue);
+                    break;
+            }
+        }
+        
+        // Reset the deviation budget
+        ResetDeviationBudget();
+    }
     #endregion
     
     
@@ -219,5 +409,4 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
 }
