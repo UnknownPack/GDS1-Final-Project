@@ -50,23 +50,6 @@ public class PieMenuManager : MonoBehaviour
     }
 
     private void Redraw() {
-        // Transform menuItemsDir = pieMenu.PieMenuElements.MenuItemsDir;
-
-        // var settingsHandler = PieMenuShared.References.GeneralSettingsHandler;
-        // var pieMenuInfo = pieMenu.PieMenuInfo;
-        // int menuItemCount = menuItemsDir.childCount;
-        // int menuItemspacing = pieMenuInfo.MenuItemSpacing;
-        // int rotation = pieMenuInfo.Rotation;
-
-        // settingsHandler.HandleRotationChange(pieMenu, 0);
-
-        // pieMenu.MenuItemsTracker.Initialize(menuItemsDir);
-
-        // settingsHandler.UpdateButtons(pieMenu, menuItemCount, menuItemspacing);
-
-        // // ManageMenuItemspacing(pieMenu);
-        // settingsHandler.HandleRotationChange(pieMenu, rotation);
-        // RotationCalculator.CalculateNewRotation(pieMenu.MenuItemsTracker.PieMenuItems.Count, pieMenu.PieMenuInfo.MenuItemSpacing);
         var generalSettingsHandler = PieMenuShared.References.GeneralSettingsHandler;
         generalSettingsHandler.HandleRotationChange(pieMenu, 0);
     }

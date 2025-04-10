@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
     
     private Dictionary<PostProcessingEffect, float> CurrentPostProcessingEffectValues;
     private Dictionary<PostProcessingEffect, float> DefaultPostProcessingEffectValues;
-    private HotBarPair[] CurrentHotBar = new HotBarPair[7];
-    private Slider[] slider = new Slider[7];
+    private HotBarPair[] CurrentHotBar = new HotBarPair[2];
+    private Slider[] slider = new Slider[2];
+    private int selectedSliderIndex = 0;
 
     // Resource UI elements
     private ProgressBar resourceBar;
@@ -35,6 +36,8 @@ public class GameManager : MonoBehaviour
     [Header("Tutorial UI (Only for Introducing-Level)")]
     public GameObject sliderTutorialText;
     private Coroutine sliderTutorialCoroutine;
+
+    private EventCallback<ChangeEvent<float>>[] sliderCallbacks = new EventCallback<ChangeEvent<float>>[2];
 
 
     #region Persistant Game Manager Instancing 
@@ -69,6 +72,8 @@ public class GameManager : MonoBehaviour
      {
          Debug.Log("Scene loaded: " + scene.name);
          InitalizeDefaultSliderValues();
+
+         InitializeUIElements();
          
          if (resetBudgetOnSceneLoad)
          {
@@ -96,37 +101,239 @@ public class GameManager : MonoBehaviour
  
     void Start()
     { 
-        InitalizeDefaultSliderValues();
+        InitializeSystem();
         postProccessManager = GetComponent<PostProccessManager>();
-        
-        #region UI Initialization
-        quickAccessDocument = GetComponent<UIDocument>();
-        slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
-        slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
-        slider[2] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyThree");
-        slider[3] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyFour");
-        slider[4] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyFive");
-        slider[5] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeySix");
-        slider[6] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeySeven");
-        
-        resourceBar = quickAccessDocument.rootVisualElement.Q<ProgressBar>("deviationBudgetBar");
-        resourceLabel = quickAccessDocument.rootVisualElement.Q<Label>("deviationBudgetLabel");
-        #endregion
-
-        // Initialize deviation budget
+        InitializeUIElements();
         ResetDeviationBudget();
+    }
 
-        for (int i = 0; i < 7; i++)
-        {
-            SetSlider(i, slider[i], postProcessingSliderValues[i]);
-            var sliderType = postProcessingSliderValues[i].type;
-            slider[i].RegisterValueChangedCallback(evt => OnSliderChanged(evt, sliderType));
-        }
-        
-        UpdateResourceUI();
+    private void Update() {
+        HandleHotbarInput();
     }
 
     
+    private void InitializeSystem() {
+        CurrentPostProcessingEffectValues = new Dictionary<PostProcessingEffect, float>();
+        DefaultPostProcessingEffectValues = new Dictionary<PostProcessingEffect, float>();
+
+        foreach (HotBarPair pair in postProcessingSliderValues) {
+            CurrentPostProcessingEffectValues.Add(pair.type, pair.data.DefaultValue);
+            DefaultPostProcessingEffectValues.Add(pair.type, pair.data.DefaultValue);
+        }
+    }
+
+    private void InitializeUIElements() {
+        quickAccessDocument = GetComponent<UIDocument>();
+        
+        slider[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
+        slider[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
+
+        resourceBar = quickAccessDocument.rootVisualElement.Q<ProgressBar>("deviationBudgetBar");
+        resourceLabel = quickAccessDocument.rootVisualElement.Q<Label>("deviationBudgetLabel");
+
+            if (slider[0] == null || slider[1] == null || resourceBar == null || resourceLabel == null) {
+        Debug.LogError("Failed to find required UI elements!");
+        return;
+    }
+
+        for (int i = 0; i < 2; i++) {
+            SetupSlider(i, postProcessingSliderValues[i]);
+        }
+        resourceBar.lowValue = 0;
+        resourceBar.highValue = maxTotalDeviationBudget;
+    }
+
+    private void SetupSlider(int index, HotBarPair pair) {
+        CurrentHotBar[index] = pair;
+        slider[index].label = pair.type.ToString();
+        slider[index].value = pair.data.DefaultValue;
+        slider[index].lowValue = pair.data.MinValue;
+        slider[index].highValue = pair.data.MaxValue;
+        
+        // Store the effect type locally to capture the correct value
+        PostProcessingEffect effectType = pair.type;
+        
+        // Clean up existing callback first
+        if (sliderCallbacks[index] != null) {
+            slider[index].UnregisterValueChangedCallback(sliderCallbacks[index]);
+        }
+        
+        // Create new callback with captured effectType
+        sliderCallbacks[index] = evt => OnSliderChanged(evt, effectType);
+        slider[index].RegisterValueChangedCallback(sliderCallbacks[index]);
+    }
+
+    private void HandleHotbarInput() {
+        HandleSelectionInput();
+        HandleAdjustmentInput();
+    }
+
+    private void HandleSelectionInput() {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectSlider(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectSlider(1);
+    }
+
+    private void HandleAdjustmentInput() {
+        if (CurrentHotBar.Length == 0 || selectedSliderIndex < 0 || selectedSliderIndex >= CurrentHotBar.Length) 
+            return;
+
+        HotBarPair currentPair = CurrentHotBar[selectedSliderIndex];
+        PostProcessingEffect currentEffect = currentPair.type;
+        float currentValue = CurrentPostProcessingEffectValues[currentEffect];
+        float min = currentPair.data.MinValue;
+        float max = currentPair.data.MaxValue;
+        float def = currentPair.data.DefaultValue;
+        float epsilon = 0.0001f; // Small value for float comparisons
+
+        // Gradual adjustments
+        if (Input.GetKey(KeyCode.W)) {
+            float newValue = Mathf.Min(currentValue + (max - min) * 0.01f, max);
+            UpdateSliderAndEffects(currentEffect, newValue);
+        }
+        if (Input.GetKey(KeyCode.S)) {
+            float newValue = Mathf.Max(currentValue - (max - min) * 0.01f, min);
+            UpdateSliderAndEffects(currentEffect, newValue);
+        }
+
+        // Q - moves down through states
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            float newValue;
+            if (Mathf.Abs(currentValue - max) < epsilon) {
+                newValue = def; // Max → Default
+            }
+            else if (Mathf.Abs(currentValue - def) < epsilon && def > min + epsilon) {
+                newValue = min; // Default → Min (only if default > min)
+            }
+            else if (currentValue > def + epsilon) {
+                newValue = def; // Above default → Default
+            }
+            else {
+                newValue = min; // Everything else → Min
+            }
+            UpdateSliderAndEffects(currentEffect, newValue);
+        }
+
+        // E - moves up through states
+        if (Input.GetKeyDown(KeyCode.E)) {
+            float newValue;
+            if (Mathf.Abs(currentValue - min) < epsilon && def > min + epsilon) {
+                newValue = def; // Min → Default (only if default > min)
+            }
+            else if (Mathf.Abs(currentValue - def) < epsilon) {
+                newValue = max; // Default → Max
+            }
+            else if (currentValue < def - epsilon) {
+                newValue = def; // Below default → Default
+            }
+            else {
+                newValue = max; // Everything else → Max
+            }
+            UpdateSliderAndEffects(currentEffect, newValue);
+        }
+    }
+
+    private void UpdateSliderAndEffects(PostProcessingEffect effect, float newValue) {
+    // Clamp the value first
+    HotBarPair pair = GetPairForEffect(effect);
+    newValue = Mathf.Clamp(newValue, pair.data.MinValue, pair.data.MaxValue);
+
+    // Try to adjust (checks deviation budget)
+    if (TryAdjustSlider(effect, newValue)) {
+        // Update UI slider
+        int sliderIndex = GetSliderIndexForEffect(effect);
+        if (sliderIndex >= 0 && sliderIndex < slider.Length) {
+            slider[sliderIndex].value = newValue;
+        }
+    }
+}
+
+    private HotBarPair GetPairForEffect(PostProcessingEffect effect) {
+        foreach (var pair in CurrentHotBar) {
+            if (pair.type == effect) {
+                return pair;
+            }
+        }
+        return default;
+    }
+
+    private int GetSliderIndexForEffect(PostProcessingEffect effect) {
+        for (int i = 0; i < CurrentHotBar.Length; i++) {
+            if (CurrentHotBar[i].type == effect) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void AdjustSliderValue(float newValue) {
+        HotBarPair pair = CurrentHotBar[selectedSliderIndex];
+        newValue = Mathf.Clamp(newValue, pair.data.MinValue, pair.data.MaxValue);
+        
+        if (TryAdjustSlider(pair.type, newValue)) {
+            UpdateSliderVisuals();
+        }
+    }
+
+    private void SetSliderToMin() {
+        HotBarPair pair = CurrentHotBar[selectedSliderIndex];
+        AdjustSliderValue(pair.data.MinValue);
+    }
+
+    private void SetSliderToMax() {
+        HotBarPair pair = CurrentHotBar[selectedSliderIndex];
+        AdjustSliderValue(pair.data.MaxValue);
+    }
+
+    private void SelectSlider(int index) {
+        selectedSliderIndex = Mathf.Clamp(index, 0, CurrentHotBar.Length - 1);
+        UpdateSliderVisuals();
+    }
+
+    private void UpdateSliderVisuals() {
+        for (int i = 0; i < slider.Length; i++) {
+            slider[i].style.backgroundColor = new StyleColor(
+                i == selectedSliderIndex ? Color.green : Color.clear
+            );
+        }
+    }
+
+    private bool TryAdjustSlider(PostProcessingEffect effect, float newValue) {
+        float defaultValue = DefaultPostProcessingEffectValues[effect];
+        float currentValue = CurrentPostProcessingEffectValues[effect];
+        float sliderRange = GetSliderRange(effect);
+
+        float currentDeviation = Mathf.Abs(currentValue - defaultValue) / sliderRange;
+        float newDeviation = Mathf.Abs(newValue - defaultValue) / sliderRange;
+        float deviationDelta = newDeviation - currentDeviation;
+
+        if (deviationDelta > 0 && currentDeviationUsed + deviationDelta > maxTotalDeviationBudget) {
+            Debug.Log("Deviation budget exceeded");
+            return false;
+        }
+
+        currentDeviationUsed += deviationDelta;
+        CurrentPostProcessingEffectValues[effect] = newValue;
+        UpdateResourceUI();
+        return true;
+    }
+
+    private float GetSliderRange(PostProcessingEffect effect) {
+        foreach (HotBarPair pair in postProcessingSliderValues) {
+            if (pair.type == effect) {
+                return pair.data.MaxValue - pair.data.MinValue;
+            }
+        }
+        return 1f;
+    }
+
+    public void SetSelectedSlider(int index) {
+        SelectSlider(index);
+    }
+
+    private void UpdateResourceUI() {
+        resourceBar.value = maxTotalDeviationBudget - currentDeviationUsed;
+        resourceLabel.text = $"Resources: {(maxTotalDeviationBudget - currentDeviationUsed) * 100:F2}/{maxTotalDeviationBudget * 100:F2}";
+    }
 
     void SetSlider(int index, Slider slider, HotBarPair hotBarPair)
     {
@@ -159,103 +366,18 @@ public class GameManager : MonoBehaviour
         UpdateResourceUI();
     }
 
-    private void RecalculateCurrentDeviation()
-    {
+    private void RecalculateCurrentDeviation() {
         currentDeviationUsed = 0f;
-        foreach (KeyValuePair<PostProcessingEffect, float> kvp in CurrentPostProcessingEffectValues)
-        {
-            float defaultValue = DefaultPostProcessingEffectValues[kvp.Key];
-            float sliderRange = GetSliderRange(kvp.Key);
-            float normalizedDeviation = Mathf.Abs(kvp.Value - defaultValue) / sliderRange;
+        // Only consider effects in the current hotbar
+        foreach (HotBarPair pair in CurrentHotBar) {
+            PostProcessingEffect effect = pair.type;
+            float defaultValue = DefaultPostProcessingEffectValues[effect];
+            float currentValue = CurrentPostProcessingEffectValues[effect];
+            float sliderRange = GetSliderRange(effect);
+            float normalizedDeviation = Mathf.Abs(currentValue - defaultValue) / sliderRange;
             currentDeviationUsed += normalizedDeviation;
         }
-        
         UpdateResourceUI();
-    }
-    
-    private float GetSliderRange(PostProcessingEffect effect)
-    {
-        foreach (HotBarPair hotBarPair in postProcessingSliderValues)
-        {
-            if (hotBarPair.type == effect)
-            {
-                return hotBarPair.data.MaxValue - hotBarPair.data.MinValue;
-            }
-        }
-        
-        return 1.0f; // Default range if not found
-    }
-    
-    private bool TryAdjustSlider(PostProcessingEffect effect, float newValue)
-    {
-        float defaultValue = DefaultPostProcessingEffectValues[effect];
-        float currentValue = CurrentPostProcessingEffectValues[effect];
-        float sliderRange = GetSliderRange(effect);
-        
-        // Calculate the normalized deviation from default (as percentage of total range)
-        float currentNormalizedDeviation = Mathf.Abs(currentValue - defaultValue) / sliderRange;
-        float newNormalizedDeviation = Mathf.Abs(newValue - defaultValue) / sliderRange;
-        
-        // Calculate the change in deviation
-        float deviationChange = newNormalizedDeviation - currentNormalizedDeviation;
-        
-        // Special case: if returning closer to default, allow it
-        if (deviationChange < 0)
-        {
-            // Update the current deviation used
-            currentDeviationUsed += deviationChange; // This will be negative, reducing the total
-            
-            // Apply the new value
-            CurrentPostProcessingEffectValues[effect] = newValue;
-            UpdateResourceUI();
-            return true;
-        }
-        
-        // Check if there's enough budget for the adjustment
-        if (currentDeviationUsed + deviationChange > maxTotalDeviationBudget)
-        {
-            Debug.Log($"Not enough deviation budget! Need {deviationChange}, have {maxTotalDeviationBudget - currentDeviationUsed}");
-            return false;
-        }
-        
-        // Update the current deviation used
-        currentDeviationUsed += deviationChange;
-        
-        // Apply the new value
-        CurrentPostProcessingEffectValues[effect] = newValue;
-        UpdateResourceUI();
-        
-        return true;
-    }
-    
-    private void UpdateResourceUI()
-    {
-        if (resourceBar != null)
-        {
-            resourceBar.value = maxTotalDeviationBudget - currentDeviationUsed;
-            resourceBar.highValue = maxTotalDeviationBudget;
-        }
-        
-        if (resourceLabel != null)
-        {
-            resourceLabel.text = $"Computational Power: {((maxTotalDeviationBudget - currentDeviationUsed) * 100) .ToString("F2")}/{(maxTotalDeviationBudget* 100).ToString("F2")}";
-        }
-        
-        // Disable all sliders if budget is fully depleted (except for returning to default)
-        bool hasRemainingBudget = currentDeviationUsed < maxTotalDeviationBudget;
-        for (int i = 0; i < 7; i++)
-        {
-            PostProcessingEffect effect = CurrentHotBar[i].type;
-            float currentValue = CurrentPostProcessingEffectValues[effect];
-            float defaultValue = DefaultPostProcessingEffectValues[effect];
-            
-            // Enable sliders if there's budget OR if they're not at default (so they can return)
-            bool canMove = hasRemainingBudget || !Mathf.Approximately(currentValue, defaultValue);
-            if (slider[i] != null) {
-                slider[i].SetEnabled(canMove);
-            }
-            
-        }
     }
     
     #endregion
@@ -377,6 +499,77 @@ public class GameManager : MonoBehaviour
         
         // Reset the deviation budget
         ResetDeviationBudget();
+    }
+
+    public void ReplaceSlider(PostProcessingEffect newEffect)
+    {
+        int slotIndex = selectedSliderIndex;
+        // Remove this line as it overrides the passed slotIndex with selectedSliderIndex
+        // slotIndex = selectedSliderIndex;
+        
+        if (slotIndex < 0 || slotIndex >= CurrentHotBar.Length)
+        {
+            Debug.LogError($"Invalid slot index: {slotIndex}");
+            return;
+        }
+
+        // Get the current effect before replacement
+        PostProcessingEffect oldEffect = CurrentHotBar[slotIndex].type;
+
+        UpdateSliderAndEffects(oldEffect, GetDefaultValue(oldEffect));
+        
+        // If replacing with same effect, do nothing
+        if (oldEffect == newEffect) return;
+
+        // Find the new effect's data
+        HotBarPair newPair = postProcessingSliderValues.Find(pair => pair.type == newEffect);
+        if (newPair.Equals(default(HotBarPair)))
+        {
+            Debug.LogError($"Effect {newEffect} not found in postProcessingSliderValues");
+            return;
+        }
+
+        // Calculate deviation adjustment:
+        // 1. Remove deviation from old effect
+        float oldDefault = DefaultPostProcessingEffectValues[oldEffect];
+        float oldValue = CurrentPostProcessingEffectValues[oldEffect];
+        float oldDeviation = Mathf.Abs(oldValue - oldDefault) / 
+                            (CurrentHotBar[slotIndex].data.MaxValue - CurrentHotBar[slotIndex].data.MinValue);
+        currentDeviationUsed -= oldDeviation;
+
+        // 2. Reset old effect to default in dictionary
+        CurrentPostProcessingEffectValues[oldEffect] = oldDefault;
+
+        // 3. Set new effect to its default value
+        float newDefault = newPair.data.DefaultValue;
+        CurrentPostProcessingEffectValues[newEffect] = newDefault;
+        
+        // 4. Calculate new effect's deviation (will be 0 since we're setting to default)
+        float newDeviation = 0f;
+        currentDeviationUsed += newDeviation;
+        Debug.Log(sliderCallbacks[slotIndex]);
+        // Unregister old callback
+        if (sliderCallbacks[slotIndex] != null)
+        {
+            slider[slotIndex].UnregisterValueChangedCallback(sliderCallbacks[slotIndex]);
+        }
+        Debug.Log(sliderCallbacks[slotIndex]);
+
+        // Update the hotbar slot
+        CurrentHotBar[slotIndex] = newPair;
+
+        // Update UI slider
+        slider[slotIndex].label = newEffect.ToString();
+        slider[slotIndex].lowValue = newPair.data.MinValue;
+        slider[slotIndex].highValue = newPair.data.MaxValue;
+        slider[slotIndex].value = newDefault;
+
+        // Register new callback
+        sliderCallbacks[slotIndex] = evt => OnSliderChanged(evt, newEffect);
+        slider[slotIndex].RegisterValueChangedCallback(sliderCallbacks[slotIndex]);
+
+        // Update the UI (no need for full recalculate since we've manually adjusted deviation)
+        UpdateResourceUI();
     }
     #endregion
     

@@ -58,7 +58,7 @@ namespace SimplePieMenu
 
             if (prefabIsolationMode != null || parent != null && !parent.activeSelf) return;
 
-            if (!selected && menuItem.PieMenu != null && menuItem.PieMenu.MenuItemsTracker.ButtonComponents != null)
+            if (!selected && menuItem.PieMenu != null && menuItem.PieMenu.MenuItemsTracker != null && menuItem.PieMenu.MenuItemsTracker.ButtonComponents != null)
             {
                 SelectMenuItem();
             }
