@@ -10,10 +10,7 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     
     [Header("Post Processing Sliders")]
-    [Tooltip("This list stores the min, max and current values a slider for a post-porcessing effect can have")]
-    [SerializeField]private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
-
-    private int currentLevel = 0;
+    [Tooltip("This list stores the min, max and current values a slider for a post-porcessing effect can have")]  
     [SerializeField] private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
     
     [Header("Slider Resource System")]
@@ -21,14 +18,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maxTotalDeviationBudget = 1.0f;
     [SerializeField] private float currentDeviationUsed = 0f;
     [Tooltip("Whether to reset deviation budget when loading a new scene")]
-    [SerializeField] private bool resetBudgetOnSceneLoad = true;
+    [SerializeField] private bool resetBudgetOnSceneLoad = true; 
     
     private Dictionary<PostProcessingEffect, float> CurrentPostProcessingEffectValues;
     private Dictionary<PostProcessingEffect, float> DefaultPostProcessingEffectValues;
     private HotBarPair[] CurrentHotBar = new HotBarPair[2];
     private Slider[] slider = new Slider[2];
     private int selectedSliderIndex = 0;
-
+    private int currentLevel = 0;
     // Resource UI elements
     private ProgressBar resourceBar;
     private Label resourceLabel;
@@ -74,19 +71,8 @@ public class GameManager : MonoBehaviour
      private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
      {
          Debug.Log("Scene loaded: " + scene.name);
-         InitalizeDefaultSliderValues();
+         InitalizeDefaultSliderValues(); 
          currentLevel = SceneManager.GetActiveScene().buildIndex;
-        if (scene.name == "Introducing-Level")
-        {
-            if (sliderTutorialText != null)
-                sliderTutorialText.SetActive(true); 
-        }
-        else
-        {
-            if (sliderTutorialText != null)
-                sliderTutorialText.SetActive(false);
-        }
-    }
 
          InitializeUIElements();
          
@@ -110,7 +96,7 @@ public class GameManager : MonoBehaviour
              if (sliderTutorialText != null)
                  sliderTutorialText.SetActive(false);
          }
-     }
+     } 
      
      #endregion
  
@@ -367,12 +353,10 @@ public class GameManager : MonoBehaviour
         
         foreach (HotBarPair hotBarPair in postProcessingSliderValues)
         {
-            CurrentPostProcessingEffectValues.Add(hotBarPair.type, hotBarPair.data.DefaultValue);
-        }  
             float defaultValue = hotBarPair.data.DefaultValue;
             CurrentPostProcessingEffectValues.Add(hotBarPair.type, defaultValue);
             DefaultPostProcessingEffectValues.Add(hotBarPair.type, defaultValue);
-        }
+        } 
     }
 
     #region Resource System Methods
@@ -402,42 +386,42 @@ public class GameManager : MonoBehaviour
     #region Listener Methods
 
     private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect)
-{
-    if (TryAdjustSlider(effect, evt.newValue))
     {
-        switch (effect)
+        if (TryAdjustSlider(effect, evt.newValue))
         {
-            case PostProcessingEffect.Brightness:
-                PostProccessManager.Instance.ChangeBrightness(evt.newValue);
-                break;
-            case PostProcessingEffect.AntiAliasing:
-                PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
-                break;
-            case PostProcessingEffect.MotionBlur:
-                PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
-                break;
-            case PostProcessingEffect.FilmGrain:
-                PostProccessManager.Instance.ChangeFilmGrain(evt.newValue);
-                break;
-            case PostProcessingEffect.ColorCorrection:
-                PostProccessManager.Instance.ChangeColorCorrection(evt.newValue);
-                break;
-            case PostProcessingEffect.ChromaticAberration:
-                PostProccessManager.Instance.ChangeChromaticAberration(evt.newValue);
-                break;
-            case PostProcessingEffect.Bloom:
-                PostProccessManager.Instance.ChangeBloom(evt.newValue);
-                break;
-        }
+            switch (effect)
+            {
+                case PostProcessingEffect.Brightness:
+                    PostProccessManager.Instance.ChangeBrightness(evt.newValue);
+                    break;
+                case PostProcessingEffect.AntiAliasing:
+                    PostProccessManager.Instance.ChangeAntiAlyasing(evt.newValue);
+                    break;
+                case PostProcessingEffect.MotionBlur:
+                    PostProccessManager.Instance.ChangeMotionBlur(evt.newValue);
+                    break;
+                case PostProcessingEffect.FilmGrain:
+                    PostProccessManager.Instance.ChangeFilmGrain(evt.newValue);
+                    break;
+                case PostProcessingEffect.ColorCorrection:
+                    PostProccessManager.Instance.ChangeColorCorrection(evt.newValue);
+                    break;
+                case PostProcessingEffect.ChromaticAberration:
+                    PostProccessManager.Instance.ChangeChromaticAberration(evt.newValue);
+                    break;
+                case PostProcessingEffect.Bloom:
+                    PostProccessManager.Instance.ChangeBloom(evt.newValue);
+                    break;
+            }
 
-        ResetSliderTutorialTimer();
+            ResetSliderTutorialTimer();
+        }
+        else
+        {
+            // Revert the slider to previous value if not enough budget
+            slider[0].SetValueWithoutNotify(CurrentPostProcessingEffectValues[effect]);
+        }
     }
-    else
-    {
-        // Revert the slider to previous value if not enough budget
-        slider[0].SetValueWithoutNotify(CurrentPostProcessingEffectValues[effect]);
-    }
-}
 
     #endregion
 
@@ -475,7 +459,7 @@ public class GameManager : MonoBehaviour
                 return CurrentPostProcessingEffectValues[postProcessingEffect] / hotBarPair.data.MaxValue;
         } 
         Debug.LogError("No Post Processing Effect found: " + postProcessingEffect);
-        return 0;
+        return 0; 
     } 
     
     public void RestartLevel() 
@@ -484,8 +468,6 @@ public class GameManager : MonoBehaviour
     }
 
     public int GetCurrentLevel() { return currentLevel; }
-
-    }
     
     public float GetRemainingDeviationBudget()
     {
@@ -594,7 +576,7 @@ public class GameManager : MonoBehaviour
 
         // Update the UI (no need for full recalculate since we've manually adjusted deviation)
         UpdateResourceUI();
-    }
+    } 
     #endregion
     
     
@@ -629,10 +611,10 @@ public class GameManager : MonoBehaviour
         public float MaxValue => maxValue;
         public float DefaultValue => defaultValue;
     }
-    #endregion
+    #endregion 
 
     public void RestartLevel() 
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-}
+} 
