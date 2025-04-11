@@ -10,13 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4807484681728770711}
   - component: {fileID: 1502191259899643197}
-  - component: {fileID: 8111453060283433394}
   - component: {fileID: 1419742284433337191}
   - component: {fileID: 3083590068151271766}
   - component: {fileID: 1271383266522604289}
   - component: {fileID: -5448054180017331462}
   - component: {fileID: 822940017041940693}
-  - component: {fileID: 4431083688820339839}
   m_Layer: 0
   m_Name: PostProccessing
   m_TagString: Untagged
@@ -53,20 +51,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   urpAsset: {fileID: 11400000, guid: 681886c5eb7344803b6206f758bf0b1c, type: 2}
   finalBrightness: 20
---- !u!114 &8111453060283433394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4308902281476771174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a3f0d31e67835149ba8d379fa18794f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameUI: {fileID: 9197481963319205126, guid: b00e917cd99995741b086a639c0799b9, type: 3}
-  PauseMenuUI: {fileID: 9197481963319205126, guid: f541d7192a19fb94d8cc981f29c58d89, type: 3}
 --- !u!114 &1419742284433337191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,6 +79,29 @@ MonoBehaviour:
       minValue: 0
       maxValue: 1
       defaultValue: 0
+  - type: 3
+    data:
+      minValue: 0
+      maxValue: 1
+      defaultValue: 0
+  - type: 4
+    data:
+      minValue: -1
+      maxValue: 1
+      defaultValue: 0
+  - type: 5
+    data:
+      minValue: 0
+      maxValue: 1
+      defaultValue: 0
+  - type: 6
+    data:
+      minValue: 0
+      maxValue: 1
+      defaultValue: 0
+  maxTotalDeviationBudget: 1.5
+  currentDeviationUsed: 0
+  resetBudgetOnSceneLoad: 0
   sliderTutorialText: {fileID: 0}
 --- !u!114 &3083590068151271766
 MonoBehaviour:
@@ -201,33 +208,3 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
---- !u!114 &4431083688820339839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4308902281476771174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 63b4ee411e689914d9d57107e88bff07, type: 3}
-  m_NotificationBehavior: 3
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
