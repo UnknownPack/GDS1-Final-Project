@@ -664,12 +664,36 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: resetBudgetOnSceneLoad
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: CurrentHotBar.Array.data[1].type
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: postProcessingSliderValues.Array.size
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: CurrentHotBar.Array.data[0].data.maxValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: CurrentHotBar.Array.data[1].data.maxValue
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: CurrentHotBar.Array.data[0].data.defaultValue
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: postProcessingSliderValues.Array.data[7].type
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: postProcessingSliderValues.Array.data[7].data.maxValue
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_Name
