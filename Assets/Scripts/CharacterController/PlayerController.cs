@@ -80,5 +80,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Player hit spikes");
             GameManager.Instance.RestartLevel();
         }
+
+        if (other.CompareTag("Pedestal"))
+        {
+            string pedestalName = other.gameObject.name;
+            PieMenuManager.Instance.HandleAddingItem(pedestalName);
+        }
     }
 }

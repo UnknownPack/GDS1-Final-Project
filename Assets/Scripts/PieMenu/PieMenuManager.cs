@@ -1,11 +1,18 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SimplePieMenu;
 using UnityEngine;
 
 public class PieMenuManager : MonoBehaviour
 {
+    public static PieMenuManager Instance { get; private set; }
     [SerializeField] PieMenu pieMenu;
     private PieMenuDisplayer displayer;
+    [SerializeField] private List<int> enabledItems = new();
+    [SerializeField] private List<int> allWheelItems = new() {0, 1, 2, 3, 4, 5, 6};
+    private HashSet<int> currentlyHiddenItems = new();
+    private bool menuInitilised = false;
 
     // Dictionary now maps string names to their enum index values (ints)
     private Dictionary<string, int> postProcessingDict = new Dictionary<string, int>
@@ -21,6 +28,13 @@ public class PieMenuManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        Instance = this;
         displayer = GetComponent<PieMenuDisplayer>();
         pieMenu.OnPieMenuFullyInitialized += HideMenuItems;
     }
@@ -31,13 +45,12 @@ public class PieMenuManager : MonoBehaviour
     }
 
     void HideMenuItems() {
+        menuInitilised = true;
         List<int> menuItemsIds = new();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 6; i > 1; i--) {
             menuItemsIds.Add(i);
         }
-        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu,
-            menuItemsIds);
-        Redraw();
+        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu, menuItemsIds);
     }
 
     void Start()
@@ -55,26 +68,25 @@ public class PieMenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             displayer.ShowPieMenu(pieMenu);
+            // StartCoroutine(DelayedHideMenuItems());
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            DisableMenuItem(1);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            EnableMenuItem(1);
+            Redraw();
         }
     }
 
-    private void DisableMenuItem(int menuItemId)
+    private IEnumerator DelayedHideMenuItems()
     {
-        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu, new List<int> { menuItemId });
-        Redraw();
+        // Wait for a frame to ensure menu is fully loaded
+        while (!menuInitilised) {yield return null;}
+        HideMenuItems();
     }
 
-    private void EnableMenuItem(int menuItemId)
+    public void EnableMenuItem(int menuItemId)
     {
         PieMenuShared.References.MenuItemsManager.MenuItemHider.Restore(pieMenu, new List<int> { menuItemId });
+        enabledItems.Add(menuItemId);
         Redraw();
     }
 
@@ -85,22 +97,18 @@ public class PieMenuManager : MonoBehaviour
     }
 
     // Trigger detection and adding to pie menu
-    private void OnTriggerEnter(Collider other)
+    public void HandleAddingItem(string pedestalName)
     {
-        if (other.CompareTag("Pedestal"))
+        if (postProcessingDict.ContainsKey(pedestalName))
         {
-            string pedestalName = other.gameObject.name;
-
-            if (postProcessingDict.ContainsKey(pedestalName))
-            {
-                int effectIndex = postProcessingDict[pedestalName];
-                EnableMenuItem(effectIndex);
-                Redraw();
-            }
-            else
-            {
-                Debug.LogWarning($"No effect index found for pedestal: {pedestalName}");
-            }
+            Debug.Log(pedestalName);
+            int effectIndex = postProcessingDict[pedestalName];
+            EnableMenuItem(effectIndex);
+            Redraw();
+        }
+        else
+        {
+            Debug.LogWarning($"No effect index found for pedestal: {pedestalName}");
         }
     }
 }
