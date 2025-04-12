@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
         {
             string pedestalName = other.gameObject.name;
             PieMenuManager.Instance.HandleAddingItem(pedestalName);
+            Destroy(other.GetComponent<BoxCollider2D>());
         }
     }
 }

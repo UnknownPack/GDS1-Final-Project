@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
          Debug.Log("Scene loaded: " + scene.name);
          InitalizeDefaultSliderValues();
 
-         InitializeUIElements();
+        //  InitializeUIElements();
          
          if (resetBudgetOnSceneLoad)
          {
@@ -136,9 +136,11 @@ public class GameManager : MonoBehaviour
         return;
     }
 
-        for (int i = 0; i < 2; i++) {
-            SetupSlider(i, postProcessingSliderValues[i]);
-        }
+        // for (int i = 0; i < 2; i++) {
+        //     SetupSlider(i, postProcessingSliderValues[i]);
+        // }
+        SetupSlider(0, postProcessingSliderValues[0]);
+        SetupSlider(1, postProcessingSliderValues[7]);
         resourceBar.lowValue = 0;
         resourceBar.highValue = maxTotalDeviationBudget;
     }
@@ -355,6 +357,7 @@ public class GameManager : MonoBehaviour
             float defaultValue = hotBarPair.data.DefaultValue;
             CurrentPostProcessingEffectValues.Add(hotBarPair.type, defaultValue);
             DefaultPostProcessingEffectValues.Add(hotBarPair.type, defaultValue);
+            UpdateSliderAndEffects(hotBarPair.type, defaultValue);
         }
     }
 
@@ -587,7 +590,8 @@ public class GameManager : MonoBehaviour
         FilmGrain,
         ColorCorrection,
         ChromaticAberration,
-        Bloom
+        Bloom,
+        Empty
     }
 
     [System.Serializable]public struct PostProcessingEffectData

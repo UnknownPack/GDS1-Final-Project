@@ -11,7 +11,6 @@ public class PieMenuManager : MonoBehaviour
     private PieMenuDisplayer displayer;
     [SerializeField] private List<int> enabledItems = new();
     [SerializeField] private List<int> allWheelItems = new() {0, 1, 2, 3, 4, 5, 6};
-    private HashSet<int> currentlyHiddenItems = new();
     private bool menuInitilised = false;
 
     // Dictionary now maps string names to their enum index values (ints)
@@ -44,13 +43,36 @@ public class PieMenuManager : MonoBehaviour
         pieMenu.OnPieMenuFullyInitialized -= HideMenuItems;
     }
 
+    void OnEnable() {
+            if (pieMenu == null)
+        {
+            pieMenu = FindObjectOfType<PieMenu>(true); // Include inactive objects
+            if (pieMenu != null)
+            {
+                // Re-subscribe to events
+                pieMenu.OnPieMenuFullyInitialized -= HideMenuItems;
+                pieMenu.OnPieMenuFullyInitialized += HideMenuItems;
+                
+                // Re-hide items if we were already initialized
+                if (menuInitilised)
+                {
+                    StartCoroutine(DelayedHideMenuItems());
+                }
+            }
+        }
+        else if (menuInitilised)
+        {
+            // If we already have a reference and were initialized, ensure items are hidden
+            StartCoroutine(DelayedHideMenuItems());
+    }
+    }
+
+
     void HideMenuItems() {
         menuInitilised = true;
         List<int> menuItemsIds = new();
-        for (int i = 6; i > 1; i--) {
-            menuItemsIds.Add(i);
-        }
-        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu, menuItemsIds);
+        List<int> disabledItems = allWheelItems.Except(enabledItems).ToList();
+        PieMenuShared.References.MenuItemsManager.MenuItemHider.Hide(pieMenu, disabledItems);
     }
 
     void Start()
