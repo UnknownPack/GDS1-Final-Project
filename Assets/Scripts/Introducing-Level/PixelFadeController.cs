@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PixelFadeController : MonoBehaviour
@@ -27,10 +28,12 @@ public class PixelFadeController : MonoBehaviour
         {
             t += Time.deltaTime;
             progress = Mathf.Clamp01(t / duration);
-            fadeMaterial.SetFloat("_Progress", progress);
+            fadeMaterial.SetFloat("_Progress", progress);  
             yield return null;
         }
 
         fadeMaterial.SetFloat("_Progress", 1f);
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene("SliderIntroScene");
     }
 }

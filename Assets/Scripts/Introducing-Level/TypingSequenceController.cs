@@ -36,12 +36,7 @@ public class TypingSequenceController : MonoBehaviour
         PixelFadeController pixelFade = FindFirstObjectByType<PixelFadeController>();
         if (pixelFade != null)
         {
-            Debug.Log("PixelFade Triggered from TypingSequenceController");
             pixelFade.StartFade();
-        }
-        else
-        {
-            Debug.LogWarning("PixelFadeController not found in scene.");
         }
     }
 }
