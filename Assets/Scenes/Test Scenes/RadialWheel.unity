@@ -668,30 +668,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: CurrentHotBar.Array.data[1].type
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: postProcessingSliderValues.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: CurrentHotBar.Array.data[0].data.maxValue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: CurrentHotBar.Array.data[1].data.maxValue
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: CurrentHotBar.Array.data[0].data.defaultValue
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
-      propertyPath: postProcessingSliderValues.Array.data[7].type
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: postProcessingSliderValues.Array.data[7].data.maxValue
       value: 1
       objectReference: {fileID: 0}
@@ -4625,18 +4601,6 @@ PrefabInstance:
       propertyPath: pieMenu
       value: 
       objectReference: {fileID: 1007659793}
-    - target: {fileID: 7713433321563538206, guid: 471ab1698762448718d8996a5284f369, type: 3}
-      propertyPath: enabledItems.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7713433321563538206, guid: 471ab1698762448718d8996a5284f369, type: 3}
-      propertyPath: 'enabledItems.Array.data[1]'
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7713433321563538206, guid: 471ab1698762448718d8996a5284f369, type: 3}
-      propertyPath: 'enabledItems.Array.data[2]'
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 9030642820532006453, guid: 471ab1698762448718d8996a5284f369, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.208408

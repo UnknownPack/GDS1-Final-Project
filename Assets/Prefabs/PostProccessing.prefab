@@ -102,11 +102,11 @@ MonoBehaviour:
   - type: 7
     data:
       minValue: 0
-      maxValue: 0
+      maxValue: 1
       defaultValue: 0
   maxTotalDeviationBudget: 1.5
   currentDeviationUsed: 0
-  resetBudgetOnSceneLoad: 0
+  resetBudgetOnSceneLoad: 1
   sliderTutorialText: {fileID: 0}
 --- !u!114 &3083590068151271766
 MonoBehaviour:
