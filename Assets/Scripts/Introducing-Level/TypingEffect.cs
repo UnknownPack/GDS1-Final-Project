@@ -9,6 +9,11 @@ public class TypingEffect : MonoBehaviour
     public string fullText = "Default typing text...";
     public float typingSpeed = 0.05f;
     public bool playOnStart = true;
+    public bool IsTyping()
+    {
+        return isTyping;
+    }
+
 
     private TextMeshProUGUI textComponent;
     private string currentTypedText = "";
@@ -21,19 +26,18 @@ public class TypingEffect : MonoBehaviour
     public float cursorBlinkInterval = 0.5f;
 
     [Header("Audio")]
-    public AudioClip typingSound; // 预先指定的打字声音
+    public AudioClip typingSound;
     private AudioSource audioSource;
 
     void Awake()
     {
         textComponent = GetComponent<TextMeshProUGUI>();
 
-        // 自动添加 AudioSource 组件并设置基础参数
         if (typingSound)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.clip = typingSound;
-            audioSource.loop = true; // 设置为循环播放
+            audioSource.loop = true;
             audioSource.playOnAwake = false;
         }
     }
@@ -58,7 +62,6 @@ public class TypingEffect : MonoBehaviour
         currentTypedText = "";
         textComponent.text = "";
 
-        // 开始播放连续打字声音
         if (audioSource && typingSound)
         {
             audioSource.Play();
@@ -74,7 +77,6 @@ public class TypingEffect : MonoBehaviour
             yield return new WaitForSeconds(typingSpeed);
         }
 
-        // 文字完全显示后，停止打字声音
         if (audioSource && audioSource.isPlaying)
         {
             audioSource.Stop();
