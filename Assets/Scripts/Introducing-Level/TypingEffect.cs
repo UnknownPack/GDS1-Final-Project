@@ -9,6 +9,11 @@ public class TypingEffect : MonoBehaviour
     public string fullText = "Default typing text...";
     public float typingSpeed = 0.05f;
     public bool playOnStart = true;
+    public bool IsTyping()
+    {
+        return isTyping;
+    }
+
 
     private TextMeshProUGUI textComponent;
     private string currentTypedText = "";
@@ -20,13 +25,21 @@ public class TypingEffect : MonoBehaviour
     public string cursorChar = "|";
     public float cursorBlinkInterval = 0.5f;
 
-    [Header("Audio (Optional)")]
-    public AudioSource typingAudio;
+    [Header("Audio")]
     public AudioClip typingSound;
+    private AudioSource audioSource;
 
     void Awake()
     {
         textComponent = GetComponent<TextMeshProUGUI>();
+
+        if (typingSound)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.clip = typingSound;
+            audioSource.loop = true;
+            audioSource.playOnAwake = false;
+        }
     }
 
     void Start()
@@ -49,22 +62,28 @@ public class TypingEffect : MonoBehaviour
         currentTypedText = "";
         textComponent.text = "";
 
+        if (audioSource && typingSound)
+        {
+            audioSource.Play();
+        }
+
         if (cursorCoroutine == null)
             cursorCoroutine = StartCoroutine(BlinkCursor());
 
         foreach (char c in fullText)
         {
             currentTypedText += c;
-
-            if (typingAudio && typingSound && c != ' ')
-                typingAudio.PlayOneShot(typingSound);
-
             UpdateTextWithCursor();
             yield return new WaitForSeconds(typingSpeed);
         }
 
+        if (audioSource && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+
         isTyping = false;
-        UpdateTextWithCursor(); 
+        UpdateTextWithCursor();
     }
 
     IEnumerator BlinkCursor()
