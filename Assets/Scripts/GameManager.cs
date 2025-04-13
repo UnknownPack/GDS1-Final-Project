@@ -319,49 +319,58 @@ public class GameManager : MonoBehaviour
     public float GetDefaultValue(PostProcessingEffect effect) => defaultEffectValues[effect];
 
     public void ReplaceSlider(PostProcessingEffect newEffect, int slotIndex = -1)
-{
-    // Default to currently selected slot
-    if (slotIndex < 0) slotIndex = selectedSliderIndex;
-    
-    // Validate slot index
-    if (slotIndex < 0 || slotIndex >= currentHotBar.Length)
     {
-        Debug.LogError($"Invalid slot index: {slotIndex}");
-        return;
+        // Default to currently selected slot
+        if (slotIndex < 0) slotIndex = selectedSliderIndex;
+        
+        // Validate slot index
+        if (slotIndex < 0 || slotIndex >= currentHotBar.Length)
+        {
+            Debug.LogError($"Invalid slot index: {slotIndex}");
+            return;
+        }
+
+        foreach (HotBarPair pair in currentHotBar)
+    {
+        if (pair.type == newEffect)
+        {
+            Debug.Log($"Effect {newEffect} is already in the hotbar.");
+            return;
+        }
     }
 
-    // Get current effect in slot
-    PostProcessingEffect oldEffect = currentHotBar[slotIndex].type;
-    
-    // Don't replace with same effect
-    if (oldEffect == newEffect) return;
+        // Get current effect in slot
+        PostProcessingEffect oldEffect = currentHotBar[slotIndex].type;
+        
+        // Don't replace with same effect
+        if (oldEffect == newEffect) return;
 
-    // Find new effect's data
-    HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
-    if (newPair.Equals(default(HotBarPair)))
-    {
-        Debug.LogError($"Effect {newEffect} not found in configuration!");
-        return;
+        // Find new effect's data
+        HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
+        if (newPair.Equals(default(HotBarPair)))
+        {
+            Debug.LogError($"Effect {newEffect} not found in configuration!");
+            return;
+        }
+
+        // Reset old effect to default and clear its deviation
+        float oldDefault = defaultEffectValues[oldEffect];
+        currentEffectValues[oldEffect] = oldDefault;
+        currentDeviationUsed -= CalculateNormalizedDeviation(oldEffect);
+
+        // Initialize new effect with its default value
+        currentEffectValues[newEffect] = newPair.data.DefaultValue;
+        defaultEffectValues[newEffect] = newPair.data.DefaultValue;
+
+        // Update hotbar slot
+        currentHotBar[slotIndex] = newPair;
+
+        // Update UI slider
+        SetupSlider(slotIndex, newPair);
+
+        // Force update resource display
+        RecalculateCurrentDeviation();
     }
-
-    // Reset old effect to default and clear its deviation
-    float oldDefault = defaultEffectValues[oldEffect];
-    currentEffectValues[oldEffect] = oldDefault;
-    currentDeviationUsed -= CalculateNormalizedDeviation(oldEffect);
-
-    // Initialize new effect with its default value
-    currentEffectValues[newEffect] = newPair.data.DefaultValue;
-    defaultEffectValues[newEffect] = newPair.data.DefaultValue;
-
-    // Update hotbar slot
-    currentHotBar[slotIndex] = newPair;
-
-    // Update UI slider
-    SetupSlider(slotIndex, newPair);
-
-    // Force update resource display
-    RecalculateCurrentDeviation();
-}
     #endregion
 
     #region Helper Methods
