@@ -174,8 +174,8 @@ MonoBehaviour:
   canJump: 0
   defaultGravityScale: 4
   chargeRate: 2.5
-  maxCharge: 2
-  jumpForceVertical: 15
+  maxCharge: 3
+  jumpForceVertical: 20
   jumpForceHorizontal: 10
   GreenBouncePadPower: 2.6
   noGravity: 0
