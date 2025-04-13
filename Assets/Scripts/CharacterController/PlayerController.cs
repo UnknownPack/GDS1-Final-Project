@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 currentMovementVector;
     private float currentSpeed, currentJumpCharge = 0, currentJumpDirection = 0;
     private bool isCharging = false; 
+    
+    [SerializeField]private bool noGravity = false;
 
     private Collider2D collider2D;
     private Rigidbody2D rigidbody2D;
@@ -39,35 +42,36 @@ public class PlayerController : MonoBehaviour
     void Update()
     { 
         currentMovementVector = moveAction.ReadValue<Vector2>();
-        if (!canJump)
-        { 
-            currentSpeed = currentMovementVector.x * MovementSpeed * 10f;
-            // Update the rigidbody's velocity instead of using AddForce for smoother movement
-            rigidbody2D.linearVelocity = new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeed, MaxMovementSpeed),rigidbody2D.linearVelocity.y);
-        }
-        else
-        { 
-            isCharging = currentMovementVector.x != 0;   
-            if (isCharging)
-            {
-                //Debug.Log($"Current charge: {currentJumpCharge}/{maxCharge}");
-                currentJumpDirection = currentMovementVector.x;
-                currentJumpCharge += chargeRate * Time.deltaTime;
-                currentJumpCharge = Mathf.Clamp(currentJumpCharge, 0f, maxCharge); 
+        if (!noGravity)
+        {
+            if (!canJump)
+            { 
+                currentSpeed = currentMovementVector.x * MovementSpeed * 10f; 
+                rigidbody2D.linearVelocity = new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeed, MaxMovementSpeed),rigidbody2D.linearVelocity.y);
             }
             else
-            {
-                float chargePercent = currentJumpCharge / maxCharge;
-                Vector2 force = new Vector2(currentJumpDirection * jumpForceHorizontal * chargePercent,
-                    jumpForceVertical * chargePercent);
-                rigidbody2D.AddForce(force, ForceMode2D.Impulse);
-                currentJumpDirection = 0f;
-                currentJumpCharge = 0f;
-            }  
-        } 
-        
-        // Turn gravity off if the player is grounded and standing still
-        if (IsGrounded() && Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f)
+            { 
+                isCharging = currentMovementVector.x != 0;   
+                if (isCharging)
+                { 
+                    currentJumpDirection = currentMovementVector.x;
+                    currentJumpCharge += chargeRate * Time.deltaTime;
+                    currentJumpCharge = Mathf.Clamp(currentJumpCharge, 0f, maxCharge); 
+                }
+                else
+                {
+                    float chargePercent = currentJumpCharge / maxCharge;
+                    Vector2 force = new Vector2(currentJumpDirection * jumpForceHorizontal * chargePercent,
+                        jumpForceVertical * chargePercent);
+                    rigidbody2D.AddForce(force, ForceMode2D.Impulse);
+                    currentJumpDirection = 0f;
+                    currentJumpCharge = 0f;
+                }  
+            } 
+        }
+         
+        bool isIdle = Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f;
+        if ((IsGrounded() && isIdle) || noGravity)
         {
             rigidbody2D.gravityScale = 0; // Set gravity scale to 0 when standing still on the ground
         }
@@ -76,9 +80,24 @@ public class PlayerController : MonoBehaviour
             rigidbody2D.gravityScale = defaultGravityScale; // Reset gravity scale to default when moving or jumping
         }
 
-         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
-    } 
- 
+        if (Camera.main != null)
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
+        if(rigidbody2D.linearVelocity.x > 0.1f || rigidbody2D.linearVelocity.y > 0.1f)
+            Debug.Log($"VelX: {rigidbody2D.linearVelocity.x}, VelY: {rigidbody2D.linearVelocity.y}, Gravity: {rigidbody2D.gravityScale}, noGravity: {noGravity}");
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Vector3 direction = (other.transform.position - transform.position).normalized;
+            Vector2 forceProject = rb.linearVelocity * rb.mass;
+            rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse);
+            Debug.Log($"Impact! ForceProject: {forceProject}");
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
@@ -97,8 +116,8 @@ public class PlayerController : MonoBehaviour
 
     #endregion
     #region Public Methods
-
-    void SetJumpStatus(bool status){canJump = status;}
+    public void SetGravityStatus(bool status){noGravity = status;}
+    public void SetJumpStatus(bool status){canJump = status;}
 
     #endregion
 }

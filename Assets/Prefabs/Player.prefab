@@ -116,7 +116,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!70 &1427932090064066149
 CapsuleCollider2D:
@@ -170,12 +170,14 @@ MonoBehaviour:
   groundCheckDistance: 1.1
   MovementSpeed: 7
   MaxMovementSpeed: 7
+  JumpForce: 1.1
   canJump: 0
+  defaultGravityScale: 4
   chargeRate: 2.5
   maxCharge: 2
   jumpForceVertical: 15
   jumpForceHorizontal: 10
-  defaultGravityScale: 4
+  noGravity: 0
 --- !u!114 &5609071412945821210
 MonoBehaviour:
   m_ObjectHideFlags: 0

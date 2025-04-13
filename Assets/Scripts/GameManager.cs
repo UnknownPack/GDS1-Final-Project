@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SimplePieMenu;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -24,8 +25,12 @@ public class GameManager : MonoBehaviour
     private Dictionary<PostProcessingEffect, float> DefaultPostProcessingEffectValues;
     private HotBarPair[] CurrentHotBar = new HotBarPair[2];
     private Slider[] slider = new Slider[2];
+    private Slider currentSlider;
     private int selectedSliderIndex = 0;
-    private int currentLevel = 0;
+    private int currentLevel = 0; 
+    
+    //player input
+    private List<ColourCorrectionBlocks> currentColourCorrectionBlocks;
     // Resource UI elements
     private ProgressBar resourceBar;
     private Label resourceLabel;
@@ -104,6 +109,8 @@ public class GameManager : MonoBehaviour
     { 
         InitializeSystem();
         postProccessManager = GetComponent<PostProccessManager>();
+        currentColourCorrectionBlocks = new List<ColourCorrectionBlocks>(); 
+        
         InitializeUIElements();
         ResetDeviationBudget();
     }
@@ -359,6 +366,11 @@ public class GameManager : MonoBehaviour
         } 
     }
 
+    #region HotBarChanges
+ 
+
+    #endregion
+
     #region Resource System Methods
     
     private void ResetDeviationBudget()
@@ -577,8 +589,9 @@ public class GameManager : MonoBehaviour
         // Update the UI (no need for full recalculate since we've manually adjusted deviation)
         UpdateResourceUI();
     } 
-    #endregion
     
+    public void AddToColourCorrectionBlockList(ColourCorrectionBlocks colourCorrectionBlocks){currentColourCorrectionBlocks.Add(colourCorrectionBlocks);}
+    #endregion
     
     #region Custom Structs
     [System.Serializable] private struct HotBarPair
@@ -613,8 +626,4 @@ public class GameManager : MonoBehaviour
     }
     #endregion 
 
-    public void RestartLevel() 
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
 } 
