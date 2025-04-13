@@ -8,6 +8,11 @@ TagManager:
   - MovingPlatform
   - Spikes
   - Pedestal
+  - Trigger
+  - DeathBox
+  - Danger
+  - Bounce
+  - Safe
   layers:
   - Default
   - TransparentFX
