@@ -24,6 +24,7 @@ public class PostProccessManager : MonoBehaviour
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
     float ScaleAntiAliasing(float x) =>  (0.9f + (x * (1.5f - 0.9f)));
     float ScaleAntiAliasing2(float x) =>  (1f + (x * (100f - 1f)));
+    private float previousValue;
     
     private ColourCorrectionBlocks.ColorChannelMatrix currentColorChannelMatrix;
 
@@ -130,6 +131,34 @@ public class PostProccessManager : MonoBehaviour
     }
     public void ChangeColorCorrection(float value)
     {
+        Colour[] platforms = FindObjectsOfType<Colour>();
+        foreach (Colour platform in platforms)
+        {//test
+            // Threshold at 1 (exact match)
+            if (value == 1f && previousValue != 1f)
+            {
+                platform.CycleUp(); // Forward cycle
+            }
+            // Threshold at 0 (exact match)
+            else if (value == 0f && previousValue != 0f)
+            {
+                if (previousValue > 0f)
+                {
+                    platform.CycleDown(); // Coming from positive
+                }
+                else
+                {
+                    platform.CycleUp(); // Coming from negative
+                }
+            }
+            // Threshold at -1 (exact match)
+            else if (value == -1f && previousValue != -1f)
+            {
+                platform.CycleDown(); // Backward cycle
+            }
+        }
+
+        previousValue = value;
 
         // Default channel weights (identity matrix)
         Vector3 redChannel   = new Vector3(100, 0, 0);
