@@ -91,5 +91,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b298ce655cf2fe9a78d9acb59efecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  postProcessingEffect: 0
+  postProcessingEffect: 2
   setting: 0
