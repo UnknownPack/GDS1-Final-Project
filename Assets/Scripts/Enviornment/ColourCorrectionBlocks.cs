@@ -47,7 +47,7 @@ public class ColourCorrectionBlocks : MonoBehaviour
                gameObject.tag = "DeathBox";
                break;
            case 1:
-               gameObject.tag = "";
+               gameObject.tag = "Bounce";
                break;
            case 2:
                gameObject.tag = "Safe";
