@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 4124058730738416425, guid: 3511fd1a71087da4081182d685ec5d38, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e6680d2ca5c5fa246ae5e519c8acc4ce, type: 3}
     - target: {fileID: 4543307821599209606, guid: 3511fd1a71087da4081182d685ec5d38, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -92,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbdb80fe031f914c98d270af8b00262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Index: 0
+  SceneName: 
 --- !u!114 &3924825252480197300
 MonoBehaviour:
   m_ObjectHideFlags: 0
