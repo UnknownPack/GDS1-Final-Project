@@ -10,6 +10,10 @@ public class LightBlocks : MonoBehaviour
     [SerializeField, Tooltip("Sets the starting state of the block ")]
     private LightBlockState startingState;
     
+    [SerializeField] private float enableThreshold = 0.9f;
+    [SerializeField] private float disableThreshold = 0.1f;
+
+    
     SpriteRenderer spriteRenderer;
     Collider2D collider2D;
     private float currentAlpha;
@@ -45,11 +49,10 @@ public class LightBlocks : MonoBehaviour
         Color colour = spriteRenderer.color;
         spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
         
-        if (Mathf.Approximately(currentAlpha, 1f)) 
-            collider2D.enabled = true; 
-        else if (Mathf.Approximately(currentAlpha, 0f)) 
-            collider2D.enabled = false; 
-
+        if (currentAlpha >= enableThreshold)
+            collider2D.enabled = true;
+        else if (currentAlpha <= disableThreshold)
+            collider2D.enabled = false;
     }
     
     private enum LightBlockState{
