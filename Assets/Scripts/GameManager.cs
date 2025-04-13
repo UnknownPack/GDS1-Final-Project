@@ -34,9 +34,9 @@ public class GameManager : MonoBehaviour
     private Slider currentSlider;
     private int selectedSliderIndex = 0;
     private int currentLevel = 0;
-
-    //player input
+    
     private List<ColourCorrectionBlocks> currentColourCorrectionBlocks;
+    
     // Resource UI elements 
     private ProgressBar resourceBar;
     private Label resourceLabel;
@@ -45,9 +45,7 @@ public class GameManager : MonoBehaviour
     private EventCallback<ChangeEvent<float>>[] sliderCallbacks = new EventCallback<ChangeEvent<float>>[2];
 
     // Post-processing management
-    private PostProccessManager postProcessManager;
-    private Dictionary<PostProcessingEffect, float> currentEffectValues;
-    private Dictionary<PostProcessingEffect, float> defaultEffectValues;
+    private PostProccessManager postProcessManager; 
     private Coroutine transitionCoroutine;
 
     #region Singleton Pattern
@@ -352,17 +350,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Slider Tutorial Timer
-    private void ResetSliderTutorialTimer() {
-        if (SceneManager.GetActiveScene().name != "Introducing-Level")
-            return;
-
-        if (sliderTutorialText != null) {
-            if (sliderTutorialCoroutine != null) {
-                StopCoroutine(sliderTutorialCoroutine);
-            }
-            sliderTutorialCoroutine = StartCoroutine(HideSliderTutorialAfterDelay(3f));
-        }
-    }
     private IEnumerator HideSliderTutorialAfterDelay(float delay) {
         yield return new WaitForSeconds(1f);
         if (sliderTutorialText != null)
@@ -522,6 +509,7 @@ public class GameManager : MonoBehaviour
         transitionCoroutine = StartCoroutine(TransitionEffectValue(effect, currentValue, targetValue, 0.5f, newPair));
     }
 
+    public void AddToColourCorrectionBlockList(ColourCorrectionBlocks script) {currentColourCorrectionBlocks.Add(script);}
     #endregion
 
     #region Helper Methods
