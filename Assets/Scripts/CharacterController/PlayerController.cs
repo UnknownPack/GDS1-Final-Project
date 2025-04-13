@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MovementSpeed = 1.1f;
     [SerializeField] private float MaxMovementSpeed = 1.1f;
     [SerializeField] private float JumpForce = 1.1f;
-    [SerializeField] private bool canJump = false;
+    [SerializeField] public bool canJump = false;
 
     private Vector2 currentMovementVector;
     private float currentSpeed;
@@ -79,6 +79,13 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Player hit spikes");
             GameManager.Instance.RestartLevel();
+        }
+
+        if (other.CompareTag("Pedestal"))
+        {
+            string pedestalName = other.gameObject.name;
+            PieMenuManager.Instance.HandleAddingItem(pedestalName);
+            Destroy(other.GetComponent<BoxCollider2D>());
         }
     }
 }
