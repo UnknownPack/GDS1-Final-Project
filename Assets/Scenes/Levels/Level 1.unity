@@ -623,6 +623,10 @@ PrefabInstance:
       propertyPath: setting
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
+      propertyPath: postProcessingEffect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5442887724829376056, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.84
@@ -699,6 +703,10 @@ PrefabInstance:
     - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: setting
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
+      propertyPath: postProcessingEffect
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5442887724829376056, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1410,6 +1418,10 @@ PrefabInstance:
       propertyPath: setting
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
+      propertyPath: postProcessingEffect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5442887724829376056, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.31
@@ -1902,6 +1914,10 @@ PrefabInstance:
       propertyPath: setting
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
+      propertyPath: postProcessingEffect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5442887724829376056, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.1
@@ -2060,6 +2076,10 @@ PrefabInstance:
     - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: setting
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4368356818412803316, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
+      propertyPath: postProcessingEffect
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5442887724829376056, guid: 771981094461b45c6a27af628f7d02ed, type: 3}
       propertyPath: m_LocalPosition.x

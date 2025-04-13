@@ -10,6 +10,9 @@ TagManager:
   - Pedestal
   - Trigger
   - DeathBox
+  - Danger
+  - Bounce
+  - Safe
   layers:
   - Default
   - TransparentFX
