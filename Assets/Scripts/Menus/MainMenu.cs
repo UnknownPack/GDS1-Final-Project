@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
         uiDocument = GetComponent<UIDocument>();
         playButton = uiDocument.rootVisualElement.Q<Button>("start");
         exitButton = uiDocument.rootVisualElement.Q<Button>("exit");
-        playButton.clicked += () => SceneManager.LoadScene("Level 1");
+        playButton.clicked += () => SceneManager.LoadScene("Plot");
         exitButton.clicked += () => Application.Quit();
     }
 
