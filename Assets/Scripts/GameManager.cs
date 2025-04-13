@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
 
     // Post-processing management
     private PostProccessManager postProcessManager;
+    private Dictionary<PostProcessingEffect, float> currentEffectValues;
+    private Dictionary<PostProcessingEffect, float> defaultEffectValues;
     private Coroutine transitionCoroutine;
 
     #region Singleton Pattern
@@ -628,15 +630,38 @@ public class GameManager : MonoBehaviour
         if (showTutorial) ResetSliderTutorialTimer();
     }
 
-    private float CalculateNormalizedDeviation(PostProcessingEffect effect) {
-        HotBarPair pair = GetPairForEffect(effect);
-        float currentValue = currentEffectValues[effect];
-        return Mathf.Abs(currentValue - pair.data.DefaultValue) /
-               (pair.data.MaxValue - pair.data.MinValue);
+    private void ResetSliderTutorialTimer() {
+        if (sliderTutorialCoroutine != null) StopCoroutine(sliderTutorialCoroutine);
+        sliderTutorialCoroutine = StartCoroutine(HideTutorialAfterDelay(3f));
     }
 
-    public void AddToColourCorrectionBlockList(ColourCorrectionBlocks colourCorrectionBlocks) {
-        currentColourCorrectionBlocks.Add(colourCorrectionBlocks);
+    private IEnumerator HideTutorialAfterDelay(float delay) {
+        yield return new WaitForSeconds(delay);
+        if (sliderTutorialText != null) sliderTutorialText.SetActive(false);
+        sliderTutorialCoroutine = null;
+    }
+
+    private float CalculateNormalizedDeviation(PostProcessingEffect effect)
+    {
+        HotBarPair pair = GetPairForEffect(effect);
+        float currentValue = currentEffectValues[effect];
+        return Mathf.Abs(currentValue - pair.data.DefaultValue) / 
+            (pair.data.MaxValue - pair.data.MinValue);
+    }
+
+    private float GetTargetValue(PostProcessingEffect effect, Setting setting)
+    {
+        float defaultValue = defaultEffectValues[effect];
+        float min = GetPairForEffect(effect).data.MinValue;
+        float max = GetPairForEffect(effect).data.MaxValue;
+
+        return setting switch
+        {
+            Setting.Min => min,
+            Setting.Default => defaultValue,
+            Setting.Max => max,
+            _ => defaultValue
+        };
     }
     #endregion
 
