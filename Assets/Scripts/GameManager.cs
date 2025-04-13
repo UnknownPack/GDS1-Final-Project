@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     private PostProccessManager postProcessManager;
     private Dictionary<PostProcessingEffect, float> currentEffectValues;
     private Dictionary<PostProcessingEffect, float> defaultEffectValues;
+    private Coroutine transitionCoroutine;
 
     #region Singleton Pattern
     public static GameManager Instance {
@@ -319,49 +320,66 @@ public class GameManager : MonoBehaviour
     public float GetDefaultValue(PostProcessingEffect effect) => defaultEffectValues[effect];
 
     public void ReplaceSlider(PostProcessingEffect newEffect, int slotIndex = -1)
-{
-    // Default to currently selected slot
-    if (slotIndex < 0) slotIndex = selectedSliderIndex;
-    
-    // Validate slot index
-    if (slotIndex < 0 || slotIndex >= currentHotBar.Length)
     {
-        Debug.LogError($"Invalid slot index: {slotIndex}");
-        return;
+        // Default to currently selected slot
+        if (slotIndex < 0) slotIndex = selectedSliderIndex;
+        
+        // Validate slot index
+        if (slotIndex < 0 || slotIndex >= currentHotBar.Length)
+        {
+            Debug.LogError($"Invalid slot index: {slotIndex}");
+            return;
+        }
+
+        // Get current effect in slot
+        PostProcessingEffect oldEffect = currentHotBar[slotIndex].type;
+        
+        // Don't replace with same effect
+        if (oldEffect == newEffect) return;
+
+        // Find new effect's data
+        HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
+        if (newPair.Equals(default(HotBarPair)))
+        {
+            Debug.LogError($"Effect {newEffect} not found in configuration!");
+            return;
+        }
+
+        // Reset old effect to default and clear its deviation
+        float oldDefault = defaultEffectValues[oldEffect];
+        currentEffectValues[oldEffect] = oldDefault;
+        currentDeviationUsed -= CalculateNormalizedDeviation(oldEffect);
+
+        // Initialize new effect with its default value
+        currentEffectValues[newEffect] = newPair.data.DefaultValue;
+        defaultEffectValues[newEffect] = newPair.data.DefaultValue;
+
+        // Update hotbar slot
+        currentHotBar[slotIndex] = newPair;
+
+        // Update UI slider
+        SetupSlider(slotIndex, newPair);
+
+        // Force update resource display
+        RecalculateCurrentDeviation();
     }
 
-    // Get current effect in slot
-    PostProcessingEffect oldEffect = currentHotBar[slotIndex].type;
-    
-    // Don't replace with same effect
-    if (oldEffect == newEffect) return;
-
-    // Find new effect's data
-    HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
-    if (newPair.Equals(default(HotBarPair)))
+    public void TransitionExternal(PostProcessingEffect effect, Setting setting)
     {
-        Debug.LogError($"Effect {newEffect} not found in configuration!");
-        return;
+        if (!currentEffectValues.ContainsKey(effect) || !defaultEffectValues.ContainsKey(effect))
+            return;
+
+        float currentValue = currentEffectValues[effect];
+        float targetValue = GetTargetValue(effect, setting);
+
+        if (Mathf.Approximately(currentValue, targetValue))
+            return;
+
+        if (transitionCoroutine != null)
+            StopCoroutine(transitionCoroutine);
+
+        transitionCoroutine = StartCoroutine(TransitionToTarget(effect, currentValue, targetValue, 0.5f));
     }
-
-    // Reset old effect to default and clear its deviation
-    float oldDefault = defaultEffectValues[oldEffect];
-    currentEffectValues[oldEffect] = oldDefault;
-    currentDeviationUsed -= CalculateNormalizedDeviation(oldEffect);
-
-    // Initialize new effect with its default value
-    currentEffectValues[newEffect] = newPair.data.DefaultValue;
-    defaultEffectValues[newEffect] = newPair.data.DefaultValue;
-
-    // Update hotbar slot
-    currentHotBar[slotIndex] = newPair;
-
-    // Update UI slider
-    SetupSlider(slotIndex, newPair);
-
-    // Force update resource display
-    RecalculateCurrentDeviation();
-}
     #endregion
 
     #region Helper Methods
@@ -370,6 +388,23 @@ public class GameManager : MonoBehaviour
             if (pair.type == effect) return pair;
         }
         return default;
+    }
+    private IEnumerator TransitionToTarget(PostProcessingEffect effect, float from, float to, float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float newValue = Mathf.Lerp(from, to, t);
+
+            UpdateSliderAndEffects(effect, newValue);
+            yield return null;
+        }
+
+        UpdateSliderAndEffects(effect, to);
+        transitionCoroutine = null;
     }
 
     private void UpdateSliderAndEffects(PostProcessingEffect effect, float newValue) {
@@ -422,12 +457,27 @@ public class GameManager : MonoBehaviour
     }
 
     private float CalculateNormalizedDeviation(PostProcessingEffect effect)
-{
-    HotBarPair pair = GetPairForEffect(effect);
-    float currentValue = currentEffectValues[effect];
-    return Mathf.Abs(currentValue - pair.data.DefaultValue) / 
-          (pair.data.MaxValue - pair.data.MinValue);
-}
+    {
+        HotBarPair pair = GetPairForEffect(effect);
+        float currentValue = currentEffectValues[effect];
+        return Mathf.Abs(currentValue - pair.data.DefaultValue) / 
+            (pair.data.MaxValue - pair.data.MinValue);
+    }
+
+    private float GetTargetValue(PostProcessingEffect effect, Setting setting)
+    {
+        float defaultValue = defaultEffectValues[effect];
+        float min = GetPairForEffect(effect).data.MinValue;
+        float max = GetPairForEffect(effect).data.MaxValue;
+
+        return setting switch
+        {
+            Setting.Min => min,
+            Setting.Default => defaultValue,
+            Setting.Max => max,
+            _ => defaultValue
+        };
+    }
     #endregion
 
     #region Data Structures
@@ -440,6 +490,10 @@ public class GameManager : MonoBehaviour
     public enum PostProcessingEffect {
         Brightness, AntiAliasing, MotionBlur, FilmGrain,
         ColorCorrection, ChromaticAberration, Bloom, Empty
+    }
+
+    public enum Setting {
+        Max, Min, Default
     }
 
     [System.Serializable]
