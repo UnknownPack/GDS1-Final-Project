@@ -24,6 +24,8 @@ public class PostProccessManager : MonoBehaviour
     float ScaleBrightness(float x, float y) => (1 + (x - 1) * y);
     float ScaleAntiAliasing(float x) =>  (0.9f + (x * (1.5f - 0.9f)));
     float ScaleAntiAliasing2(float x) =>  (1f + (x * (100f - 1f)));
+    
+    private ColourCorrectionBlocks.ColorChannelMatrix currentColorChannelMatrix;
 
       private void Awake()
     {
@@ -48,6 +50,23 @@ public class PostProccessManager : MonoBehaviour
         volume.profile.TryGet(out channelMixer);
         volume.profile.TryGet(out chromaticAberration);
         volume.profile.TryGet(out bloom);
+        
+        Vector3 redResult   = new Vector3(
+            channelMixer.redOutRedIn.value,
+            channelMixer.redOutGreenIn.value,
+            channelMixer.redOutBlueIn.value);
+
+        Vector3 greenResult = new Vector3(
+            channelMixer.greenOutRedIn.value,
+            channelMixer.greenOutGreenIn.value,
+            channelMixer.greenOutBlueIn.value);
+
+        Vector3 blueResult  = new Vector3(
+            channelMixer.blueOutRedIn.value,
+            channelMixer.blueOutGreenIn.value,
+            channelMixer.blueOutBlueIn.value);
+        
+        currentColorChannelMatrix = new ColourCorrectionBlocks.ColorChannelMatrix(redResult, greenResult, blueResult);
     }
 
      
@@ -160,6 +179,22 @@ public class PostProccessManager : MonoBehaviour
             channelMixer.blueOutGreenIn.value = Mathf.Lerp(blueChannel.y, blueRight.y, t);
             channelMixer.blueOutBlueIn.value  = Mathf.Lerp(blueChannel.z, blueRight.z, t);
         }
+        Vector3 redResult   = new Vector3(
+            channelMixer.redOutRedIn.value,
+            channelMixer.redOutGreenIn.value,
+            channelMixer.redOutBlueIn.value);
+
+        Vector3 greenResult = new Vector3(
+            channelMixer.greenOutRedIn.value,
+            channelMixer.greenOutGreenIn.value,
+            channelMixer.greenOutBlueIn.value);
+
+        Vector3 blueResult  = new Vector3(
+            channelMixer.blueOutRedIn.value,
+            channelMixer.blueOutGreenIn.value,
+            channelMixer.blueOutBlueIn.value);
+        
+        currentColorChannelMatrix = new ColourCorrectionBlocks.ColorChannelMatrix(redResult, greenResult, blueResult);
     }
     public void ChangeChromaticAberration(float value)
     {
@@ -189,5 +224,19 @@ public class PostProccessManager : MonoBehaviour
     {
         bloom.intensity.value = value;
         //add method to crash
+    }
+    
+    public ColourCorrectionBlocks.ColorChannelMatrix GetCurrentColorChannelMatrix(){return currentColorChannelMatrix;}
+    
+    public Vector3 ApplyMatrix(Color baseColor, ColourCorrectionBlocks.ColorChannelMatrix matrix)
+    {
+        Vector3 input = new Vector3(baseColor.r, baseColor.g, baseColor.b);
+
+        float r = Vector3.Dot(matrix.RedChannel, input) / 100f;
+        float g = Vector3.Dot(matrix.GreenChannel, input) / 100f;
+        float b = Vector3.Dot(matrix.BlueChannel, input) / 100f;
+
+
+        return new Vector3(r, g, b); 
     }
 }
