@@ -366,11 +366,44 @@ public class GameManager : MonoBehaviour
 
     public void TransitionExternal(PostProcessingEffect effect, Setting setting)
     {
-        if (!currentEffectValues.ContainsKey(effect) || !defaultEffectValues.ContainsKey(effect))
+        // Find the effect's configuration data from all available effects
+        HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
+        if (newPair.Equals(default(HotBarPair)))
+        {
+            Debug.LogError($"Effect {effect} not found in configuration!");
             return;
+        }
+
+        // Initialize or retrieve values
+        if (!currentEffectValues.ContainsKey(effect))
+        {
+            currentEffectValues[effect] = newPair.data.DefaultValue;
+        }
+        
+        if (!defaultEffectValues.ContainsKey(effect))
+        {
+            defaultEffectValues[effect] = newPair.data.DefaultValue;
+        }
 
         float currentValue = currentEffectValues[effect];
-        float targetValue = GetTargetValue(effect, setting);
+        float targetValue;
+        
+        // Determine target value based on setting
+        switch (setting)
+        {
+            case Setting.Min:
+                targetValue = newPair.data.MinValue;
+                break;
+            case Setting.Default:
+                targetValue = newPair.data.DefaultValue;
+                break;
+            case Setting.Max:
+                targetValue = newPair.data.MaxValue;
+                break;
+            default:
+                targetValue = newPair.data.DefaultValue;
+                break;
+        }
 
         if (Mathf.Approximately(currentValue, targetValue))
             return;
@@ -378,7 +411,7 @@ public class GameManager : MonoBehaviour
         if (transitionCoroutine != null)
             StopCoroutine(transitionCoroutine);
 
-        transitionCoroutine = StartCoroutine(TransitionToTarget(effect, currentValue, targetValue, 0.5f));
+        transitionCoroutine = StartCoroutine(TransitionEffectValue(effect, currentValue, targetValue, 0.5f, newPair));
     }
     #endregion
 
@@ -389,7 +422,32 @@ public class GameManager : MonoBehaviour
         }
         return default;
     }
-    private IEnumerator TransitionToTarget(PostProcessingEffect effect, float from, float to, float duration)
+    private float GetTargetValue(PostProcessingEffect effect, Setting setting, HotBarPair pair)
+    {
+        float defaultValue = defaultEffectValues[effect];
+        float min = pair.data.MinValue;
+        float max = pair.data.MaxValue;
+
+        return setting switch
+        {
+            Setting.Min => min,
+            Setting.Default => defaultValue,
+            Setting.Max => max,
+            _ => defaultValue
+        };
+    }
+    private void ApplyEffectValue(PostProcessingEffect effect, float value, HotBarPair pair)
+    {
+        // Store the value
+        currentEffectValues[effect] = Mathf.Clamp(value, pair.data.MinValue, pair.data.MaxValue);
+        
+        // Apply the effect
+        ApplyPostProcessingEffect(effect, value);
+        
+        // Recalculate deviation for UI update if needed
+        RecalculateCurrentDeviation();
+    }
+    private IEnumerator TransitionEffectValue(PostProcessingEffect effect, float from, float to, float duration, HotBarPair pair)
     {
         float elapsed = 0f;
 
@@ -398,12 +456,30 @@ public class GameManager : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
             float newValue = Mathf.Lerp(from, to, t);
-
-            UpdateSliderAndEffects(effect, newValue);
+            
+            // Apply effect directly
+            ApplyEffectValue(effect, newValue, pair);
+            
+            // Update UI if the effect is in the hotbar
+            int sliderIndex = GetSliderIndexForEffect(effect);
+            if (sliderIndex >= 0) 
+            {
+                sliders[sliderIndex].SetValueWithoutNotify(newValue);
+            }
+            
             yield return null;
         }
 
-        UpdateSliderAndEffects(effect, to);
+        // Final update
+        ApplyEffectValue(effect, to, pair);
+        
+        // Update UI one last time if the effect is in the hotbar
+        int finalSliderIndex = GetSliderIndexForEffect(effect);
+        if (finalSliderIndex >= 0) 
+        {
+            sliders[finalSliderIndex].SetValueWithoutNotify(to);
+        }
+        
         transitionCoroutine = null;
     }
 
