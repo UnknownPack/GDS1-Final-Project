@@ -82,9 +82,6 @@ public class PlayerController : MonoBehaviour
 
         if (Camera.main != null)
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
-        if(rigidbody2D.linearVelocity.x > 0.1f || rigidbody2D.linearVelocity.y > 0.1f)
-            Debug.Log($"VelX: {rigidbody2D.linearVelocity.x}, VelY: {rigidbody2D.linearVelocity.y}, Gravity: {rigidbody2D.gravityScale}, noGravity: {noGravity}");
-
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -94,8 +91,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 direction = (other.transform.position - transform.position).normalized;
             Vector2 forceProject = rb.linearVelocity * rb.mass;
-            rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse);
-            Debug.Log($"Impact! ForceProject: {forceProject}");
+            rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse); 
         }
     }
 
