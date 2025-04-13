@@ -106,9 +106,8 @@ public class PostProccessManager : MonoBehaviour
                 Debug.LogError("PlayerScript component not found on player!");
                 return;
             }
-    }
-    //maybe change to a method
-    playerController.canJump = shouldEnableJump;
+        } 
+        playerController.SetJumpStatus(shouldEnableJump);
     }
     public void ChangeColorCorrection(float value)
     {
@@ -165,8 +164,26 @@ public class PostProccessManager : MonoBehaviour
     public void ChangeChromaticAberration(float value)
     {
         chromaticAberration.intensity.value = value;
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+            if (player == null)
+            {
+                Debug.LogError("No GameObject with tag 'Player' found!");
+                return;
+            }
+        }
 
-        //add method to change to zero gravity
+        if (playerController == null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogError("PlayerScript component not found on player!");
+                return;
+            }
+        } 
+        playerController.SetGravityStatus(value >= 0.75f); 
     }
     public void ChangeBloom(float value)
     {

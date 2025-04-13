@@ -15,9 +15,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
+                    "name": "QuickAdjust",
+                    "type": "PassThrough",
+                    "id": "76516938-ef65-4205-97e7-a7257442e3f3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
                     "type": "Button",
-                    "id": "c45ce6e3-0537-4375-91f3-d785f4a914c7",
+                    "id": "7ba581ff-8754-41d7-b144-82907a992c72",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HotBarOne",
+                    "type": "Button",
+                    "id": "86af7b7b-bd49-4ae9-addf-c5018fcc8be6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HotBarTwo",
+                    "type": "Button",
+                    "id": "ff361df3-d9f6-4e24-a60a-b40823084a56",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -137,12 +164,89 @@
                 },
                 {
                     "name": "",
-                    "id": "05448956-53cd-4f86-90d8-653dfd7bcbb5",
-                    "path": "<Keyboard>/space",
+                    "id": "c4b98d57-35ec-4e61-846c-963507c0f356",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "ace6422c-0a03-4b80-b890-8d7c02add70b",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickAdjust",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "5fdded45-befb-4642-a6b6-8a701bd0a4bd",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickAdjust",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "e69bf6fe-4e34-4b58-a86a-0970afa0667a",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickAdjust",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "b955443b-f6f5-4d26-9544-aef6ec7e5d0e",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickAdjust",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "3c95686f-bf3f-49e3-ae24-17b19d18cf6c",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuickAdjust",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "2ce16899-7817-49a6-89c5-6fb6ec38bc19",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HotBarOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77561e85-e4f8-4d34-8100-6d162fd173f4",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HotBarTwo",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
