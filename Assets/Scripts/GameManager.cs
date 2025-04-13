@@ -202,6 +202,15 @@ public class GameManager : MonoBehaviour
                 break;
             case PostProcessingEffect.ColorCorrection:
                 postProcessManager.ChangeColorCorrection(value);
+                foreach (var colourBlock in currentColourCorrectionBlocks)
+                {
+                    if (colourBlock != null)
+                    {
+                        Vector3 newColourType = postProcessManager.ApplyMatrix(colourBlock.GetSpriteRenderer().color,
+                            postProcessManager.GetCurrentColorChannelMatrix());
+                        colourBlock.setVectorType(newColourType);
+                    }
+                }
                 break;
             case PostProcessingEffect.ChromaticAberration:
                 postProcessManager.ChangeChromaticAberration(value);
