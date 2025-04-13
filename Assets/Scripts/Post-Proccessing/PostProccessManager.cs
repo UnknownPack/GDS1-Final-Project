@@ -156,6 +156,7 @@ public class PostProccessManager : MonoBehaviour
             {
                 platform.CycleDown(); // Backward cycle
             }
+            platform.GetColor();
         }
 
         previousValue = value;
