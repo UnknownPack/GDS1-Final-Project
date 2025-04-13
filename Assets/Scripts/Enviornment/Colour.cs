@@ -26,10 +26,18 @@ public class Colour : MonoBehaviour
     {
         switch (currentState)
         {
-            case ColorState.Red: return Color.red;
-            case ColorState.Green: return Color.green;
-            case ColorState.Blue: return Color.blue;
-            default: return Color.red;
+            case ColorState.Red: 
+                gameObject.tag = "DeathBox";
+                return Color.red;
+            case ColorState.Green: 
+                gameObject.tag = "Bounce";
+                return Color.green;
+            case ColorState.Blue: 
+                gameObject.tag = "Safe";
+                return Color.blue;
+            default: 
+                gameObject.tag = "DeathBox";
+                return Color.red;
         }
     }
 }

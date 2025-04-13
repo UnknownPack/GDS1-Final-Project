@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxCharge = 50f;
     [SerializeField] private float jumpForceVertical = 50f;
     [SerializeField] private float jumpForceHorizontal = 25f; 
+    [SerializeField] private float GreenBouncePadPower = 50f; 
     
     private Vector2 currentMovementVector;
     private float currentSpeed, currentJumpCharge = 0, currentJumpDirection = 0;
@@ -95,21 +96,21 @@ public class PlayerController : MonoBehaviour
         Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
         if(other.gameObject.CompareTag("Bounce"))
         { 
+            rigidbody2D.AddForce(transform.up * GreenBouncePadPower * 10, ForceMode2D.Impulse); 
+        } 
+        else{
             if (rb != null)
             {
-                Vector3 direction = (other.transform.position - transform.position).normalized; 
-                rigidbody2D.AddForce(direction * jumpForceVertical * 10, ForceMode2D.Impulse); 
-            }
+                Vector3 direction = (other.transform.position - transform.position).normalized;
+                Vector2 forceProject = rb.linearVelocity * rb.mass; 
+                rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse); 
+            } 
+        }  
+        if (other.gameObject.CompareTag("DeathBox"))
+        {
+            Debug.Log("Player hit the deathbox");
+            GameManager.Instance.RestartLevel();
         }
-        else{
-                    if (rb != null)
-                    {
-                        Vector3 direction = (other.transform.position - transform.position).normalized;
-                        Vector2 forceProject = rb.linearVelocity * rb.mass;
-                        rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse); 
-                    }
-            }
-        
              
  
     }
