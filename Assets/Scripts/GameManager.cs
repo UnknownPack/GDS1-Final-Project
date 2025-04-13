@@ -235,6 +235,16 @@ public class GameManager : MonoBehaviour
     private void HandleSelectionInput() {
         if (Input.GetKeyDown(KeyCode.Alpha1)) SelectSlider(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectSlider(1);
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            int currentIndex = SceneManager.GetActiveScene().buildIndex;
+            int nextIndex = currentIndex + 1;
+
+            if (nextIndex < SceneManager.sceneCountInBuildSettings) 
+                SceneManager.LoadScene(nextIndex); 
+            else 
+                Debug.LogWarning("You are at the last scene!"); 
+        }
     }
 
     private void HandleAdjustmentInput() {
