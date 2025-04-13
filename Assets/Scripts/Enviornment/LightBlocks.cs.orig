@@ -52,11 +52,19 @@ public class LightBlocks : MonoBehaviour
         
         Color colour = spriteRenderer.color;
         spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
+<<<<<<< HEAD
         if (Mathf.Approximately(currentAlpha, 1f)) 
             collider2D.enabled = true; 
         else if (Mathf.Approximately(currentAlpha, 0f)) 
             collider2D.enabled = false; 
 
+=======
+        
+        if (currentAlpha >= enableThreshold)
+            collider2D.enabled = true;
+        else if (currentAlpha <= disableThreshold)
+            collider2D.enabled = false;
+>>>>>>> 296207d32b0c358fda0557589cb3e09364797cf6
     }
     
     private enum LightBlockState{
