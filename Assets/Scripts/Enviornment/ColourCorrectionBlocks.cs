@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ColourCorrectionBlocks : MonoBehaviour
@@ -5,6 +6,7 @@ public class ColourCorrectionBlocks : MonoBehaviour
     [SerializeField, Tooltip("Predefine the rbg of the bloock")]private Vector3 vectorType; 
     private SpriteRenderer spriteRenderer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();

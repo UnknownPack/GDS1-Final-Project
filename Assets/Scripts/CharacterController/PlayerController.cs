@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
     {
         
         Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
-        if(other.gameObject.CompareTag("Ground"))
+        if(other.gameObject.CompareTag("Bounce"))
         { 
             if (rb != null)
             {
