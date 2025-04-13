@@ -464,6 +464,7 @@ public class GameManager : MonoBehaviour
         currentEffectValues[oldEffect] = oldDefault;
         currentDeviationUsed -= CalculateNormalizedDeviation(oldEffect);
 
+
         // Initialize new effect with its default value
         currentEffectValues[newEffect] = newPair.data.DefaultValue;
         defaultEffectValues[newEffect] = newPair.data.DefaultValue;
@@ -476,6 +477,7 @@ public class GameManager : MonoBehaviour
 
         // Force update resource display
         RecalculateCurrentDeviation();
+        ApplyEffectValue(oldEffect, oldDefault, postProcessingSliderValues.Find(p => p.type == oldEffect));
     }
 
 
