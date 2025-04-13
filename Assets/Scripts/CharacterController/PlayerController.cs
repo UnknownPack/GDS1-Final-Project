@@ -92,5 +92,10 @@ public class PlayerController : MonoBehaviour
             Trigger trigger = other.gameObject.GetComponent<Trigger>();
             GameManager.Instance.TransitionExternal(trigger.postProcessingEffect, trigger.setting);
         }
+        if (other.CompareTag("DeathBox"))
+        {
+            Debug.Log("Player hit the deathbox");
+            GameManager.Instance.RestartLevel();
+        }
     }
 }
