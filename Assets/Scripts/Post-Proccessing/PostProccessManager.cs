@@ -90,6 +90,7 @@ public class PostProccessManager : MonoBehaviour
     }
 
     public void ChangeBrightness (float value) {
+        if (light2D == null) {return;}
         //float brightnessValue = brightnessSlider.value;
         if (value > 1) {
             // brightnessValue = 1 + (brightnessValue - 1)/;
@@ -133,7 +134,7 @@ public class PostProccessManager : MonoBehaviour
     {
         Colour[] platforms = FindObjectsOfType<Colour>();
         foreach (Colour platform in platforms)
-        {//test
+        {
             // Threshold at 1 (exact match)
             if (value == 1f && previousValue != 1f)
             {
@@ -225,6 +226,7 @@ public class PostProccessManager : MonoBehaviour
             channelMixer.blueOutBlueIn.value);
         
         currentColorChannelMatrix = new ColourCorrectionBlocks.ColorChannelMatrix(redResult, greenResult, blueResult);
+        
     }
     public void ChangeChromaticAberration(float value)
     {

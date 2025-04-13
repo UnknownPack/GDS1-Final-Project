@@ -36,7 +36,11 @@ public class LightBlocks : MonoBehaviour
 
     void Update()
     { 
-        float brightness = GameManager.Instance.GetPostProcessingValue(GameManager.PostProcessingEffect.Brightness); 
+        float brightness = GameManager.Instance.GetPostProcessingValue(GameManager.PostProcessingEffect.Brightness);
+        Debug.Log(brightness);
+        if (brightness == 0.1) {
+            brightness = 0;
+        }
         if (activationState == Activation.FullLight) 
             currentAlpha = 1f - brightness;  
         else 
@@ -44,7 +48,6 @@ public class LightBlocks : MonoBehaviour
         
         Color colour = spriteRenderer.color;
         spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
-        
         if (Mathf.Approximately(currentAlpha, 1f)) 
             collider2D.enabled = true; 
         else if (Mathf.Approximately(currentAlpha, 0f)) 

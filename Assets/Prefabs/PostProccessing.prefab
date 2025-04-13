@@ -107,8 +107,8 @@ MonoBehaviour:
       defaultValue: 0
   maxTotalDeviationBudget: 1.5
   currentDeviationUsed: 0
-  resetBudgetOnSceneLoad: 1
   sliderTutorialText: {fileID: 0}
+  resetBudgetOnSceneLoad: 1
 --- !u!114 &3083590068151271766
 MonoBehaviour:
   m_ObjectHideFlags: 0
