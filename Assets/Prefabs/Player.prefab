@@ -177,6 +177,7 @@ MonoBehaviour:
   maxCharge: 2
   jumpForceVertical: 15
   jumpForceHorizontal: 10
+  GreenBouncePadPower: 2.6
   noGravity: 0
 --- !u!114 &5609071412945821210
 MonoBehaviour:
