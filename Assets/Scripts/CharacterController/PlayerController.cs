@@ -29,7 +29,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidbody2D;
     private UnityEngine.InputSystem.PlayerInput playerInput;
     private InputAction moveAction;
-    private Vector2 currentVector; 
+    private Vector2 currentVector;
+    private Vector2 noGravityVelocity;
+    Vector2 lastPosition;
+    Vector2 currentVelocity;
 
     void Start()
     {
@@ -37,10 +40,12 @@ public class PlayerController : MonoBehaviour
         collider2D = GetComponent<Collider2D>();
         playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>(); 
         moveAction = playerInput.actions.FindAction("Move");   
-        moveAction.Enable();    
+        moveAction.Enable();
+        lastPosition = transform.position;    
     } 
     void Update()
     { 
+
         currentMovementVector = moveAction.ReadValue<Vector2>();
         if (!noGravity)
         {
@@ -143,7 +148,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
     #region Public Methods
-    public void SetGravityStatus(bool status){noGravity = status;}
+    public void SetGravityStatus(bool status){noGravity = status; rigidbody2D.gravityScale = -1;}
     public void SetJumpStatus(bool status){canJump = status;}
 
     #endregion
