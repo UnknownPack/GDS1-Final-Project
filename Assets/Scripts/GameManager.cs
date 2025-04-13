@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Scene Management
+    public enum SliderType { Brightness, MotionBlur, FilmGrain }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         Debug.Log($"Scene loaded: {scene.name}");
         InitializeSystem();
@@ -78,6 +79,14 @@ public class GameManager : MonoBehaviour
         else RecalculateCurrentDeviation();
         
         HandleTutorialUI(scene.name);
+    }
+    public void EnableSliderManually(GameObject sliderObject, SliderType sliderType)
+    {
+        if (SceneManager.GetActiveScene().name != "SliderIntroScene")
+            return;
+
+        sliderObject.SetActive(true);
+
     }
     #endregion
 
