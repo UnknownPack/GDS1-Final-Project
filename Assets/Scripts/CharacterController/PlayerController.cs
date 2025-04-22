@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Trigger"))
         {
             Trigger trigger = other.gameObject.GetComponent<Trigger>();
-            GameManager.Instance.TransitionExternal(trigger.postProcessingEffect, trigger.setting);
+            GameManager.Instance.TransitionExternal(trigger.postProcessingEffect, trigger.setting, 0.5f);
         }
         if (other.CompareTag("DeathBox"))
         {

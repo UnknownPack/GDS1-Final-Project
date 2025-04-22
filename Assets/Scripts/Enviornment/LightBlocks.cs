@@ -40,11 +40,11 @@ public class LightBlocks : MonoBehaviour
 
     void Update()
     { 
-        float brightness = GameManager.Instance.GetPostProcessingValue(GameManager.PostProcessingEffect.Brightness);
-        Debug.Log(brightness);
-        if (brightness == 0.1) {
-            brightness = 0;
-        }
+
+    }
+
+    public void ChangeBrightness(float brightness) {
+        brightness = brightness / 2;
         if (activationState == Activation.FullLight) 
             currentAlpha = 1f - brightness;  
         else 
@@ -56,7 +56,6 @@ public class LightBlocks : MonoBehaviour
             collider2D.enabled = true; 
         else if (Mathf.Approximately(currentAlpha, 0f)) 
             collider2D.enabled = false; 
-
     }
     
     private enum LightBlockState{

@@ -90,6 +90,11 @@ public class PostProccessManager : MonoBehaviour
     }
 
     public void ChangeBrightness (float value) {
+        Debug.Log(value);
+        LightBlocks[] lightBlocks = FindObjectsByType<LightBlocks>(0);
+        foreach (LightBlocks lightBlock in lightBlocks) {
+            lightBlock.ChangeBrightness(value);
+        }
         if (light2D == null) {return;}
         //float brightnessValue = brightnessSlider.value;
         if (value > 1) {

@@ -25,7 +25,7 @@ public class SliderUnlockTrigger : MonoBehaviour
             GameManager gm = GameManager.Instance;
             if (gm != null)
             {
-                gm.EnableSliderManually(sliderPrefab, GameManager.SliderType.Brightness);
+                // gm.EnableSliderManually(sliderPrefab, GameManager.SliderType.Brightness);
             }
         }
     }

@@ -1220,6 +1220,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationState: 0
   startingState: 0
+  enableThreshold: 0.9
+  disableThreshold: 0.1
 --- !u!1001 &1001829699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1659,6 +1661,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationState: 1
   startingState: 0
+  enableThreshold: 0.9
+  disableThreshold: 0.1
 --- !u!1001 &1441317607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1728,6 +1732,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: postProcessingSliderValues.Array.size
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_Name
       value: PostProccessing

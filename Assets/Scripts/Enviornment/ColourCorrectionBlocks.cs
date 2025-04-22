@@ -10,7 +10,7 @@ public class ColourCorrectionBlocks : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        GameManager.Instance.AddToColourCorrectionBlockList(this);
+        // GameManager.Instance.AddToColourCorrectionBlockList(this);
     }
 
     // Update is called once per frame
