@@ -13,6 +13,7 @@ TagManager:
   - Danger
   - Bounce
   - Safe
+  - TempSlider
   layers:
   - Default
   - TransparentFX
