@@ -20,7 +20,7 @@ public class PauseView : MonoBehaviour
             Debug.Log("Resume button clicked");
             currentlyPaused = false;
             //Time.timeScale = 1f;
-            uiDocument.enabled = false; 
+            uiDocument.rootVisualElement.style.display = DisplayStyle.None; 
         };
 
         reset = uiDocument.rootVisualElement.Q<Button>("Restart");
@@ -43,7 +43,7 @@ public class PauseView : MonoBehaviour
             SceneManager.LoadScene("MainMenu");
         }; 
         
-        uiDocument.enabled = false;  
+        uiDocument.rootVisualElement.style.display = DisplayStyle.None;   
         playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         pauseAction = playerInput.actions["Pause"];
         pauseAction.Enable();
@@ -53,9 +53,8 @@ public class PauseView : MonoBehaviour
     private void HandlePause(InputAction.CallbackContext context)
     {
         Debug.Log("PauseButtonPressed");
-        currentlyPaused = !currentlyPaused; 
-        uiDocument.enabled = currentlyPaused;
-        //Time.timeScale = (currentlyPaused) ? 0.0f : 1.0f; 
+        currentlyPaused = !currentlyPaused;   
+        uiDocument.rootVisualElement.style.display = (currentlyPaused) ? DisplayStyle.Flex: DisplayStyle.None; 
     } 
     
     private void OnDestroy()
