@@ -18,12 +18,12 @@ public class GameManager : MonoBehaviour
     public GameObject sliderTutorialText;
     private UIDocument quickAccessDocument;
 
-    private HotBarPair[] currentHotBar = new HotBarPair[2];
-    private Slider[] sliders = new Slider[2];
+    private HotBarPair[] currentHotBar = new HotBarPair[3];
+    private Slider[] sliders = new Slider[3];
     private int selectedSliderIndex = 0;
     
     private Coroutine sliderTutorialCoroutine;
-    private EventCallback<ChangeEvent<float>>[] sliderCallbacks = new EventCallback<ChangeEvent<float>>[2];
+    private EventCallback<ChangeEvent<float>>[] sliderCallbacks = new EventCallback<ChangeEvent<float>>[3];
 
     private PostProccessManager postProcessManager; 
     private Coroutine transitionCoroutine;
@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
         // UpdateUIReferences();
         ResetAllSlidersToDefault();
         HandleTutorialUI(scene.name);
+        SetTempSlider();
     }
     #endregion
 
@@ -88,6 +89,50 @@ public class GameManager : MonoBehaviour
     private void GetUIReferences() {
         sliders[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
         sliders[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
+        sliders[2] = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
+    }
+
+    private void SetTempSlider() {
+        GameObject targetObject = GameObject.FindWithTag("TempSlider");
+        if (targetObject == null) {SetTempSlider(false); return; }
+        
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null) { return; }
+
+        // Convert world position to screen space
+        Vector3 worldPos = targetObject.transform.position;
+        Vector3 screenPos3D = mainCamera.WorldToScreenPoint(worldPos);
+        
+        // Flip Y-axis for UI Document coordinate system
+        Vector2 screenPos = new Vector2(
+            screenPos3D.x, 
+            Screen.height - screenPos3D.y // Invert Y coordinate
+        );
+
+        // Convert to UI Document space
+        Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(
+            quickAccessDocument.rootVisualElement.panel, 
+            screenPos
+        );
+
+        // Get resolved dimensions
+        float sliderWidth = sliders[2].resolvedStyle.width;
+        float sliderHeight = sliders[2].resolvedStyle.height;
+
+        // Apply position (centered)
+        sliders[2].style.position = Position.Absolute;
+        sliders[2].style.left = panelPos.x - sliderWidth / 2;
+        sliders[2].style.top = panelPos.y - sliderHeight / 2;
+    }
+
+    private void SetTempSlider(bool enabled) {
+        if (enabled) {
+            sliders[2].SetEnabled(true);
+        }
+        else {
+            sliders[2].SetEnabled(false);
+        }
+
     }
     #endregion
 
@@ -147,6 +192,7 @@ public class GameManager : MonoBehaviour
     private void Update() => HandleHotbarInput();
 
     private void HandleHotbarInput() {
+        SetTempSlider();
         HandleSelectionInput();
         HandleAdjustmentInput();
     }
@@ -245,8 +291,9 @@ public class GameManager : MonoBehaviour
     public void ReplaceSlider(PostProcessingEffect newEffect, int slotIndex = -1) {
         slotIndex = slotIndex < 0 ? selectedSliderIndex : Mathf.Clamp(slotIndex, 0, currentHotBar.Length - 1);
         
-        foreach (HotBarPair pair in currentHotBar) {
-            if (pair.type == newEffect) return;
+        for (int i = 0; i < 2; i++) {
+            Debug.Log(currentHotBar[i].type);
+            if (currentHotBar[i].type == newEffect) return;
         }
 
         TransitionExternal(currentHotBar[selectedSliderIndex].type, Setting.Default, 0.1f);
@@ -264,7 +311,7 @@ public class GameManager : MonoBehaviour
             if (pair.type == effect) isInHotbar = true;
         }
         if (!isInHotbar) {
-            ReplaceSlider(effect, 1);
+            ReplaceSlider(effect, 2);
         }
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
         if (newPair.Equals(default(HotBarPair))) return;

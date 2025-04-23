@@ -140,29 +140,7 @@ public class PostProccessManager : MonoBehaviour
         Colour[] platforms = FindObjectsOfType<Colour>();
         foreach (Colour platform in platforms)
         {
-            // Threshold at 1 (exact match)
-            if (value == 1f && previousValue != 1f)
-            {
-                platform.CycleUp(); // Forward cycle
-            }
-            // Threshold at 0 (exact match)
-            else if (value == 0f && previousValue != 0f)
-            {
-                if (previousValue > 0f)
-                {
-                    platform.CycleDown(); // Coming from positive
-                }
-                else
-                {
-                    platform.CycleUp(); // Coming from negative
-                }
-            }
-            // Threshold at -1 (exact match)
-            else if (value == -1f && previousValue != -1f)
-            {
-                platform.CycleDown(); // Backward cycle
-            }
-            platform.GetColor();
+            platform.SetState(value);
         }
 
         previousValue = value;

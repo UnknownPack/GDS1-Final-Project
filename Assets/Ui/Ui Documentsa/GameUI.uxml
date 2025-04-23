@@ -4,4 +4,7 @@
         <engine:Slider label="Motion Blur" value="50" high-value="100" direction="Vertical" name="hotkeyOne" focusable="false" fill="false" show-input-field="false" inverted="false" class="sliderHotKey" style="height: 200px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 45px; top: 0; align-content: flex-start;" />
         <engine:Slider label="Effect 2" value="50" high-value="100" direction="Vertical" name="hotkeyTwo" focusable="false" class="sliderHotKey" style="height: 200px; margin-left: 45px; margin-bottom: 0; margin-right: 0; margin-top: 0; top: 0;" />
     </engine:VisualElement>
+    <engine:VisualElement style="flex-grow: 1; position: absolute;">
+        <engine:Slider label="Slider" value="60" high-value="100" name="TempSlider" inverted="false" fill="false" style="position: absolute; height: 27px; width: 421px;" />
+    </engine:VisualElement>
 </engine:UXML>

@@ -4,16 +4,31 @@ public class Colour : MonoBehaviour
 {
 
     public enum ColorState { Red, Blue, Green }
-    public ColorState currentState = ColorState.Red;
+    private ColorState currentState;
+    public ColorState startState = ColorState.Red;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void CycleUp()
+    void Start()
     {
-        currentState = (ColorState)(((int)currentState + 1) % 3);
+        currentState = startState;
+        GetColor();
     }
 
-    public void CycleDown()
-    {
-        currentState = (ColorState)(((int)currentState + 2) % 3);
+    public bool Approximately(float a, float b, float tolerance = 0.1f) {
+        return Mathf.Abs(a - b) < tolerance;
+    }
+
+    public void SetState(float value) {
+        Debug.Log(value);
+        if (Approximately(value, 0, 0.25f)) {
+            currentState = startState;
+        }
+        else if (Approximately(value, 1, 0.25f)) {
+            currentState = (ColorState)(((int)startState + 1) % 3);
+        }
+        else if (Approximately(value, -1, 0.25f)) {
+            currentState = (ColorState)(((int)startState + 2) % 3);
+        }
+        GetColor();
     }
 
     // Update is called once per frame
