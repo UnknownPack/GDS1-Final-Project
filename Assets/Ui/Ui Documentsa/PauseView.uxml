@@ -1,12 +1,58 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Ui/StyleSheets/GameUI.uss?fileID=7433441132597879392&amp;guid=2402c6ba7d7c39342bf558a131953256&amp;type=3#GameUI" />
     <Style src="project://database/Assets/Ui/StyleSheets/Menu.uss?fileID=7433441132597879392&amp;guid=e4bfdd1675def544b9b4a1c04c1c6b85&amp;type=3#Menu" />
-    <engine:VisualElement name="VisualElement" style="flex-grow: 1; align-items: flex-start; align-self: auto; align-content: center; justify-content: center; background-color: rgb(45, 37, 37);">
-        <engine:Label text="Post Process" style="padding-bottom: 74px; padding-top: 0; padding-right: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; font-size: 150px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); -unity-text-align: middle-center; -unity-text-outline-color: rgb(89, 170, 64); -unity-text-outline-width: 5px; background-color: rgba(151, 151, 151, 0);" />
-        <engine:Button text="Resume" name="Resume" class="button" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-        <engine:Button text="Restart" name="Restart" class="button" />
-        <engine:Button text="Settings" name="Settings" class="button" />
-        <engine:Button text="Controls&#10;" name="Controls" class="button" />
-        <engine:Button text="Main Menu" name="Menu" class="button" />
+    <engine:VisualElement name="VisualElement" style="flex-grow: 1; align-items: flex-start; align-self: auto; align-content: center; justify-content: center; background-color: rgba(45, 37, 37, 0.92);">
+        <engine:VisualElement style="flex-grow: 1; width: 100%; height: 100%; align-self: center; justify-content: center;">
+            <engine:Label text="Post Process" style="padding-bottom: 74px; padding-top: 0; padding-right: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: -500px; font-size: 150px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); -unity-text-align: middle-center; -unity-text-outline-color: rgb(89, 170, 64); -unity-text-outline-width: 5px; background-color: rgba(151, 151, 151, 0);" />
+            <engine:Button text="Resume" name="Resume" class="button" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 100px;" />
+            <engine:Button text="Restart" name="Restart" class="button" style="margin-left: 100px;" />
+            <engine:Button text="Settings" name="Settings" class="button" style="margin-left: 100px;" />
+            <engine:Button text="Main Menu" name="Menu" class="button" style="margin-left: 100px;" />
+            <engine:VisualElement style="flex-grow: 1; position: absolute; right: 91px; bottom: auto; top: 459px; left: auto; height: 570px; width: 1250px; align-self: flex-start; justify-content: center; align-items: auto; align-content: auto; flex-direction: row; background-color: rgba(0, 0, 0, 0);">
+                <engine:VisualElement name="halfOne" style="flex-grow: 1; width: 50%; height: 100%; flex-direction: column;">
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/a.png?fileID=2800000&amp;guid=84336ead2bc884a4389f3d4e11093845&amp;type=3#a&quot;);" />
+                        <engine:Label text="Move Left" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/d.png?fileID=2800000&amp;guid=f88a3bde663a377419f80eeae083d5b7&amp;type=3#d&quot;);" />
+                        <engine:Label text="Move Right" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/1.png?fileID=2800000&amp;guid=6afb4906456b94d47b629085a57a2c3c&amp;type=3#1&quot;);" />
+                        <engine:Label text="Hotbar One" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/2.png?fileID=2800000&amp;guid=2cd54d96e66949742980626a60c9be53&amp;type=3#2&quot;);" />
+                        <engine:Label text="Hotbar Two" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/esc.png?fileID=2800000&amp;guid=a51aac4521ec79b4f99279d63e8c4d78&amp;type=3#esc&quot;);" />
+                        <engine:Label text="Pause" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+                <engine:VisualElement name="halfTwo" style="flex-grow: 1; width: 50%; height: 100%;">
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: column-reverse; color: rgb(89, 170, 64); -unity-font-style: normal; align-content: center; align-self: center;">
+                        <engine:Label text="Quick Adjust:" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 90px; color: rgb(220, 190, 59); -unity-font-style: bold;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/q.png?fileID=2800000&amp;guid=35ecb234d30b9cb42b07f10511a850cb&amp;type=3#q&quot;);" />
+                        <engine:Label text="Big Increase" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/w.png?fileID=2800000&amp;guid=c48a9e623f57a964bb290afc4c88ec5e&amp;type=3#w&quot;);" />
+                        <engine:Label text="Small Increase" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/s.png?fileID=2800000&amp;guid=39c87eb429428fe49a2621871ade9193&amp;type=3#s&quot;);" />
+                        <engine:Label text="Big Decrease" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                    <engine:VisualElement style="flex-grow: 1; height: 20%; min-height: 20%; max-height: 20%; flex-direction: row; color: rgb(89, 170, 64); -unity-font-style: normal;">
+                        <engine:VisualElement name="VisualElement" style="flex-grow: 1; width: 20%; min-width: 20%; max-width: 20%; background-image: url(&quot;project://database/Assets/Imported%20Assets/GameInputControllerIconsFree/keyboard/keyboard-solid/e.png?fileID=2800000&amp;guid=69da02ec34c73624b91727759ad616df&amp;type=3#e&quot;);" />
+                        <engine:Label text="Small Decrease" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 80px;" />
+                    </engine:VisualElement>
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

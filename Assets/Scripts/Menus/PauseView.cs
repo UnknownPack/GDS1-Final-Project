@@ -19,7 +19,7 @@ public class PauseView : MonoBehaviour
         {
             Debug.Log("Resume button clicked");
             currentlyPaused = false;
-            //Time.timeScale = 1f;
+            Time.timeScale = 1f;
             uiDocument.rootVisualElement.style.display = DisplayStyle.None; 
         };
 
@@ -38,8 +38,7 @@ public class PauseView : MonoBehaviour
         
         mainMenu = uiDocument.rootVisualElement.Q<Button>("Menu");
         mainMenu.clicked += () => 
-        { 
-            Debug.Log("Menu button clicked"); 
+        {  
             SceneManager.LoadScene("MainMenu");
         }; 
         
@@ -51,9 +50,9 @@ public class PauseView : MonoBehaviour
     }
     
     private void HandlePause(InputAction.CallbackContext context)
-    {
-        Debug.Log("PauseButtonPressed");
+    { 
         currentlyPaused = !currentlyPaused;   
+        Time.timeScale = currentlyPaused ? 1f : 0f;
         uiDocument.rootVisualElement.style.display = (currentlyPaused) ? DisplayStyle.Flex: DisplayStyle.None; 
     } 
     
