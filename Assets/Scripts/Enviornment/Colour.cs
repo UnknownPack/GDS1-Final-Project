@@ -18,7 +18,6 @@ public class Colour : MonoBehaviour
     }
 
     public void SetState(float value) {
-        Debug.Log(value);
         if (Approximately(value, 0, 0.25f)) {
             currentState = startState;
         }

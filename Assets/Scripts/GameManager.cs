@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private EventCallback<ChangeEvent<float>>[] sliderCallbacks = new EventCallback<ChangeEvent<float>>[3];
 
     private PostProccessManager postProcessManager; 
-    private Coroutine transitionCoroutine;
+    private Dictionary<PostProcessingEffect, Coroutine> activeTransitions = new Dictionary<PostProcessingEffect, Coroutine>();
 
     #region Singleton Pattern
     public static GameManager Instance {
@@ -59,10 +59,11 @@ public class GameManager : MonoBehaviour
     public enum SliderType { Brightness, MotionBlur, FilmGrain }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        // UpdateUIReferences();
-        ResetAllSlidersToDefault();
+        UpdateUIReferences();
+        
         HandleTutorialUI(scene.name);
         SetTempSlider();
+        ResetAllSlidersToDefault();
     }
     #endregion
 
@@ -90,6 +91,9 @@ public class GameManager : MonoBehaviour
         sliders[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
         sliders[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
         sliders[2] = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
+        sliders[2].RegisterCallback<PointerDownEvent>(e => e.PreventDefault());
+        sliders[2].RegisterCallback<PointerMoveEvent>(e => e.PreventDefault());
+        sliders[2].SetEnabled(false); // Disables ALL interaction (mouse + keyboard)
     }
 
     private void SetTempSlider() {
@@ -128,9 +132,11 @@ public class GameManager : MonoBehaviour
     private void SetTempSlider(bool enabled) {
         if (enabled) {
             sliders[2].SetEnabled(true);
+            sliders[2].style.display = DisplayStyle.Flex;
         }
         else {
             sliders[2].SetEnabled(false);
+            sliders[2].style.display = DisplayStyle.None;
         }
 
     }
@@ -140,16 +146,17 @@ public class GameManager : MonoBehaviour
     private void SetupSlider(int index, HotBarPair pair) {
         currentHotBar[index] = pair;
         var slider = sliders[index];
-        
-        slider.label = pair.type.ToString();
-        slider.value = pair.data.DefaultValue;
-        Debug.Log(pair.type + " " + pair.data.DefaultValue);
-        slider.lowValue = pair.data.MinValue;
-        slider.highValue = pair.data.MaxValue;
 
         if (sliderCallbacks[index] != null) {
             slider.UnregisterValueChangedCallback(sliderCallbacks[index]);
         }
+
+        slider.label = pair.type.ToString();
+        slider.value = pair.data.DefaultValue;
+        slider.lowValue = pair.data.MinValue;
+        slider.highValue = pair.data.MaxValue;
+
+        
 
         PostProcessingEffect effect = pair.type;
         sliderCallbacks[index] = evt => OnSliderChanged(evt, effect);
@@ -292,7 +299,6 @@ public class GameManager : MonoBehaviour
         slotIndex = slotIndex < 0 ? selectedSliderIndex : Mathf.Clamp(slotIndex, 0, currentHotBar.Length - 1);
         
         for (int i = 0; i < 2; i++) {
-            Debug.Log(currentHotBar[i].type);
             if (currentHotBar[i].type == newEffect) return;
         }
 
@@ -322,11 +328,26 @@ public class GameManager : MonoBehaviour
         Slider targetSlider = sliders[index];
         float currentValue = targetSlider.value;
         float targetValue = GetTargetValue(newPair, setting);
+        // Debug.Log(currentValue + " " + setting + " " + effect);
 
         if (Mathf.Approximately(currentValue, targetValue)) return;
 
-        if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
-        transitionCoroutine = StartCoroutine(TransitionEffectValue(targetSlider, currentValue, targetValue, duration));
+        if (activeTransitions.TryGetValue(effect, out Coroutine runningCoroutine)) 
+        {
+            if (runningCoroutine != null)
+            {
+                StopCoroutine(runningCoroutine);
+            }
+            // Remove the entry regardless
+            activeTransitions.Remove(effect);
+        }
+        // Then add the new coroutine to the dictionary
+        activeTransitions[effect] = StartCoroutine(TransitionEffectValue(targetSlider, currentValue, targetValue, duration, effect));
+        foreach (var item in activeTransitions.Keys)
+        {
+            Debug.Log(item);
+            Debug.Log(activeTransitions.Count);
+        }
     }
 
     private int FindSliderIndex(PostProcessingEffect effect) {
@@ -349,16 +370,17 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Helper Methods
-    private IEnumerator TransitionEffectValue(Slider targetSlider, float from, float to, float duration) {
+    private IEnumerator TransitionEffectValue(Slider targetSlider, float from, float to, float duration, PostProcessingEffect effect) {
         float elapsed = 0f;
         while (elapsed < duration) {
             elapsed += Time.deltaTime;
             float newValue = Mathf.Lerp(from, to, Mathf.Clamp01(elapsed / duration));
             targetSlider.value = newValue;
+            // Debug.Log(effect + " " + newValue);
             yield return null;
         }
         targetSlider.value = to;
-        transitionCoroutine = null;
+        activeTransitions.Remove(effect);
     }
 
     private void SelectSlider(int index) {
