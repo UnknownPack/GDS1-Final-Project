@@ -6,80 +6,59 @@ using UnityEngine.UIElements;
 
 public class PauseView : MonoBehaviour
 {
-    [SerializeField]VisualTreeAsset GameUI;
-    [SerializeField]VisualTreeAsset PauseMenuUI; 
     UIDocument uiDocument;
-    
     private UnityEngine.InputSystem.PlayerInput playerInput;
-    private InputAction pauseAction;
-    private GameObject pauseMenuObject;
+    private InputAction pauseAction; 
     private bool currentlyPaused = false;
+    private Button resume, reset, settings, mainMenu;
     void Start()
     { 
-        #region UI Initalization
         uiDocument = GetComponent<UIDocument>();
-        
-        pauseMenuObject = new GameObject("PauseMenuView");
-        DontDestroyOnLoad(pauseMenuObject);
-        pauseMenuObject.AddComponent<UIDocument>();
-        UIDocument pauseUI = pauseMenuObject.GetComponent<UIDocument>();
-        pauseUI.panelSettings = uiDocument.panelSettings;
-        pauseUI.visualTreeAsset = PauseMenuUI;
-        pauseUI.sortingOrder = 100;
-        pauseUI.rootVisualElement.pickingMode = PickingMode.Position; 
-        pauseUI.rootVisualElement.Q<Button>("Resume").RegisterCallback<ClickEvent>(evt => 
+        resume = uiDocument.rootVisualElement.Q<Button>("Resume");
+        resume.clicked += () => 
         {
             Debug.Log("Resume button clicked");
             currentlyPaused = false;
             Time.timeScale = 1f;
-            uiDocument.enabled = true;
-            pauseMenuObject.SetActive(false);
-        });
-        
-        pauseUI.rootVisualElement.Q<Button>("Reset").RegisterCallback<ClickEvent>(evt => {
+            uiDocument.rootVisualElement.style.display = DisplayStyle.None; 
+        };
+
+        reset = uiDocument.rootVisualElement.Q<Button>("Restart");
+        reset.clicked += () => {
             Debug.Log("Reset button clicked"); 
-            currentlyPaused = false;
-            Time.timeScale = 1f;
-            uiDocument.enabled = true;
-            pauseMenuObject.SetActive(false);
             GameManager.Instance.RestartLevel(); 
-        });
+        };
     
-        pauseUI.rootVisualElement.Q<Button>("Settings").RegisterCallback<ClickEvent>(evt => 
+        settings = uiDocument.rootVisualElement.Q<Button>("Settings");
+        settings.clicked += () => 
         {
             Debug.Log("Settings button clicked"); 
             //TODO: DISSCUSS AND IMPLEMENT SETTINGS WINDOW
-        });
-        pauseUI.rootVisualElement.Q<Button>("Menu").RegisterCallback<ClickEvent>(evt => 
-        { 
-            Debug.Log("Menu button clicked"); 
-            currentlyPaused = false;
-            Time.timeScale = 1f;
-            uiDocument.enabled = true;
-            pauseMenuObject.SetActive(false);
-            SceneManager.LoadScene("MainMenu");
-        }); 
+        };
         
-        pauseMenuObject.SetActive(false);
-        #endregion  
+        mainMenu = uiDocument.rootVisualElement.Q<Button>("Menu");
+        mainMenu.clicked += () => 
+        {  
+            SceneManager.LoadScene("MainMenu");
+        }; 
+        
+        uiDocument.rootVisualElement.style.display = DisplayStyle.None;   
         playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         pauseAction = playerInput.actions["Pause"];
         pauseAction.Enable();
-        pauseAction.performed += OnPause;
+        pauseAction.performed += HandlePause;
     }
     
-    private void OnPause(InputAction.CallbackContext context)
-    {
-        Debug.Log("PauseButtonPressed");
-        currentlyPaused = !currentlyPaused; 
-        uiDocument.enabled = !currentlyPaused;
-        Time.timeScale = (currentlyPaused) ? 0.0f : 1.0f;
-        pauseMenuObject.SetActive(currentlyPaused);
+    private void HandlePause(InputAction.CallbackContext context)
+    { 
+        currentlyPaused = !currentlyPaused;   
+        Time.timeScale = currentlyPaused ? 1f : 0f;
+        uiDocument.rootVisualElement.style.display = (currentlyPaused) ? DisplayStyle.Flex: DisplayStyle.None; 
     } 
     
     private void OnDestroy()
     {
         if (pauseAction != null)
-            pauseAction.performed -= OnPause;
+            pauseAction.performed -= HandlePause;
     }
 }
