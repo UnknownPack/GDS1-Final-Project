@@ -302,7 +302,7 @@ public class GameManager : MonoBehaviour
             if (currentHotBar[i].type == newEffect) return;
         }
 
-        TransitionExternal(currentHotBar[selectedSliderIndex].type, Setting.Default, 0.1f);
+        TransitionExternal(currentHotBar[selectedSliderIndex].type, Setting.Default, 0.0f);
 
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
         if (newPair.Equals(default(HotBarPair))) return;
