@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -472, y: 97}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8311419184590626155
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullText: Default typing text...
   typingSpeed: 0.05
-  playOnStart: 1
+  playOnStart: 0
   cursorChar: '|'
   cursorBlinkInterval: 0.5
   typingSound: {fileID: 8300000, guid: bcac108ef6b85a84a9df03780b94f8c3, type: 3}
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -587.64453, w: -254.53104}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
