@@ -1037,7 +1037,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3263258252902532904, guid: e23c0c8b5c40f98428373bfb06761cea, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1064,6 +1065,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationState: 1
   startingState: 1
+  enableThreshold: 0.9
+  disableThreshold: 0.1
 --- !u!1001 &935634731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1144,6 +1147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationState: 0
   startingState: 1
+  enableThreshold: 0.9
+  disableThreshold: 0.1
 --- !u!1001 &1079333925
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1940,7 +1945,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3263258252902532904, guid: e23c0c8b5c40f98428373bfb06761cea, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1967,6 +1973,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationState: 0
   startingState: 0
+  enableThreshold: 0.9
+  disableThreshold: 0.1
 --- !u!1001 &1863561889
 PrefabInstance:
   m_ObjectHideFlags: 0
