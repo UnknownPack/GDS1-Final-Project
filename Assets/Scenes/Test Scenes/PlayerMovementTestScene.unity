@@ -1200,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952291731928152b0b7ebc0ea1e8edb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  travelTime: 1
   waitTime: 2
   targetPositions:
   - {x: 8.16, y: -1.25}
