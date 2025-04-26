@@ -6,7 +6,6 @@
             <engine:Label text="Post Process" style="padding-bottom: 74px; padding-top: 0; padding-right: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: -500px; font-size: 150px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); -unity-text-align: middle-center; -unity-text-outline-color: rgb(89, 170, 64); -unity-text-outline-width: 5px; background-color: rgba(151, 151, 151, 0);" />
             <engine:Button text="Resume" name="Resume" class="button" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 100px;" />
             <engine:Button text="Restart" name="Restart" class="button" style="margin-left: 100px;" />
-            <engine:Button text="Settings" name="Settings" class="button" style="margin-left: 100px;" />
             <engine:Button text="Main Menu" name="Menu" class="button" style="margin-left: 100px;" />
             <engine:VisualElement style="flex-grow: 1; position: absolute; right: 91px; bottom: auto; top: 459px; left: auto; height: 570px; width: 1250px; align-self: flex-start; justify-content: center; align-items: auto; align-content: auto; flex-direction: row; background-color: rgba(0, 0, 0, 0);">
                 <engine:VisualElement name="halfOne" style="flex-grow: 1; width: 50%; height: 100%; flex-direction: column;">
