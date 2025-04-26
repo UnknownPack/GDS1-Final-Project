@@ -4373,36 +4373,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4624050006166851614, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: sourceAsset
-      value: 
-      objectReference: {fileID: 9197481963319205126, guid: 4cc44e38c9b6f9648b4ea62926c9ae73, type: 3}
-    - target: {fileID: 6983919345069499035, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: canJump
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6983919345069499035, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: maxCharge
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6983919345069499035, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: noGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6983919345069499035, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: chargeRate
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7575848556070164052, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 9098276512336608361, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
       propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 9098276512336608361, guid: f73fd227f6e0054459529aeb93b5e4c8, type: 3}
-      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []

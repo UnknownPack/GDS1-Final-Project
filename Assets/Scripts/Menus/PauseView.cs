@@ -52,7 +52,7 @@ public class PauseView : MonoBehaviour
     private void HandlePause(InputAction.CallbackContext context)
     { 
         currentlyPaused = !currentlyPaused;   
-        Time.timeScale = currentlyPaused ? 1f : 0f;
+        Time.timeScale = currentlyPaused ? 0f : 1f;
         uiDocument.rootVisualElement.style.display = (currentlyPaused) ? DisplayStyle.Flex: DisplayStyle.None; 
     } 
     

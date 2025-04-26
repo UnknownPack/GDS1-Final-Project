@@ -173,10 +173,10 @@ MonoBehaviour:
   MovementSpeed: 7
   MaxMovementSpeed: 7
   JumpForce: 1.1
-  canJump: 0
+  canJump: 1
   defaultGravityScale: 4
-  chargeRate: 2.5
-  maxCharge: 3
+  chargeRate: 5
+  maxCharge: 2.5
   jumpForceVertical: 20
   jumpForceHorizontal: 10
   GreenBouncePadPower: 2.6
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: a51822bed94138840a6b5aff69917e7b, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: f541d7192a19fb94d8cc981f29c58d89, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 4cc44e38c9b6f9648b4ea62926c9ae73, type: 3}
   m_SortingOrder: 100
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
