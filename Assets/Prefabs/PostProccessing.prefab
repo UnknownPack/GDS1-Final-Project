@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   urpAsset: {fileID: 11400000, guid: 681886c5eb7344803b6206f758bf0b1c, type: 2}
+  scanlinesMaterial: {fileID: 2100000, guid: efb385a746918f413b427a9e5ca4a5da, type: 2}
   finalBrightness: 20
 --- !u!114 &1419742284433337191
 MonoBehaviour:
@@ -105,10 +106,7 @@ MonoBehaviour:
       minValue: 0
       maxValue: 1
       defaultValue: 0
-  maxTotalDeviationBudget: 1.5
-  currentDeviationUsed: 0
   sliderTutorialText: {fileID: 0}
-  resetBudgetOnSceneLoad: 1
 --- !u!114 &3083590068151271766
 MonoBehaviour:
   m_ObjectHideFlags: 0

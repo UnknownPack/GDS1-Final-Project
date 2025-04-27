@@ -968,6 +968,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1502191259899643197, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: scanlinesMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: efb385a746918f413b427a9e5ca4a5da, type: 2}
     - target: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_Name
       value: PostProccessing
