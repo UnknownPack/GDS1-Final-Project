@@ -119,6 +119,24 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &252035765 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3048559084950410238, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+  m_PrefabInstance: {fileID: 1278241433}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &252035771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252035765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d827c667acfa25a4c8ad440349c2371a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelName: Level 1
 --- !u!1001 &559615196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -504,10 +522,14 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.newSize.y
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1663183879585110332, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3048559084950410238, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 252035771}
   m_SourcePrefab: {fileID: 100100000, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
 --- !u!1 &1380646799
 GameObject:
