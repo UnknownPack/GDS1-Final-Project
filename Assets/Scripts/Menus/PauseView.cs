@@ -27,14 +27,7 @@ public class PauseView : MonoBehaviour
         reset.clicked += () => {
             Debug.Log("Reset button clicked"); 
             GameManager.Instance.RestartLevel(); 
-        };
-    
-        settings = uiDocument.rootVisualElement.Q<Button>("Settings");
-        settings.clicked += () => 
-        {
-            Debug.Log("Settings button clicked"); 
-            //TODO: DISSCUSS AND IMPLEMENT SETTINGS WINDOW
-        };
+        }; 
         
         mainMenu = uiDocument.rootVisualElement.Q<Button>("Menu");
         mainMenu.clicked += () => 
