@@ -125,12 +125,27 @@ public class PieMenuManager : MonoBehaviour
         {
             Debug.Log(pedestalName);
             int effectIndex = postProcessingDict[pedestalName];
-            EnableMenuItem(effectIndex);
-            Redraw();
+            EnableMenuItemDelayed(effectIndex);
         }
         else
         {
             Debug.LogWarning($"No effect index found for pedestal: {pedestalName}");
         }
+    }
+    private void EnableMenuItemDelayed(int menuItemId)
+    {
+        StartCoroutine(EnableMenuItemCoroutine(menuItemId));
+    }
+    private IEnumerator EnableMenuItemCoroutine(int menuItemId)
+    {
+        // Wait until the menu is fully initialized
+        while (!menuInitilised)
+        {
+            yield return null;
+        }
+        
+        
+        EnableMenuItem(menuItemId);
+        Redraw();
     }
 }

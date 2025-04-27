@@ -718,6 +718,96 @@ MonoBehaviour:
   chromaticAbberationIntensity:
     m_OverrideState: 1
     m_Value: 0.5
+--- !u!114 &6833360178979297764
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54db5b2280e1b1f8d913cbff0397f81a, type: 3}
+  m_Name: ScanlinesEffect
+  m_EditorClassIdentifier: 
+  active: 1
+  <displayName>k__BackingField: 
+  isActive:
+    <debugId>k__BackingField: isActive
+    m_OverrideState: 1
+    m_Value: 0
+  intensity:
+    <debugId>k__BackingField: intensity
+    m_OverrideState: 1
+    m_Value: 0.5
+  lineCount:
+    <debugId>k__BackingField: lineCount
+    m_OverrideState: 1
+    m_Value: 10
+  lineColor:
+    <debugId>k__BackingField: lineColor
+    m_OverrideState: 1
+    m_Value:
+      r: 0
+      g: 0
+      b: 0
+      a: 1
+  lineWidth:
+    <debugId>k__BackingField: lineWidth
+    m_OverrideState: 1
+    m_Value: 0.5
+  animate:
+    <debugId>k__BackingField: animate
+    m_OverrideState: 1
+    m_Value: 0
+  scrollSpeed:
+    <debugId>k__BackingField: scrollSpeed
+    m_OverrideState: 1
+    m_Value: 1
+  enableFlicker:
+    <debugId>k__BackingField: enableFlicker
+    m_OverrideState: 1
+    m_Value: 0
+  flickerSpeed:
+    <debugId>k__BackingField: flickerSpeed
+    m_OverrideState: 1
+    m_Value: 60
+  flickerAmount:
+    <debugId>k__BackingField: flickerAmount
+    m_OverrideState: 1
+    m_Value: 0.1
+  enableJitter:
+    <debugId>k__BackingField: enableJitter
+    m_OverrideState: 1
+    m_Value: 0
+  jitterSpeed:
+    <debugId>k__BackingField: jitterSpeed
+    m_OverrideState: 1
+    m_Value: 5
+  jitterAmount:
+    <debugId>k__BackingField: jitterAmount
+    m_OverrideState: 1
+    m_Value: 0.002
+  enablePulsing:
+    <debugId>k__BackingField: enablePulsing
+    m_OverrideState: 1
+    m_Value: 0
+  pulseSpeed:
+    <debugId>k__BackingField: pulseSpeed
+    m_OverrideState: 1
+    m_Value: 3
+  pulseAmount:
+    <debugId>k__BackingField: pulseAmount
+    m_OverrideState: 1
+    m_Value: 0.2
+  enableGhosting:
+    <debugId>k__BackingField: enableGhosting
+    m_OverrideState: 1
+    m_Value: 0
+  ghostingAmount:
+    <debugId>k__BackingField: ghostingAmount
+    m_OverrideState: 1
+    m_Value: 0.05
 --- !u!114 &7933203426823181213
 MonoBehaviour:
   m_ObjectHideFlags: 3

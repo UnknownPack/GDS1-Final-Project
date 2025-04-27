@@ -16,7 +16,9 @@ public class PostProccessManager : MonoBehaviour
     private ChannelMixer channelMixer;
     private ChromaticAberration chromaticAberration;
     private Bloom bloom;
+    private PaniniProjection paniniProjection;
     [SerializeField] private UniversalRenderPipelineAsset urpAsset;
+    [SerializeField] private Material scanlinesMaterial;
     private PlayerTrail playerTrail;
     public float finalBrightness = 1.0f;
     private GameObject player;
@@ -51,6 +53,7 @@ public class PostProccessManager : MonoBehaviour
         volume.profile.TryGet(out channelMixer);
         volume.profile.TryGet(out chromaticAberration);
         volume.profile.TryGet(out bloom);
+        volume.profile.TryGet(out paniniProjection);
         
         Vector3 redResult   = new Vector3(
             channelMixer.redOutRedIn.value,
@@ -74,6 +77,10 @@ public class PostProccessManager : MonoBehaviour
     void Update()
     {
         
+    }
+    private void OnDestroy()
+    {
+        scanlinesMaterial.SetFloat("_EnableEffect", 0);
     }
 
     public void ChangeAntiAlyasing (float value) {
@@ -110,6 +117,14 @@ public class PostProccessManager : MonoBehaviour
 
     public void ChangeFilmGrain(float value)
     {
+        if (value > 0.05) {
+            scanlinesMaterial.SetFloat("_EnableEffect", 1);
+        }
+        else {
+            scanlinesMaterial.SetFloat("_EnableEffect", 0);
+        }
+        paniniProjection.distance.value = Mathf.Lerp(0.0f, 0.5f, value);
+        scanlinesMaterial.SetFloat("_Intensity", value);
         filmGrain.intensity.value = value;
         bool shouldEnableJump = value > 0.95f;
     
