@@ -174,7 +174,7 @@ MonoBehaviour:
   MovementSpeed: 7
   MaxMovementSpeed: 7
   JumpForce: 1.1
-  canJump: 1
+  canJump: 0
   defaultGravityScale: 4
   chargeRate: 5
   maxCharge: 2.5

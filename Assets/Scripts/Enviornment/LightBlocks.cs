@@ -15,22 +15,22 @@ public class LightBlocks : MonoBehaviour
 
     
     SpriteRenderer spriteRenderer;
-    Collider2D collider2D;
+    BoxCollider2D boxCollider2D;
     private float currentAlpha;
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        collider2D = GetComponent<Collider2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
 
         switch (startingState)
         {
             case LightBlockState.DefaultEnabled:
                 currentAlpha = 1f;
-                collider2D.enabled = true;
+                boxCollider2D.enabled = true;
                 break;
             case LightBlockState.DefaultDisabled:
                 currentAlpha = 0f;
-                collider2D.enabled = false;
+                boxCollider2D.enabled = false;
                 break;
         }
  
@@ -44,6 +44,9 @@ public class LightBlocks : MonoBehaviour
     }
 
     public void ChangeBrightness(float brightness) {
+        if (spriteRenderer == null || boxCollider2D == null) {
+            return;
+        }
         brightness = brightness / 2;
         if (activationState == Activation.FullLight) 
             currentAlpha = 1f - brightness;  
@@ -53,9 +56,9 @@ public class LightBlocks : MonoBehaviour
         Color colour = spriteRenderer.color;
         spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
         if (Mathf.Approximately(currentAlpha, 1f)) 
-            collider2D.enabled = true; 
+            boxCollider2D.enabled = true; 
         else if (Mathf.Approximately(currentAlpha, 0f)) 
-            collider2D.enabled = false; 
+            boxCollider2D.enabled = false; 
     }
     
     private enum LightBlockState{
