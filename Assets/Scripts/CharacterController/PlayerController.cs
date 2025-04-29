@@ -74,16 +74,16 @@ public class PlayerController : MonoBehaviour
                     currentJumpCharge = 0f;
                 }  
             } 
-        }
          
-        bool isIdle = Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f;
-        if ((IsGrounded() && isIdle) || noGravity)
-        {
-            rigidbody2D.gravityScale = 0; // Set gravity scale to 0 when standing still on the ground
-        }
-        else
-        {
-            rigidbody2D.gravityScale = defaultGravityScale; // Reset gravity scale to default when moving or jumping
+            bool isIdle = Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f;
+            if ((IsGrounded() && isIdle) || noGravity)
+            {
+                rigidbody2D.gravityScale = 0; // Set gravity scale to 0 when standing still on the ground
+            }
+            else
+            {
+                rigidbody2D.gravityScale = defaultGravityScale; // Reset gravity scale to default when moving or jumping
+            }
         }
 
         if (Camera.main != null)
@@ -101,9 +101,9 @@ public class PlayerController : MonoBehaviour
         else{
             if (rb != null)
             {
-                Vector3 direction = (other.transform.position - transform.position).normalized;
-                Vector2 forceProject = rb.linearVelocity * rb.mass; 
-                rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse); 
+                // Vector3 direction = (other.transform.position - transform.position).normalized;
+                // Vector2 forceProject = rb.linearVelocity * rb.mass; 
+                // rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse); 
             } 
         }  
         if (other.gameObject.CompareTag("DeathBox"))
@@ -144,12 +144,13 @@ public class PlayerController : MonoBehaviour
     #region Helper Methods
     private bool IsGrounded() 
     { 
+        if (noGravity) return false;
         return Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, ~LayerMask.GetMask("Player", "Ignore Raycast")); 
     }
 
     #endregion
     #region Public Methods
-    public void SetGravityStatus(bool status){noGravity = status; rigidbody2D.gravityScale = -1;}
+    public void SetGravityStatus(bool status){noGravity = status; rigidbody2D.gravityScale = 0; rigidbody2D.linearVelocity = Vector2.zero;}
     public void SetJumpStatus(bool status){canJump = status;}
 
     #endregion

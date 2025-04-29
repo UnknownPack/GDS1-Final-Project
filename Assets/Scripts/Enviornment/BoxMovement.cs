@@ -2,70 +2,94 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class BoxMovement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public float travelTime = 1; // Speed at which the box moves
-    public float waitTime = 2f;
-    public List<Vector2> targetPositions; // List of target positions (coordinates) to move between
-    private int currentTargetIndex = 0; // Index to track the current target position
+    [Header("Platform timing")]
+    public float travelTime = 1f;      // seconds to go from A→B or B→A
+    public float waitTime   = 2f;      // pause at each end
+
+    [Header("Waypoints (must be exactly 2)")]
+    public List<Vector2> targetPositions;
+
+    [Header("Detector (optional)")]
     public GameObject detectorPair;
-    private Detector detector;
-    private Animator animator;
+    
+    private Rigidbody2D _rb;
+    private Detector   _detector;
+    private Animator   _animator;
+
+    void Awake()
+    {
+        // 1) Grab & configure Rigidbody2D
+        _rb = GetComponent<Rigidbody2D>();
+        _rb.bodyType           = RigidbodyType2D.Kinematic;
+        _rb.gravityScale       = 0f;
+        _rb.linearDamping               = 0f;
+        _rb.angularDamping        = 0f;
+        _rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        
+        // 2) Detector/animator (optional)
+        if (detectorPair != null)
+        {
+            _detector = detectorPair.GetComponent<Detector>();
+            _animator = detectorPair.GetComponent<Animator>();
+        }
+    }
+
     void Start()
-    { 
-        transform.position = targetPositions[1];
-        detector = detectorPair.GetComponent<Detector>();
-        animator = detector.GetComponent<Animator>();
+    {
+        if (targetPositions.Count != 2)
+        {
+            Debug.LogError("BoxMovement requires exactly 2 targetPositions!");
+            enabled = false;
+            return;
+        }
+
+        // jump straight to the second point and start moving
+        _rb.position = targetPositions[1];
+        StartCoroutine(movePlatform());
     }
 
     public IEnumerator movePlatform()
     {
-        if (targetPositions.Count != 2)
+        // loop forever
+        while (true)
         {
-            Debug.LogError("Target positions not properly set");
-            yield break;
+            // --- Move B→A ---
+            yield return MoveBetween(targetPositions[1], targetPositions[0]);
+
+            // optional “down” animation
+            if (_animator) _animator.SetBool("IsDown", true);
+            if (_detector) _detector.isSet = true;
+
+            yield return new WaitForSeconds(waitTime);
+            
+            // clear detector/anim
+            if (_animator) _animator.SetBool("IsDown", false);
+            if (_detector) _detector.isSet = false;
+
+            // --- Move A→B ---
+            yield return MoveBetween(targetPositions[0], targetPositions[1]);
+            yield return new WaitForSeconds(waitTime);
         }
-        
-        animator.SetBool("IsDown", false);
-        transform.position = targetPositions[1]; 
-        Vector2 startPos = transform.position;
-
-        float elapsedTime = 0f, duration = travelTime;
-
-        // Move from 0 -> 1
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            transform.position = Vector2.Lerp(startPos, targetPositions[0], elapsedTime / duration);
-            yield return null;
-        }
-        transform.position = targetPositions[0];
-
-        yield return new WaitForSeconds(waitTime);
-
-        elapsedTime = 0f;
-        startPos = transform.position;
-
-        // Move from 1 -> 0
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            transform.position = Vector2.Lerp(startPos, targetPositions[1], elapsedTime / duration);
-            yield return null;
-        }
-        transform.position = targetPositions[1];
-
-        if (detector == null)
-        {
-            Debug.LogError("No detector attached");
-        }
-        else
-        {
-            detector.isSet = true; 
-            animator.SetBool("IsDown", true);
-        }  
     }
 
-
+    IEnumerator MoveBetween(Vector2 from, Vector2 to)
+    {
+        float elapsed = 0f;
+        while (elapsed < travelTime)
+        {
+            elapsed += Time.fixedDeltaTime;
+            float t = Mathf.Clamp01(elapsed / travelTime);
+            Vector2 nextPos = Vector2.Lerp(from, to, t);
+            
+            // Kinematic MovePosition so physics “sees” the platform moving
+            _rb.MovePosition(nextPos);
+            
+            yield return new WaitForFixedUpdate();
+        }
+        // ensure exact end
+        _rb.MovePosition(to);
+    }
 }

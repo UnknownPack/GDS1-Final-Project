@@ -85,6 +85,10 @@ public class GameManager : MonoBehaviour
         // GetUIReferences();
         SetupSlider(0, currentHotBar[0]);
         SetupSlider(1, currentHotBar[1]);
+        if (sliders[2] != null) {
+            HotBarPair pair = postProcessingSliderValues.Find(p => p.type == currentHotBar[2].type);
+            TransitionExternal(pair.type, Setting.Default, 0.0f);
+        }
     }
 
     private void GetUIReferences() {
@@ -146,7 +150,7 @@ public class GameManager : MonoBehaviour
     private void SetupSlider(int index, HotBarPair pair) {
         currentHotBar[index] = pair;
         var slider = sliders[index];
-        TransitionExternal(pair.type, Setting.Default, 0.5f);
+        TransitionExternal(pair.type, Setting.Default, 0.0f);
 
         // if (sliderCallbacks[index] != null) {
         //     slider.UnregisterValueChangedCallback(sliderCallbacks[index]);
@@ -327,6 +331,7 @@ public class GameManager : MonoBehaviour
         if (index == -1) return;
 
         Slider targetSlider = sliders[index];
+        if (targetSlider == null) return;
         float currentValue = targetSlider.value;
         float targetValue = GetTargetValue(newPair, setting);
         // Debug.Log(currentValue + " " + setting + " " + effect);
