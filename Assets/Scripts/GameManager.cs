@@ -299,6 +299,17 @@ public class GameManager : MonoBehaviour
     
     public void TransitionToDifferentScene(string scene) => transitionInstance.FadeToScene(scene);
 
+    public void TransitionToNextScene()
+    {
+        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextScene < SceneManager.sceneCount)
+        {
+            transitionInstance.FadeToScene(nextScene);
+        }
+        else 
+            Debug.LogError($"Scene not found: {SceneManager.GetActiveScene().name}! Exceeded scene count: {SceneManager.sceneCount}");
+    }
+
     public float GetDefaultValue(PostProcessingEffect effect) {
         foreach (var pair in postProcessingSliderValues) {
             if (pair.type == effect) {
