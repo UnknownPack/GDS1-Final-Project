@@ -1,7 +1,7 @@
 .sliderHotKey {
     bottom: -150px;
-    background-color: rgb(39, 197, 28);
-    width: 80px;
+    background-color: rgb(89, 170, 64);
+    width: 100px;
     -unity-text-align: upper-left;
     -unity-font-style: bold;
     font-size: 15px;
@@ -19,37 +19,34 @@
     border-bottom-left-radius: 15px;
     transition-duration: 0.5s;
     transition-timing-function: ease-in;
+    height: 500px;
+    min-height: 500px;
+    max-height: 500px;
 }
 
-/* Matrix Progress Bar Container */
 #deviationBudgetBar {
     background-color: rgba(0, 20, 0, 0.9);
-    border: 1px solid #00ff41;
-    box-shadow: 0 0 5px #00ff41;
+    border: 1px solid rgb(0, 255, 65);
+    box-shadow: 0 0 5px rgb(0, 255, 65);
     height: 24px;
     border-radius: 0;
     transition: all 0.3s ease-in-out;
 }
 
-/* Progress Bar Track */
 #unity-progress-bar {
     background-color: rgba(0, 30, 0, 0.8);
 }
 
-
-/* Active State Animation */
 #deviationBudgetBar:active #unity-progress-bar > VisualElement {
-    box-shadow: 0 0 20px #00ff41;
+    box-shadow: 0 0 20px rgb(0, 255, 65);
     opacity: 1;
 }
 
-
-/* Label Styling */
 #deviationBudgetLabel {
-    color: #00ff41;
-    font-family: 'Courier New', monospace;
+    color: rgb(0, 255, 65);
+    font-family: "Courier New", monospace;
     font-size: 12px;
-    text-shadow: 0 0 5px #00ff41;
+    text-shadow: 0 0 5px rgb(0, 255, 65);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
 }
