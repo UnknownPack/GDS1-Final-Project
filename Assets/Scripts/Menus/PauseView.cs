@@ -32,7 +32,7 @@ public class PauseView : MonoBehaviour
         mainMenu = uiDocument.rootVisualElement.Q<Button>("Menu");
         mainMenu.clicked += () => 
         {  
-            SceneManager.LoadScene("MainMenu");
+            GameManager.Instance.TransitionToDifferentScene("MainMenu"); 
         }; 
         
         uiDocument.rootVisualElement.style.display = DisplayStyle.None;   

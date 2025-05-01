@@ -10,7 +10,7 @@ public class LevelTransitionTrigger : MonoBehaviour
         if (!triggered && other.CompareTag("Player"))
         {
             triggered = true;
-            FindFirstObjectByType<PixelTransitionController>().FadeToScene(nextSceneName);
+            GameManager.Instance.TransitionToNextScene();
         }
     }
 }
