@@ -129,6 +129,11 @@ public class PlayerController : MonoBehaviour
             PieMenuManager.Instance.HandleAddingItem(pedestalName);
             Destroy(other.GetComponent<BoxCollider2D>());
         }
+        if (other.CompareTag("AdditionPedestal"))
+        {
+            string pedestalName = other.gameObject.name;
+            GameManager.Instance.AddSlider(pedestalName);
+        }
         if (other.CompareTag("Trigger"))
         {
             Trigger trigger = other.gameObject.GetComponent<Trigger>();

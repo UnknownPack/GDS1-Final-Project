@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using SimplePieMenu;
+using UnityEditorInternal;
+using UnityEngine.Rendering;
+using System;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,12 +22,16 @@ public class GameManager : MonoBehaviour
     public GameObject sliderTutorialText;
     private UIDocument quickAccessDocument;
 
-    private HotBarPair[] currentHotBar = new HotBarPair[3];
-    private Slider[] sliders = new Slider[3];
+    private List<HotBarPair> currentHotBar = new List<HotBarPair>();
+    private List<Slider> sliders = new List<Slider>();
+    [SerializeField]
+    private int maxHotBarSize = 7;
+    [SerializeField]
+    private int unlockedSlots = 2;
     private int selectedSliderIndex = 0;
     
     private Coroutine sliderTutorialCoroutine;
-    private EventCallback<ChangeEvent<float>>[] sliderCallbacks = new EventCallback<ChangeEvent<float>>[3];
+    private List<EventCallback<ChangeEvent<float>>> sliderCallbacks = new List<EventCallback<ChangeEvent<float>>>();
 
     private PostProccessManager postProcessManager; 
     private Dictionary<PostProcessingEffect, Coroutine> activeTransitions = new Dictionary<PostProcessingEffect, Coroutine>();
@@ -62,7 +70,11 @@ public class GameManager : MonoBehaviour
         UpdateUIReferences();
         
         HandleTutorialUI(scene.name);
-        SetTempSlider();
+        for (int i = 0; i < currentHotBar.Count; i++) {
+            Debug.Log(currentHotBar[i].type + " " + sliders[i].value);
+            ApplyPostProcessingEffect(currentHotBar[i].type, sliders[i].value);
+        }
+        // SetTempSlider();
         // ResetAllSlidersToDefault();
     }
     #endregion
@@ -76,96 +88,108 @@ public class GameManager : MonoBehaviour
     private void InitializeUIElements() {
         quickAccessDocument = GetComponent<UIDocument>();
         GetUIReferences();
-        SetupSlider(0, postProcessingSliderValues[0]);
-        SetupSlider(1, postProcessingSliderValues[1]);
+        currentHotBar.Clear();
+        for (int i = 0; i < maxHotBarSize && i < postProcessingSliderValues.Count; i++) {
+            var slider = sliders[i];
+            if (i < unlockedSlots) {
+                currentHotBar.Add(postProcessingSliderValues[i]);
+                SetupSlider(i, postProcessingSliderValues[i]);
+            }
+            else {
+                HideSlider(i, false);
+            }
+        }
     }
 
     private void UpdateUIReferences() {
         quickAccessDocument = GetComponent<UIDocument>();
+        GetUIReferences();
         // GetUIReferences();
-        SetupSlider(0, currentHotBar[0]);
-        SetupSlider(1, currentHotBar[1]);
-        if (sliders[2] != null) {
-            HotBarPair pair = postProcessingSliderValues.Find(p => p.type == currentHotBar[2].type);
-            TransitionExternal(pair.type, Setting.Default, 0.0f);
-        }
+        // SetupSlider(0, currentHotBar[0]);
+        // SetupSlider(1, currentHotBar[1]);
+        // if (sliders[2] != null) {
+        //     HotBarPair pair = postProcessingSliderValues.Find(p => p.type == currentHotBar[2].type);
+        //     TransitionExternal(pair.type, Setting.Default, 0.0f);
+        // }
     }
 
     private void GetUIReferences() {
-        sliders[0] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyOne");
-        sliders[1] = quickAccessDocument.rootVisualElement.Q<Slider>("hotkeyTwo");
-        sliders[2] = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
-        sliders[2].RegisterCallback<PointerDownEvent>(e => e.PreventDefault());
-        sliders[2].RegisterCallback<PointerMoveEvent>(e => e.PreventDefault());
-        sliders[2].SetEnabled(false); // Disables ALL interaction (mouse + keyboard)
-    }
+        sliders.Clear();
+        sliderCallbacks.Clear();
 
-    private void SetTempSlider() {
-        GameObject targetObject = GameObject.FindWithTag("TempSlider");
-        if (targetObject == null) {SetTempSlider(false); return; }
-        
-        Camera mainCamera = Camera.main;
-        if (mainCamera == null) { return; }
+        for (int i = 1; i <= maxHotBarSize; i++) {
+            var slider = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{i}");
+            if (slider == null) continue;
+            sliderCallbacks.Add(null);
+            sliders.Add(slider);
+            slider.RegisterCallback<PointerDownEvent>(e => e.PreventDefault());
+            slider.RegisterCallback<PointerMoveEvent>(e => e.PreventDefault());
 
-        // Convert world position to screen space
-        Vector3 worldPos = targetObject.transform.position;
-        Vector3 screenPos3D = mainCamera.WorldToScreenPoint(worldPos);
-        
-        // Flip Y-axis for UI Document coordinate system
-        Vector2 screenPos = new Vector2(
-            screenPos3D.x, 
-            Screen.height - screenPos3D.y // Invert Y coordinate
-        );
-
-        // Convert to UI Document space
-        Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(
-            quickAccessDocument.rootVisualElement.panel, 
-            screenPos
-        );
-
-        // Get resolved dimensions
-        float sliderWidth = sliders[2].resolvedStyle.width;
-        float sliderHeight = sliders[2].resolvedStyle.height;
-
-        // Apply position (centered)
-        sliders[2].style.position = Position.Absolute;
-        sliders[2].style.left = panelPos.x - sliderWidth / 2;
-        sliders[2].style.top = panelPos.y - sliderHeight / 2;
-    }
-
-    private void SetTempSlider(bool enabled) {
-        if (enabled) {
-            sliders[2].SetEnabled(true);
-            sliders[2].style.display = DisplayStyle.Flex;
+            
         }
-        else {
-            sliders[2].SetEnabled(false);
-            sliders[2].style.display = DisplayStyle.None;
-        }
-
     }
+
+    // private void SetTempSlider() {
+    //     GameObject targetObject = GameObject.FindWithTag("TempSlider");
+    //     if (targetObject == null) {HideSlider(3, false); return; }
+        
+    //     Camera mainCamera = Camera.main;
+    //     if (mainCamera == null) { return; }
+
+    //     // Convert world position to screen space
+    //     Vector3 worldPos = targetObject.transform.position;
+    //     Vector3 screenPos3D = mainCamera.WorldToScreenPoint(worldPos);
+        
+    //     // Flip Y-axis for UI Document coordinate system
+    //     Vector2 screenPos = new Vector2(
+    //         screenPos3D.x, 
+    //         Screen.height - screenPos3D.y // Invert Y coordinate
+    //     );
+
+    //     // Convert to UI Document space
+    //     Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(
+    //         quickAccessDocument.rootVisualElement.panel, 
+    //         screenPos
+    //     );
+
+    //     // Get resolved dimensions
+    //     float sliderWidth = sliders[2].resolvedStyle.width;
+    //     float sliderHeight = sliders[2].resolvedStyle.height;
+
+    //     // Apply position (centered)
+    //     sliders[2].style.position = Position.Absolute;
+    //     sliders[2].style.left = panelPos.x - sliderWidth / 2;
+    //     sliders[2].style.top = panelPos.y - sliderHeight / 2;
+    // }
     #endregion
 
     #region Slider Management
     private void SetupSlider(int index, HotBarPair pair) {
-        currentHotBar[index] = pair;
-        var slider = sliders[index];
-        TransitionExternal(pair.type, Setting.Default, 0.0f);
+        if (index < 0 || index >= sliders.Count) return;
+        if (currentHotBar.Count <= index) return;
 
-        // if (sliderCallbacks[index] != null) {
-        //     slider.UnregisterValueChangedCallback(sliderCallbacks[index]);
-        // }
+        var slider = sliders[index];
+        var oldHotBarPair = currentHotBar[index];
+        var callback = sliderCallbacks[index];
+        var existingCallback = sliderCallbacks[index];
+        if (existingCallback != null) {
+            // Unregister the previous value-changed callback
+            slider.value = oldHotBarPair.data.DefaultValue;
+            slider.UnregisterValueChangedCallback(existingCallback);
+        }
+
+        currentHotBar[index] = pair;
 
         slider.label = pair.type.ToString();
-        slider.value = pair.data.DefaultValue;
         slider.lowValue = pair.data.MinValue;
         slider.highValue = pair.data.MaxValue;
+        slider.value = pair.data.DefaultValue;
 
-        
-
-        PostProcessingEffect effect = pair.type;
-        sliderCallbacks[index] = evt => OnSliderChanged(evt, effect);
-        slider.RegisterValueChangedCallback(sliderCallbacks[index]);
+        EventCallback<ChangeEvent<float>> newCallback = evt => OnSliderChanged(evt, pair.type);
+        sliderCallbacks[index] = newCallback;
+        slider.RegisterValueChangedCallback(newCallback);
+        TransitionExternal(oldHotBarPair.type, Setting.Default, 0.0f);
+        //get all elemtns in callbacks
     }
 
     private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect) {
@@ -175,27 +199,13 @@ public class GameManager : MonoBehaviour
 
     private void ApplyPostProcessingEffect(PostProcessingEffect effect, float value) {
         switch (effect) {
-            case PostProcessingEffect.Brightness:
-                postProcessManager.ChangeBrightness(value);
-                break;
-            case PostProcessingEffect.AntiAliasing:
-                postProcessManager.ChangeAntiAlyasing(value);
-                break;
-            case PostProcessingEffect.MotionBlur:
-                postProcessManager.ChangeMotionBlur(value);
-                break;
-            case PostProcessingEffect.FilmGrain:
-                postProcessManager.ChangeFilmGrain(value);
-                break;
-            case PostProcessingEffect.ColorCorrection:
-                postProcessManager.ChangeColorCorrection(value);
-                break;
-            case PostProcessingEffect.ChromaticAberration:
-                postProcessManager.ChangeChromaticAberration(value);
-                break;
-            case PostProcessingEffect.Bloom:
-                postProcessManager.ChangeBloom(value);
-                break;
+            case PostProcessingEffect.Brightness: postProcessManager.ChangeBrightness(value); break;
+            case PostProcessingEffect.AntiAliasing: postProcessManager.ChangeAntiAlyasing(value); break;
+            case PostProcessingEffect.MotionBlur: postProcessManager.ChangeMotionBlur(value); break;
+            case PostProcessingEffect.FilmGrain: postProcessManager.ChangeFilmGrain(value); break;
+            case PostProcessingEffect.ColorCorrection: postProcessManager.ChangeColorCorrection(value); break;
+            case PostProcessingEffect.ChromaticAberration: postProcessManager.ChangeChromaticAberration(value); break;
+            case PostProcessingEffect.Bloom: postProcessManager.ChangeBloom(value); break;
         }
     }
     #endregion
@@ -204,20 +214,23 @@ public class GameManager : MonoBehaviour
     private void Update() => HandleHotbarInput();
 
     private void HandleHotbarInput() {
-        SetTempSlider();
         HandleSelectionInput();
         HandleAdjustmentInput();
     }
 
     private void HandleSelectionInput() {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectSlider(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectSlider(1);
+        for (KeyCode k = KeyCode.Alpha1; k <= KeyCode.Alpha8; k++) {
+            if (Input.GetKeyDown(k)) {
+                int idx = k - KeyCode.Alpha1;
+                SelectSlider(idx);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.R)) RestartLevel();
         if (Input.GetKeyDown(KeyCode.Backspace)) LoadNextScene();
     }
 
     private void HandleAdjustmentInput() {
-        if (selectedSliderIndex < 0 || selectedSliderIndex >= currentHotBar.Length) return;
+        if (selectedSliderIndex < 0 || selectedSliderIndex >= unlockedSlots) return;
 
         HotBarPair pair = currentHotBar[selectedSliderIndex];
         float currentValue = sliders[selectedSliderIndex].value;
@@ -237,24 +250,14 @@ public class GameManager : MonoBehaviour
     }
 
     private void CycleSliderState(bool increase) {
-        const float epsilon = 0.0001f;
-        HotBarPair pair = currentHotBar[selectedSliderIndex];
-        float currentValue = sliders[selectedSliderIndex].value;
-        float defaultValue = pair.data.DefaultValue;
-        float min = pair.data.MinValue;
-        float max = pair.data.MaxValue;
-        bool minEqualsDefault = Mathf.Approximately(min, defaultValue);
+        const float eps = 0.0001f;
+        var pair = currentHotBar[selectedSliderIndex];
+        var slider = sliders[selectedSliderIndex];
+        float min = pair.data.MinValue, max = pair.data.MaxValue, def = pair.data.DefaultValue;
+        float val = slider.value;
+        bool minEqualsDefault = Mathf.Abs(min - def) < eps;
 
-        Setting current;
-        float value = sliders[selectedSliderIndex].value;
-        if (Mathf.Abs(value - min) < epsilon)
-            current = Setting.Min;
-        else if (Mathf.Abs(value - max) < epsilon)
-            current = Setting.Max;
-        else
-            current = Setting.Default;
-        
-        // Get next setting
+        Setting current = Mathf.Abs(val - min) < eps ? Setting.Min : Mathf.Abs(val - max) < eps ? Setting.Max : Setting.Default;
         Setting next;
         if (increase) { // E key - go up
             next = current == Setting.Min ? (minEqualsDefault ? Setting.Max : Setting.Default) :
@@ -272,7 +275,7 @@ public class GameManager : MonoBehaviour
 
     #region Public Methods
     public float GetPostProcessingValue(PostProcessingEffect effect) {
-        for (int i = 0; i < currentHotBar.Length; i++) {
+        for (int i = 0; i < currentHotBar.Count; i++) {
             if (currentHotBar[i].type == effect) {
                 return sliders[i].value / currentHotBar[i].data.MaxValue;
             }
@@ -294,16 +297,16 @@ public class GameManager : MonoBehaviour
     }
 
     public void ResetAllSlidersToDefault() {
-        for (int i = 0; i < currentHotBar.Length; i++) {
+        for (int i = 0; i < currentHotBar.Count; i++) {
             HotBarPair pair = currentHotBar[i];
             TransitionExternal(pair.type, Setting.Default, 0.0f);
         }
     }
 
     public void ReplaceSlider(PostProcessingEffect newEffect, int slotIndex = -1) {
-        slotIndex = slotIndex < 0 ? selectedSliderIndex : Mathf.Clamp(slotIndex, 0, currentHotBar.Length - 1);
+        slotIndex = slotIndex < 0 ? selectedSliderIndex : Mathf.Clamp(slotIndex, 0, currentHotBar.Count - 1);
         
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < unlockedSlots; i++) {
             if (currentHotBar[i].type == newEffect) return;
         }
 
@@ -322,7 +325,7 @@ public class GameManager : MonoBehaviour
             if (pair.type == effect) isInHotbar = true;
         }
         if (!isInHotbar) {
-            ReplaceSlider(effect, 2);
+            AddTempSlider(effect);
         }
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
         if (newPair.Equals(default(HotBarPair))) return;
@@ -351,8 +354,46 @@ public class GameManager : MonoBehaviour
         activeTransitions[effect] = StartCoroutine(TransitionEffectValue(targetSlider, currentValue, targetValue, duration, effect));
     }
 
+    public void HideSlider(int index, bool enabled) {
+        if (enabled) {
+            sliders[index].SetEnabled(true);
+            sliders[index].style.display = DisplayStyle.Flex;
+        }
+        else {
+            sliders[index].SetEnabled(false);
+            sliders[index].style.display = DisplayStyle.None;
+        }
+
+    }
+
+    public void AddSlider(String effectName) {
+        PostProcessingEffect effect = (PostProcessingEffect)Enum.Parse(typeof(PostProcessingEffect), effectName);
+        unlockedSlots++;
+        if (currentHotBar.Count >= maxHotBarSize) return;
+        HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
+        if (newPair.Equals(default(HotBarPair))) return;
+        //if the new effect is already in the hotbar, remove it
+        for (int i = 0; i < currentHotBar.Count; i++) {
+            if (currentHotBar[i].type == effect) {
+                currentHotBar.RemoveAt(i);
+                break;
+            }
+        }
+
+        currentHotBar.Add(newPair);
+        SetupSlider(currentHotBar.Count - 1, newPair);
+        HideSlider(currentHotBar.Count - 1, true);
+    }
+
+    public void AddTempSlider(PostProcessingEffect effect) {
+        HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
+
+        currentHotBar.Add(newPair);
+        SetupSlider(0, newPair);
+    }
+
     private int FindSliderIndex(PostProcessingEffect effect) {
-        for (int i = 0; i < currentHotBar.Length; i++) {
+        for (int i = 0; i < currentHotBar.Count; i++) {
             if (currentHotBar[i].type == effect) {
                 return i;
             }
@@ -368,6 +409,7 @@ public class GameManager : MonoBehaviour
             _ => pair.data.DefaultValue
         };
     }
+    
     #endregion
 
     #region Helper Methods
@@ -385,12 +427,12 @@ public class GameManager : MonoBehaviour
     }
 
     private void SelectSlider(int index) {
-        selectedSliderIndex = Mathf.Clamp(index, 0, currentHotBar.Length - 1);
+        selectedSliderIndex = Mathf.Clamp(index, 0, currentHotBar.Count - 1);
         UpdateSliderVisuals();
     }
 
     private void UpdateSliderVisuals() {
-        for (int i = 0; i < sliders.Length; i++) {
+        for (int i = 0; i < sliders.Count; i++) {
             sliders[i].style.backgroundColor = new StyleColor(
                 i == selectedSliderIndex ? Color.green : Color.clear
             );

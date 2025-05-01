@@ -80,7 +80,7 @@ public class PostProccessManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        scanlinesMaterial.SetFloat("_EnableEffect", 0);
+        // scanlinesMaterial.SetFloat("_Intensity", 0);
     }
 
     public void ChangeAntiAlyasing (float value) {
@@ -118,12 +118,13 @@ public class PostProccessManager : MonoBehaviour
 
     public void ChangeFilmGrain(float value)
     {
-        if (value > 0.05) {
-            scanlinesMaterial.SetFloat("_EnableEffect", 1);
-        }
-        else {
-            scanlinesMaterial.SetFloat("_EnableEffect", 0);
-        }
+        Debug.Log("Film Grain Value: " + value);
+        // if (value > 0.05) {
+        //     scanlinesMaterial.SetFloat("_EnableEffect", 1);
+        // }
+        // else {
+        //     scanlinesMaterial.SetFloat("_EnableEffect", 0);
+        // }
         paniniProjection.distance.value = Mathf.Lerp(0.0f, 0.5f, value);
         scanlinesMaterial.SetFloat("_Intensity", value);
         filmGrain.intensity.value = value;

@@ -1383,6 +1383,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4667880738938308132, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1102029171}
+    - targetCorrespondingSourceObject: {fileID: 4667880738938308132, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1102029172}
   m_SourcePrefab: {fileID: 100100000, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
 --- !u!4 &1102029169 stripped
 Transform:
@@ -1406,10 +1409,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952291731928152b0b7ebc0ea1e8edb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2.5
+  travelTime: 1
+  waitTime: 2
   targetPositions:
   - {x: 0, y: -7}
   - {x: 5, y: -7}
+  detectorPair: {fileID: 0}
+--- !u!50 &1102029172
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102029170}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &1116210686
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1733,6 +1765,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: maxHotBarSize
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
+      propertyPath: unlockedSlots
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1419742284433337191, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: postProcessingSliderValues.Array.size
       value: 7
