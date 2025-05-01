@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     private PostProccessManager postProcessManager; 
     private Dictionary<PostProcessingEffect, Coroutine> activeTransitions = new Dictionary<PostProcessingEffect, Coroutine>();
 
+    [SerializeField] private GameObject transition;
+    private PixelTransitionController transitionInstance;
+
     #region Singleton Pattern
     public static GameManager Instance {
         get {
@@ -71,6 +74,14 @@ public class GameManager : MonoBehaviour
     void Start() {
         postProcessManager = GetComponent<PostProccessManager>();
         InitializeUIElements();
+
+        transitionInstance = FindFirstObjectByType<PixelTransitionController>();
+        if (transitionInstance == null)
+        {
+            GameObject go = new GameObject("Transition"); 
+            go.transform.SetParent(transform);
+            transitionInstance = go.AddComponent<PixelTransitionController>();
+        }
     }
 
     private void InitializeUIElements() {
@@ -281,7 +292,12 @@ public class GameManager : MonoBehaviour
         return 0;
     }
 
-    public void RestartLevel() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    public void RestartLevel()
+    {
+        transitionInstance.FadeToScene(SceneManager.GetActiveScene().name); 
+    }
+    
+    public void TransitionToDifferentScene(string scene) => transitionInstance.FadeToScene(scene);
 
     public float GetDefaultValue(PostProcessingEffect effect) {
         foreach (var pair in postProcessingSliderValues) {
