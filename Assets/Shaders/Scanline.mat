@@ -13,7 +13,6 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
-  - _ENABLEEFFECT_ON
   - _ENABLEGHOSTING_ON
   - _ENABLEJITTER_ON
   - _ENABLEPULSING_ON
@@ -58,7 +57,7 @@ Material:
     - _FlickerAmount: 0.1
     - _FlickerSpeed: 60
     - _GhostingAmount: 0.0056
-    - _Intensity: 1
+    - _Intensity: 0
     - _JitterAmount: 0.00023
     - _JitterSpeed: 50
     - _LineCount: 33

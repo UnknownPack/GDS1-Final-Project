@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         
         HandleTutorialUI(scene.name);
         SetTempSlider();
-        ResetAllSlidersToDefault();
+        // ResetAllSlidersToDefault();
     }
     #endregion
 
@@ -82,9 +82,13 @@ public class GameManager : MonoBehaviour
 
     private void UpdateUIReferences() {
         quickAccessDocument = GetComponent<UIDocument>();
-        GetUIReferences();
+        // GetUIReferences();
         SetupSlider(0, currentHotBar[0]);
         SetupSlider(1, currentHotBar[1]);
+        if (sliders[2] != null) {
+            HotBarPair pair = postProcessingSliderValues.Find(p => p.type == currentHotBar[2].type);
+            TransitionExternal(pair.type, Setting.Default, 0.0f);
+        }
     }
 
     private void GetUIReferences() {
@@ -146,10 +150,11 @@ public class GameManager : MonoBehaviour
     private void SetupSlider(int index, HotBarPair pair) {
         currentHotBar[index] = pair;
         var slider = sliders[index];
+        TransitionExternal(pair.type, Setting.Default, 0.0f);
 
-        if (sliderCallbacks[index] != null) {
-            slider.UnregisterValueChangedCallback(sliderCallbacks[index]);
-        }
+        // if (sliderCallbacks[index] != null) {
+        //     slider.UnregisterValueChangedCallback(sliderCallbacks[index]);
+        // }
 
         slider.label = pair.type.ToString();
         slider.value = pair.data.DefaultValue;
@@ -291,7 +296,7 @@ public class GameManager : MonoBehaviour
     public void ResetAllSlidersToDefault() {
         for (int i = 0; i < currentHotBar.Length; i++) {
             HotBarPair pair = currentHotBar[i];
-            TransitionExternal(pair.type, Setting.Default, 0.1f);
+            TransitionExternal(pair.type, Setting.Default, 0.0f);
         }
     }
 
@@ -302,7 +307,7 @@ public class GameManager : MonoBehaviour
             if (currentHotBar[i].type == newEffect) return;
         }
 
-        TransitionExternal(currentHotBar[selectedSliderIndex].type, Setting.Default, 0.0f);
+        // TransitionExternal(currentHotBar[selectedSliderIndex].type, Setting.Default, 0.0f);
 
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
         if (newPair.Equals(default(HotBarPair))) return;
@@ -326,11 +331,12 @@ public class GameManager : MonoBehaviour
         if (index == -1) return;
 
         Slider targetSlider = sliders[index];
+        if (targetSlider == null) return;
         float currentValue = targetSlider.value;
         float targetValue = GetTargetValue(newPair, setting);
         // Debug.Log(currentValue + " " + setting + " " + effect);
 
-        if (Mathf.Approximately(currentValue, targetValue)) return;
+        // if (Mathf.Approximately(currentValue, targetValue)) return;
 
         if (activeTransitions.TryGetValue(effect, out Coroutine runningCoroutine)) 
         {
@@ -343,11 +349,6 @@ public class GameManager : MonoBehaviour
         }
         // Then add the new coroutine to the dictionary
         activeTransitions[effect] = StartCoroutine(TransitionEffectValue(targetSlider, currentValue, targetValue, duration, effect));
-        foreach (var item in activeTransitions.Keys)
-        {
-            Debug.Log(item);
-            Debug.Log(activeTransitions.Count);
-        }
     }
 
     private int FindSliderIndex(PostProcessingEffect effect) {
@@ -376,10 +377,10 @@ public class GameManager : MonoBehaviour
             elapsed += Time.deltaTime;
             float newValue = Mathf.Lerp(from, to, Mathf.Clamp01(elapsed / duration));
             targetSlider.value = newValue;
-            // Debug.Log(effect + " " + newValue);
             yield return null;
         }
         targetSlider.value = to;
+        ApplyPostProcessingEffect(effect, to);
         activeTransitions.Remove(effect);
     }
 
