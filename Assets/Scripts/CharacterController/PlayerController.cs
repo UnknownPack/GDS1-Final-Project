@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -29,24 +30,27 @@ public class PlayerController : MonoBehaviour
     private Collider2D collider2D;
     private Rigidbody2D rigidbody2D;
     private UnityEngine.InputSystem.PlayerInput playerInput;
+    private Animator animator;
     private InputAction moveAction;
     private Vector2 currentVector;
     private Vector2 noGravityVelocity;
     Vector2 lastPosition;
     Vector2 currentVelocity;
+    private float lastDirection;
 
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider2D = GetComponent<Collider2D>();
-        playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>(); 
+        playerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        animator = GetComponent<Animator>();
         moveAction = playerInput.actions.FindAction("Move");   
         moveAction.Enable();
         lastPosition = transform.position;    
     } 
     void Update()
     { 
-
+        
         currentMovementVector = moveAction.ReadValue<Vector2>();
         if (!noGravity)
         {
@@ -54,25 +58,45 @@ public class PlayerController : MonoBehaviour
             { 
                 currentSpeed = currentMovementVector.x * MovementSpeed * 10f; 
                 rigidbody2D.linearVelocity = new Vector2(Mathf.Clamp(currentSpeed, -MaxMovementSpeed, MaxMovementSpeed),rigidbody2D.linearVelocity.y);
+                bool isMoving = currentMovementVector.x != 0;
+                animator.SetBool("isMoving", isMoving); 
+                if(currentMovementVector.x != 0)
+                    lastDirection = currentMovementVector.x; 
+                float direction = (lastDirection > 0) ? 0 : 180;
+                transform.rotation = Quaternion.Euler(0f, direction, 0f);
             }
             else
-            { 
+            {
+                #region Jumping 
                 isCharging = currentMovementVector.x != 0;   
-                if (isCharging)
-                { 
-                    currentJumpDirection = currentMovementVector.x;
-                    currentJumpCharge += chargeRate * Time.deltaTime;
-                    currentJumpCharge = Mathf.Clamp(currentJumpCharge, 0f, maxCharge); 
-                }
-                else
+                if(IsGrounded())
                 {
-                    float chargePercent = currentJumpCharge / maxCharge;
-                    Vector2 force = new Vector2(currentJumpDirection * jumpForceHorizontal * chargePercent,
-                        jumpForceVertical * chargePercent);
-                    rigidbody2D.AddForce(force, ForceMode2D.Impulse);
-                    currentJumpDirection = 0f;
-                    currentJumpCharge = 0f;
-                }  
+                    if (isCharging)
+                    {
+                        animator.SetBool("Charge", true);
+                        animator.SetBool("Jump", false);
+                        currentJumpDirection = currentMovementVector.x;
+                        currentJumpCharge += chargeRate * Time.deltaTime;
+                        currentJumpCharge = Mathf.Clamp(currentJumpCharge, 0f, maxCharge);  
+                        if(currentMovementVector.x != 0)
+                            lastDirection = currentMovementVector.x; 
+                        float direction = (lastDirection > 0) ? 0 : 180;
+                        transform.rotation = Quaternion.Euler(0f, direction, 0f);
+                    }
+                    else
+                    {
+                        animator.SetBool("Jump", true);
+                        animator.SetBool("Charge", false);
+                        float chargePercent = currentJumpCharge / maxCharge;
+                        Vector2 force = new Vector2(currentJumpDirection * jumpForceHorizontal * chargePercent,
+                            jumpForceVertical * chargePercent);
+                        rigidbody2D.AddForce(force, ForceMode2D.Impulse);
+                        currentJumpDirection = 0f;
+                        currentJumpCharge = 0f; 
+                    }
+                    animator.SetBool("isGrounded", IsGrounded()); 
+                } 
+                #endregion
             } 
          
             bool isIdle = Mathf.Abs(rigidbody2D.linearVelocity.x) < 0.1f && Mathf.Abs(rigidbody2D.linearVelocity.y) < 0.1f;
@@ -84,7 +108,11 @@ public class PlayerController : MonoBehaviour
             {
                 rigidbody2D.gravityScale = defaultGravityScale; // Reset gravity scale to default when moving or jumping
             }
-        }
+        } 
+         
+        
+        float dir = (lastDirection > 0) ? 0 : 180;
+        transform.rotation = Quaternion.Euler(0f, dir, 0f);
 
         if (Camera.main != null)
             Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
@@ -108,23 +136,29 @@ public class PlayerController : MonoBehaviour
         }  
         if (other.gameObject.CompareTag("DeathBox"))
         {
-            Debug.Log("Player hit the deathbox");
-            GameManager.Instance.RestartLevel();
+            StartCoroutine(DeathScene()); 
         }
              
  
     }
 
+    IEnumerator DeathScene()
+    { 
+        animator.Play("Death");
+        yield return new WaitForSeconds(2f);
+        GameManager.Instance.RestartLevel();
+    }
+
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        if (other.CompareTag("Spikes")) 
-        {
-            Debug.Log("Player hit spikes");
-            GameManager.Instance.RestartLevel();
+        if (other.CompareTag("Spikes") || other.CompareTag("DeathBox")) 
+        { 
+            StartCoroutine(DeathScene()); 
         }
 
         if (other.CompareTag("Pedestal"))
         {
+            animator.SetTrigger("Interact");
             string pedestalName = other.gameObject.name;
             PieMenuManager.Instance.HandleAddingItem(pedestalName);
             Destroy(other.GetComponent<BoxCollider2D>());
@@ -133,12 +167,7 @@ public class PlayerController : MonoBehaviour
         {
             Trigger trigger = other.gameObject.GetComponent<Trigger>();
             GameManager.Instance.TransitionExternal(trigger.postProcessingEffect, trigger.setting, 0.5f);
-        }
-        if (other.CompareTag("DeathBox"))
-        {
-            Debug.Log("Player hit the deathbox");
-            GameManager.Instance.RestartLevel();
-        }
+        } 
     }
 
     #region Helper Methods
