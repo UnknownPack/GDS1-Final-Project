@@ -48,31 +48,29 @@ public class BoxMovement : MonoBehaviour
 
         // jump straight to the second point and start moving
         _rb.position = targetPositions[1];
-        StartCoroutine(movePlatform());
     }
 
     public IEnumerator movePlatform()
-    {
-        // loop forever
-        while (true)
+    { 
+        if(_animator == null)
         {
-            // --- Move B→A ---
-            yield return MoveBetween(targetPositions[1], targetPositions[0]);
-
-            // optional “down” animation
-            if (_animator) _animator.SetBool("IsDown", true);
-            if (_detector) _detector.isSet = true;
-
-            yield return new WaitForSeconds(waitTime);
-            
-            // clear detector/anim
-            if (_animator) _animator.SetBool("IsDown", false);
-            if (_detector) _detector.isSet = false;
-
-            // --- Move A→B ---
-            yield return MoveBetween(targetPositions[0], targetPositions[1]);
-            yield return new WaitForSeconds(waitTime);
+            Debug.LogError("BoxMovement requires a animator!");
+            yield break;
         }
+        
+        _animator.SetBool("IsDown", true);
+        _detector.isSet = true;
+        
+        // --- Move B→A ---
+        yield return MoveBetween(targetPositions[1], targetPositions[0]);
+        
+        yield return new WaitForSeconds(waitTime);
+        
+        // --- Move A→B ---
+        yield return MoveBetween(targetPositions[0], targetPositions[1]);
+        
+        if (_animator) _animator.SetBool("IsDown", false);
+        if (_detector) _detector.isSet = false; 
     }
 
     IEnumerator MoveBetween(Vector2 from, Vector2 to)
