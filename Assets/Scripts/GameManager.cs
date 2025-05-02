@@ -77,8 +77,14 @@ public class GameManager : MonoBehaviour
             Debug.Log(currentHotBar[i].type + " " + sliders[i].value);
             ApplyPostProcessingEffect(currentHotBar[i].type, sliders[i].value);
         }
-        // SetTempSlider();
-        // ResetAllSlidersToDefault();
+        
+        //Updates the playerpref so the player can access the most recent level they have played
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        if (PlayerPrefs.HasKey("CurrentLevelUnlocked") && PlayerPrefs.GetInt("CurrentLevelUnlocked") < currentLevelIndex)
+        {
+            PlayerPrefs.SetInt("CurrentLevelUnlocked", currentLevelIndex);  
+            PlayerPrefs.Save();
+        }
     }
     #endregion
 
@@ -86,7 +92,7 @@ public class GameManager : MonoBehaviour
     void Start() {
         postProcessManager = GetComponent<PostProccessManager>();
         InitializeUIElements();
-
+        InitializeLevelTracking();
         transitionInstance = FindFirstObjectByType<PixelTransitionController>();
         if (transitionInstance == null)
         {
@@ -173,7 +179,19 @@ public class GameManager : MonoBehaviour
     //     sliders[2].style.top = panelPos.y - sliderHeight / 2;
     // }
     #endregion
+    
+    #region Level Tracking Handling
 
+    void InitializeLevelTracking()
+    {
+        if (!PlayerPrefs.HasKey("CurrentLevelUnlocked"))
+        {
+            PlayerPrefs.SetInt("CurrentLevelUnlocked", 0);  
+            PlayerPrefs.Save();
+        }
+
+    }
+    #endregion
     #region Slider Management
     private void SetupSlider(int index, HotBarPair pair) {
         if (index < 0 || index >= sliders.Count) return;
