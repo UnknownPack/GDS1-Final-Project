@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d827c667acfa25a4c8ad440349c2371a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelName: Level 1
+  nextSceneName: Level 1
 --- !u!1001 &559615196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,7 +179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7041199793714711598, guid: a87e28c5bb2c55e4a92841ce2935769c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.54
+      value: -1.51
       objectReference: {fileID: 0}
     - target: {fileID: 7041199793714711598, guid: a87e28c5bb2c55e4a92841ce2935769c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -413,7 +413,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 174001aa48e2e514ea5d883ce1128a5e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -502,6 +502,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 899743901896727314, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a8a9e19dec7e8ba4aad09076830db6e1, type: 2}
     - target: {fileID: 1663183879585110332, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
       propertyPath: SceneName
       value: Level 1
