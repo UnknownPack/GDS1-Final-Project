@@ -42,6 +42,10 @@ public class TextTriggerManager : MonoBehaviour
 
     public void OnTriggerActivated(TriggerInfo info)
     {
+
+        if (info.triggerCollider != null)
+            info.triggerCollider.enabled = false;
+
         if (currentText != null)
             Destroy(currentText);
 
@@ -79,11 +83,19 @@ public class TextTriggerManager : MonoBehaviour
     {
         [HideInInspector] public TextTriggerManager manager;
         [HideInInspector] public TriggerInfo info;
+        private bool hasFired = false;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (hasFired) return;
+
             if (other.CompareTag("Player"))
+            {
+                hasFired = true;
                 manager.OnTriggerActivated(info);
+
+                Destroy(this);
+            }
         }
     }
 }
