@@ -1,8 +1,7 @@
 using UnityEngine;
 
 public class LevelTransitionTrigger : MonoBehaviour
-{
-    public string nextSceneName; 
+{ 
     private bool triggered = false;
 
     private void OnTriggerEnter2D(Collider2D other)
