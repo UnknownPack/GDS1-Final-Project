@@ -7,16 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Scanline
-  m_Shader: {fileID: 4800000, guid: bb5e9051acb728d1cb5cd1d81274ab72, type: 3}
+  m_Name: Blue
+  m_Shader: {fileID: 4800000, guid: 721be001e59926440bd639b6b947d6e2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _ENABLEEFFECT_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
@@ -28,12 +27,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _LastFrameTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 028e0745659da4445b3c6572d612e08a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -46,27 +41,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EnableEffect: 1
+    - _ColorOffset: 0.02
     - _EnableExternalAlpha: 0
-    - _EnableFlicker: 0
-    - _EnableGhosting: 0
-    - _EnableJitter: 0
-    - _EnablePulsing: 0
-    - _FlickerAmount: 0.1
-    - _FlickerSpeed: 60
-    - _GhostingAmount: 0.0056
-    - _Intensity: 1
-    - _JitterAmount: 0.00023
-    - _JitterSpeed: 50
-    - _LineCount: 14.6
-    - _LineWidth: 0.5
-    - _PulseAmount: 0
-    - _PulseSpeed: 3
-    - _ScrollSpeed: 1
+    - _GlitchAmount: 0.1
+    - _GlitchSpeed: 2
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _LineColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
