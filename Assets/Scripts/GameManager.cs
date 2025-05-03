@@ -123,6 +123,11 @@ public class GameManager : MonoBehaviour
     {
         Start();
     }
+
+    public void InitializeGameManager()
+    {
+        Start();
+    }
  
 
     public void InitializeGameManager()
