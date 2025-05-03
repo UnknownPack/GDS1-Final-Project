@@ -92,43 +92,18 @@ public class GameManager : MonoBehaviour
     #region Initialization
     void Start() {
         postProcessManager = GetComponent<PostProccessManager>(); 
-        transitionInstance = FindFirstObjectByType<PixelTransitionController>();
-        if (transitionInstance == null)
-        {
-            Debug.LogWarning("Transition Controller not found, creating new one");
-            GameObject go = new GameObject("Transition"); 
-            go.transform.SetParent(transform);
-            transitionInstance = go.AddComponent<PixelTransitionController>();
-        }
-        else
-            Debug.LogWarning("Transition Controller found");
-        
-        InitializeUIElements();
-        InitializeUIElements();
-<<<<<<< Updated upstream
-        InitializeLevelTracking();
-        transitionInstance = FindFirstObjectByType<PixelTransitionController>();
-        if (transitionInstance == null)
-        {
-            GameObject go = new GameObject("Transition"); 
-            go.transform.SetParent(transform);
-            transitionInstance = go.AddComponent<PixelTransitionController>();
-        }
-=======
-        // Hide temp slider until explicitly needed
         tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
         if (tempSlider != null) {
             tempSlider.style.display = DisplayStyle.None;
             tempSlider.SetEnabled(false);
         }
-        
+        InitializeUIElements();
     }
 
     public void InitializeGameManager()
     {
-        Start();
->>>>>>> Stashed changes
-    }
+        Start(); 
+    } 
 
     private void InitializeUIElements() {
         quickAccessDocument = GetComponent<UIDocument>();
