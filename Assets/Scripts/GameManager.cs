@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
     
     private Coroutine sliderTutorialCoroutine;
     private List<EventCallback<ChangeEvent<float>>> sliderCallbacks = new List<EventCallback<ChangeEvent<float>>>();
+    private Slider tempSlider;
+    private bool isTempSliderActive = false;
+    private const string k_TempObjectTag = "TempSlider";
+    private PostProcessingEffect tempEffect;
 
     private PostProccessManager postProcessManager; 
     private Dictionary<PostProcessingEffect, Coroutine> activeTransitions = new Dictionary<PostProcessingEffect, Coroutine>();
@@ -77,8 +81,9 @@ public class GameManager : MonoBehaviour
             Debug.Log(currentHotBar[i].type + " " + sliders[i].value);
             ApplyPostProcessingEffect(currentHotBar[i].type, sliders[i].value);
         }
-        // SetTempSlider();
-        // ResetAllSlidersToDefault();
+        tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
+        HideTempSlider();
+        isTempSliderActive = false;
     }
     #endregion
 
@@ -87,6 +92,13 @@ public class GameManager : MonoBehaviour
         postProcessManager = GetComponent<PostProccessManager>();
         InitializeUIElements();
 
+        // Hide temp slider until explicitly needed
+        tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
+        if (tempSlider != null) {
+            tempSlider.style.display = DisplayStyle.None;
+            tempSlider.SetEnabled(false);
+        }
+
         transitionInstance = FindFirstObjectByType<PixelTransitionController>();
         if (transitionInstance == null)
         {
@@ -94,6 +106,12 @@ public class GameManager : MonoBehaviour
             go.transform.SetParent(transform);
             transitionInstance = go.AddComponent<PixelTransitionController>();
         }
+    }
+
+    private void LateUpdate() {
+
+        if (tempSlider != null && tempSlider.style.display == DisplayStyle.Flex)
+            PositionAndSyncTempSlider();
     }
 
     private void InitializeUIElements() {
@@ -110,6 +128,7 @@ public class GameManager : MonoBehaviour
                 HideSlider(i, false);
             }
         }
+        // SetTempSlider();
     }
 
     private void UpdateUIReferences() {
@@ -124,7 +143,7 @@ public class GameManager : MonoBehaviour
         // }
     }
 
-    private void GetUIReferences() {
+    private void GetUIReferences() {        
         sliders.Clear();
         sliderCallbacks.Clear();
 
@@ -140,38 +159,66 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // private void SetTempSlider() {
-    //     GameObject targetObject = GameObject.FindWithTag("TempSlider");
-    //     if (targetObject == null) {HideSlider(3, false); return; }
-        
-    //     Camera mainCamera = Camera.main;
-    //     if (mainCamera == null) { return; }
+    private void ShowAndSetupTempSlider() {
+        GameObject target = GameObject.FindWithTag(k_TempObjectTag);
+        if (tempSlider == null || target == null)
+        {
+            HideTempSlider();
+            return;
+        }
 
-    //     // Convert world position to screen space
-    //     Vector3 worldPos = targetObject.transform.position;
-    //     Vector3 screenPos3D = mainCamera.WorldToScreenPoint(worldPos);
-        
-    //     // Flip Y-axis for UI Document coordinate system
-    //     Vector2 screenPos = new Vector2(
-    //         screenPos3D.x, 
-    //         Screen.height - screenPos3D.y // Invert Y coordinate
-    //     );
+        // configure range/label/callback exactly like your hotbar
+        var tempPair = postProcessingSliderValues
+            .Find(p => p.type == tempEffect);
 
-    //     // Convert to UI Document space
-    //     Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(
-    //         quickAccessDocument.rootVisualElement.panel, 
-    //         screenPos
-    //     );
+        tempSlider.label     = tempPair.type.ToString();
+        tempSlider.lowValue  = tempPair.data.MinValue;
+        tempSlider.highValue = tempPair.data.MaxValue;
+        tempSlider.value     = tempPair.data.DefaultValue;
 
-    //     // Get resolved dimensions
-    //     float sliderWidth = sliders[2].resolvedStyle.width;
-    //     float sliderHeight = sliders[2].resolvedStyle.height;
+        // re-hook the change callback (if you want to guard against duplicates you could
+        // store the EventCallback reference and unregister first)
+        tempSlider.UnregisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
+        tempSlider.RegisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
 
-    //     // Apply position (centered)
-    //     sliders[2].style.position = Position.Absolute;
-    //     sliders[2].style.left = panelPos.x - sliderWidth / 2;
-    //     sliders[2].style.top = panelPos.y - sliderHeight / 2;
-    // }
+        tempSlider.style.display = DisplayStyle.Flex;
+        tempSlider.SetEnabled(false);
+
+        tempSlider.RegisterCallback<PointerDownEvent>(e => e.StopPropagation());
+        tempSlider.RegisterCallback<PointerMoveEvent>(e => e.StopPropagation());
+        tempSlider.pickingMode = PickingMode.Ignore;
+
+        // position it immediately this frame, too
+        PositionAndSyncTempSlider();
+    }
+
+    private void PositionAndSyncTempSlider()
+    {
+        // assumes tempSlider.style.display == Flex and the tagged object exists
+        GameObject target = GameObject.FindWithTag(k_TempObjectTag);
+        if (target == null) { HideTempSlider(); return; }
+
+        Camera cam = Camera.main;
+        Vector3 screenPos = cam.WorldToScreenPoint(target.transform.position);
+        Vector2 uiPos = new Vector2(screenPos.x, Screen.height - screenPos.y);
+        Vector2 panelPos = RuntimePanelUtils.ScreenToPanel(
+            quickAccessDocument.rootVisualElement.panel, uiPos);
+
+        float w = tempSlider.resolvedStyle.width;
+        float h = tempSlider.resolvedStyle.height;
+        tempSlider.style.position = Position.Absolute;
+        tempSlider.style.left     = panelPos.x - w * 0.5f;
+        tempSlider.style.top      = panelPos.y - h * 0.5f;
+    }
+
+    private void HideTempSlider()
+    {
+        if (tempSlider == null) return;
+        tempSlider.style.display = DisplayStyle.None;
+        tempSlider.SetEnabled(false);
+    }
+
+
     #endregion
 
     #region Slider Management
@@ -347,37 +394,45 @@ public class GameManager : MonoBehaviour
     }
 
     public void TransitionExternal(PostProcessingEffect effect, Setting setting, float duration) {
-        bool isInHotbar = false;
-        foreach (HotBarPair pair in currentHotBar) {
-            if (pair.type == effect) isInHotbar = true;
-        }
-        if (!isInHotbar) {
-            AddTempSlider(effect);
-        }
+        // Find the effect data first
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
         if (newPair.Equals(default(HotBarPair))) return;
 
-        int index = FindSliderIndex(effect);
-        if (index == -1) return;
+        // Check if effect is in hotbar
+        bool isInHotbar = false;
+        int index = -1;
+        for (int i = 0; i < currentHotBar.Count; i++) {
+            if (currentHotBar[i].type == effect) {
+                isInHotbar = true;
+                index = i;
+                break;
+            }
+        }
 
-        Slider targetSlider = sliders[index];
+        // Get appropriate slider
+        Slider targetSlider;
+        if (!isInHotbar) {
+            targetSlider = AddTempSlider(effect);
+        }
+        else {
+            targetSlider = sliders[index];
+        }
+
         if (targetSlider == null) return;
+
         float currentValue = targetSlider.value;
         float targetValue = GetTargetValue(newPair, setting);
-        // Debug.Log(currentValue + " " + setting + " " + effect);
 
-        // if (Mathf.Approximately(currentValue, targetValue)) return;
-
+        // Handle existing transition
         if (activeTransitions.TryGetValue(effect, out Coroutine runningCoroutine)) 
         {
-            if (runningCoroutine != null)
-            {
+            if (runningCoroutine != null) {
                 StopCoroutine(runningCoroutine);
             }
-            // Remove the entry regardless
             activeTransitions.Remove(effect);
         }
-        // Then add the new coroutine to the dictionary
+
+        // Start new transition
         activeTransitions[effect] = StartCoroutine(TransitionEffectValue(targetSlider, currentValue, targetValue, duration, effect));
     }
 
@@ -412,11 +467,39 @@ public class GameManager : MonoBehaviour
         HideSlider(currentHotBar.Count - 1, true);
     }
 
-    public void AddTempSlider(PostProcessingEffect effect) {
-        HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
+    public Slider AddTempSlider(PostProcessingEffect effect) {
+        if (tempSlider == null) return null;
+        // If the slider is already showing this effect, just return it
+        if (isTempSliderActive) {
+            return tempSlider;
+        }
+        isTempSliderActive = true;
+        tempEffect = effect;
+        var pair = postProcessingSliderValues.Find(p => p.type == effect);
+        if (pair.Equals(default(HotBarPair))) return null;
 
-        currentHotBar.Add(newPair);
-        SetupSlider(0, newPair);
+        // Configure range & label & value
+        tempSlider.lowValue = pair.data.MinValue;
+        tempSlider.highValue = pair.data.MaxValue;
+        tempSlider.value = pair.data.DefaultValue;
+        tempSlider.label = effect.ToString();
+
+        // Re-hook callback
+        tempSlider.UnregisterValueChangedCallback(OnTempSliderChanged);
+        tempSlider.RegisterValueChangedCallback(OnTempSliderChanged);
+
+        // Show and enable interaction
+        tempSlider.style.display = DisplayStyle.Flex;
+        tempSlider.SetEnabled(true);
+        tempSlider.pickingMode = PickingMode.Position;
+
+        return tempSlider;
+    }
+
+     private void OnTempSliderChanged(ChangeEvent<float> evt)
+    {
+        // apply whichever effect is currently stored
+        ApplyPostProcessingEffect(tempEffect, evt.newValue);
     }
 
     private int FindSliderIndex(PostProcessingEffect effect) {
