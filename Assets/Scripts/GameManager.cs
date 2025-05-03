@@ -159,38 +159,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ShowAndSetupTempSlider() {
-        GameObject target = GameObject.FindWithTag(k_TempObjectTag);
-        if (tempSlider == null || target == null)
-        {
-            HideTempSlider();
-            return;
-        }
+    // private void ShowAndSetupTempSlider() {
+    //     GameObject target = GameObject.FindWithTag(k_TempObjectTag);
+    //     if (tempSlider == null || target == null)
+    //     {
+    //         HideTempSlider();
+    //         return;
+    //     }
 
-        // configure range/label/callback exactly like your hotbar
-        var tempPair = postProcessingSliderValues
-            .Find(p => p.type == tempEffect);
+    //     // configure range/label/callback exactly like your hotbar
+    //     var tempPair = postProcessingSliderValues
+    //         .Find(p => p.type == tempEffect);
 
-        tempSlider.label     = tempPair.type.ToString();
-        tempSlider.lowValue  = tempPair.data.MinValue;
-        tempSlider.highValue = tempPair.data.MaxValue;
-        tempSlider.value     = tempPair.data.DefaultValue;
+    //     tempSlider.label     = tempPair.type.ToString();
+    //     tempSlider.lowValue  = tempPair.data.MinValue;
+    //     tempSlider.highValue = tempPair.data.MaxValue;
+    //     tempSlider.value     = tempPair.data.DefaultValue;
 
-        // re-hook the change callback (if you want to guard against duplicates you could
-        // store the EventCallback reference and unregister first)
-        tempSlider.UnregisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
-        tempSlider.RegisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
+    //     // re-hook the change callback (if you want to guard against duplicates you could
+    //     // store the EventCallback reference and unregister first)
+    //     tempSlider.UnregisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
+    //     tempSlider.RegisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
 
-        tempSlider.style.display = DisplayStyle.Flex;
-        tempSlider.SetEnabled(false);
+    //     tempSlider.style.display = DisplayStyle.Flex;
+    //     tempSlider.SetEnabled(false);
 
-        tempSlider.RegisterCallback<PointerDownEvent>(e => e.StopPropagation());
-        tempSlider.RegisterCallback<PointerMoveEvent>(e => e.StopPropagation());
-        tempSlider.pickingMode = PickingMode.Ignore;
+    //     tempSlider.RegisterCallback<PointerDownEvent>(e => e.StopPropagation());
+    //     tempSlider.RegisterCallback<PointerMoveEvent>(e => e.StopPropagation());
+    //     tempSlider.pickingMode = PickingMode.Ignore;
 
-        // position it immediately this frame, too
-        PositionAndSyncTempSlider();
-    }
+    //     // position it immediately this frame, too
+    //     PositionAndSyncTempSlider();
+    // }
 
     private void PositionAndSyncTempSlider()
     {
@@ -228,11 +228,13 @@ public class GameManager : MonoBehaviour
 
         var slider = sliders[index];
         var oldHotBarPair = currentHotBar[index];
+        Debug.Log($"Setting up slider {index} for {pair.type} removing {oldHotBarPair.type}");
         var callback = sliderCallbacks[index];
         var existingCallback = sliderCallbacks[index];
         if (existingCallback != null) {
             // Unregister the previous value-changed callback
             slider.value = oldHotBarPair.data.DefaultValue;
+            Debug.Log($"Unregistering callback for {oldHotBarPair.type}");
             slider.UnregisterValueChangedCallback(existingCallback);
         }
 
@@ -246,8 +248,8 @@ public class GameManager : MonoBehaviour
         EventCallback<ChangeEvent<float>> newCallback = evt => OnSliderChanged(evt, pair.type);
         sliderCallbacks[index] = newCallback;
         slider.RegisterValueChangedCallback(newCallback);
-        TransitionExternal(oldHotBarPair.type, Setting.Default, 0.0f);
-        //get all elemtns in callbacks
+        // TransitionExternal(oldHotBarPair.type, Setting.Default, 0.0f);
+        ApplyPostProcessingEffect(oldHotBarPair.type, oldHotBarPair.data.DefaultValue);
     }
 
     private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect) {
@@ -389,8 +391,9 @@ public class GameManager : MonoBehaviour
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == newEffect);
         if (newPair.Equals(default(HotBarPair))) return;
 
-        currentHotBar[slotIndex] = newPair;
+        
         SetupSlider(slotIndex, newPair);
+        currentHotBar[slotIndex] = newPair;
     }
 
     public void TransitionExternal(PostProcessingEffect effect, Setting setting, float duration) {
