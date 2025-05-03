@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
                 GameObject gmObject = new GameObject("GameManager");
                 instance = gmObject.AddComponent<GameManager>();
                 DontDestroyOnLoad(instance.gameObject);
+                instance.Initialize();
             }
             return instance;
         }
@@ -88,24 +89,18 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Initialization
+    private void Initialize(){Start();}
     void Start() {
-        postProcessManager = GetComponent<PostProccessManager>();
-        InitializeUIElements();
+        postProcessManager = GetComponent<PostProccessManager>(); 
 
         // Hide temp slider until explicitly needed
         tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
         if (tempSlider != null) {
             tempSlider.style.display = DisplayStyle.None;
             tempSlider.SetEnabled(false);
-        }
-
-        transitionInstance = FindFirstObjectByType<PixelTransitionController>();
-        if (transitionInstance == null)
-        {
-            GameObject go = new GameObject("Transition"); 
-            go.transform.SetParent(transform);
-            transitionInstance = go.AddComponent<PixelTransitionController>();
-        }
+        } 
+        transitionInstance = FindFirstObjectByType<PixelTransitionController>(); 
+        InitializeUIElements();
     }
 
     private void LateUpdate() {
@@ -292,14 +287,23 @@ public class GameManager : MonoBehaviour
     private void HandleAdjustmentInput() {
         if (selectedSliderIndex < 0 || selectedSliderIndex >= unlockedSlots) return;
 
-        HotBarPair pair = currentHotBar[selectedSliderIndex];
-        float currentValue = sliders[selectedSliderIndex].value;
-        float range = pair.data.MaxValue - pair.data.MinValue;
-
-        if (Input.GetKey(KeyCode.W)) AdjustValue(currentValue + range * 0.01f);
-        if (Input.GetKey(KeyCode.S)) AdjustValue(currentValue - range * 0.01f);
-        if (Input.GetKeyDown(KeyCode.Q)) CycleSliderState(false);
-        if (Input.GetKeyDown(KeyCode.E)) CycleSliderState(true);
+        try
+        {
+            HotBarPair pair = currentHotBar[selectedSliderIndex];
+            float currentValue = sliders[selectedSliderIndex].value;
+            float range = pair.data.MaxValue - pair.data.MinValue;
+            
+            if (Input.GetKey(KeyCode.W)) AdjustValue(currentValue + range * 0.01f);
+            if (Input.GetKey(KeyCode.S)) AdjustValue(currentValue - range * 0.01f);
+            if (Input.GetKeyDown(KeyCode.Q)) CycleSliderState(false);
+            if (Input.GetKeyDown(KeyCode.E)) CycleSliderState(true);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        } 
+ 
     }
 
     private void AdjustValue(float newValue) {
@@ -334,6 +338,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Public Methods
+
+    public void SetUiDispaly(DisplayStyle style)
+    {
+        quickAccessDocument.rootVisualElement.style.display = style;
+    }
     public float GetPostProcessingValue(PostProcessingEffect effect) {
         for (int i = 0; i < currentHotBar.Count; i++) {
             if (currentHotBar[i].type == effect) {
@@ -354,7 +363,7 @@ public class GameManager : MonoBehaviour
     public void TransitionToNextScene()
     {
         int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextScene < SceneManager.sceneCount)
+        if (nextScene < SceneManager.sceneCountInBuildSettings)
         {
             transitionInstance.FadeToScene(nextScene);
         }

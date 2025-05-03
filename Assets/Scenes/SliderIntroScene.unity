@@ -431,6 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d827c667acfa25a4c8ad440349c2371a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PixelPrefab: {fileID: 0}
 --- !u!1001 &287619664
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1647,6 +1648,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 3857145471434932032, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      propertyPath: PixelPrefab
+      value: 
+      objectReference: {fileID: 5081392259240308480, guid: a32303822b4ddd04297272656d1237fe, type: 3}
     - target: {fileID: 6632765895184719283, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
       propertyPath: m_Size.y
       value: 4
@@ -2827,7 +2832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4308902281476771174, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4807484681728770711, guid: 79173cf7f8d1e464cbc50e6e36c28732, type: 3}
       propertyPath: m_LocalPosition.x
