@@ -85,11 +85,25 @@ public class GameManager : MonoBehaviour
         tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
         HideTempSlider();
         isTempSliderActive = false;
+        
+        //Updates the playerpref so the player can access the most recent level they have played
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
+        if (PlayerPrefs.HasKey("CurrentLevelUnlocked") && PlayerPrefs.GetInt("CurrentLevelUnlocked") < currentLevelIndex)
+        {
+            PlayerPrefs.SetInt("CurrentLevelUnlocked", currentLevelIndex);  
+            PlayerPrefs.Save();
+        }
+        
+        
     }
     #endregion
 
     #region Initialization
-    private void Initialize(){Start();}
+
+    private void Initialize()
+    {
+        Start();
+    }
     void Start() {
         postProcessManager = GetComponent<PostProccessManager>(); 
 
@@ -101,6 +115,12 @@ public class GameManager : MonoBehaviour
         } 
         transitionInstance = FindFirstObjectByType<PixelTransitionController>(); 
         InitializeUIElements();
+
+        if (!PlayerPrefs.HasKey("CurrentLevelUnlocked"))
+        {
+            PlayerPrefs.SetInt("CurrentLevelUnlocked", 0);
+            PlayerPrefs.Save();
+        }
     }
 
     private void LateUpdate() {
