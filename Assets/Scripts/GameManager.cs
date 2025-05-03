@@ -102,7 +102,6 @@ public class GameManager : MonoBehaviour
         }
         else
             Debug.LogWarning("Transition Controller found");
-         
         
         InitializeUIElements();
         InitializeUIElements();
@@ -113,6 +112,11 @@ public class GameManager : MonoBehaviour
             tempSlider.SetEnabled(false);
         }
         
+    }
+
+    public void InitializeGameManager()
+    {
+        Start();
     }
 
     public void InitializeGameManager()
