@@ -58,6 +58,8 @@ public class BoxMovement : MonoBehaviour
             yield break;
         }
         
+        yield return new WaitForSeconds(waitTime);
+        
         _animator.SetBool("IsDown", true);
         _detector.isSet = true;
         
