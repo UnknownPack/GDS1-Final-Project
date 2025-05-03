@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.UIElements;
 
 public class PixelTransitionController : MonoBehaviour
 {
@@ -54,10 +55,13 @@ public class PixelTransitionController : MonoBehaviour
             yield return null;
         }
         fadeMaterial.SetFloat("_Progress", 0f);
+        if(SceneManager.GetActiveScene().buildIndex != 2)
+            GameManager.Instance.SetUiDispaly(DisplayStyle.Flex);
     }
 
     private IEnumerator FadeAndSwitchScene(string sceneName)
     {
+        GameManager.Instance.SetUiDispaly(DisplayStyle.None);
         isTransitioning = true;
         float t = 0f;
         while (t < transitionDuration)
@@ -75,6 +79,7 @@ public class PixelTransitionController : MonoBehaviour
     
     private IEnumerator FadeAndSwitchScene(int index)
     {
+        GameManager.Instance.SetUiDispaly(DisplayStyle.None);
         isTransitioning = true;
         float t = 0f;
         while (t < transitionDuration)
