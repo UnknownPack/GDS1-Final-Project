@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class SliderUnlockTrigger : MonoBehaviour
 {
@@ -10,23 +11,12 @@ public class SliderUnlockTrigger : MonoBehaviour
     private bool triggered = false;
 
     private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (triggered) return;
+    { 
+        if (triggered || SceneManager.GetActiveScene().name != "SliderIntroScene") return; 
         if (other.CompareTag("Player"))
         {
-            gameObject.SetActive(false);
-        };
-        if (SceneManager.GetActiveScene().name != "SliderIntroScene") return;
+            GameManager.Instance.SetUIDisplay(DisplayStyle.Flex); 
+        }; 
         triggered = true;
-
-        if (sliderPrefab != null)
-        {
-            sliderPrefab.SetActive(true);
-            GameManager gm = GameManager.Instance;
-            if (gm != null)
-            {
-                // gm.EnableSliderManually(sliderPrefab, GameManager.SliderType.Brightness);
-            }
-        }
     }
 }

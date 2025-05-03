@@ -34,13 +34,17 @@ public class PixelTransitionController : MonoBehaviour
     public void FadeToScene(string sceneName)
     {
         if (!isTransitioning)
+        {
             StartCoroutine(FadeAndSwitchScene(sceneName));
+        }
     }
 
-    public void FadeToScene(int sceneIndex)
+    public void FadeToSceneInt(int sceneIndex)
     {
         if (!isTransitioning)
+        {
             StartCoroutine(FadeAndSwitchScene(sceneIndex));
+        }
     }
 
     private IEnumerator Unfade()
@@ -62,7 +66,7 @@ public class PixelTransitionController : MonoBehaviour
         float t = 0f;
         while (t < transitionDuration)
         {
-            t += Time.deltaTime;
+            t += Time.deltaTime; 
             float progress = Mathf.Clamp01(t / transitionDuration);
             fadeMaterial.SetFloat("_Progress", progress);
             yield return null;
@@ -79,7 +83,7 @@ public class PixelTransitionController : MonoBehaviour
         float t = 0f;
         while (t < transitionDuration)
         {
-            t += Time.deltaTime;
+            t += Time.deltaTime; 
             float progress = Mathf.Clamp01(t / transitionDuration);
             fadeMaterial.SetFloat("_Progress", progress);
             yield return null;

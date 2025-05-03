@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager instance;
+    private static GameManager instance; 
 
     [Header("Post Processing Sliders")]
     [SerializeField] private List<HotBarPair> postProcessingSliderValues = new List<HotBarPair>();
@@ -44,8 +44,9 @@ public class GameManager : MonoBehaviour
         get {
             if (instance == null) {
                 GameObject gmObject = new GameObject("GameManager");
-                instance = gmObject.AddComponent<GameManager>();
+                instance = gmObject.AddComponent<GameManager>(); 
                 DontDestroyOnLoad(instance.gameObject);
+                instance.InitializeGameManager();
             }
             return instance;
         }
@@ -90,8 +91,21 @@ public class GameManager : MonoBehaviour
 
     #region Initialization
     void Start() {
-        postProcessManager = GetComponent<PostProccessManager>();
+        postProcessManager = GetComponent<PostProccessManager>(); 
+        transitionInstance = FindFirstObjectByType<PixelTransitionController>();
+        if (transitionInstance == null)
+        {
+            Debug.LogWarning("Transition Controller not found, creating new one");
+            GameObject go = new GameObject("Transition"); 
+            go.transform.SetParent(transform);
+            transitionInstance = go.AddComponent<PixelTransitionController>();
+        }
+        else
+            Debug.LogWarning("Transition Controller found");
+        
         InitializeUIElements();
+        InitializeUIElements();
+<<<<<<< Updated upstream
         InitializeLevelTracking();
         transitionInstance = FindFirstObjectByType<PixelTransitionController>();
         if (transitionInstance == null)
@@ -100,6 +114,20 @@ public class GameManager : MonoBehaviour
             go.transform.SetParent(transform);
             transitionInstance = go.AddComponent<PixelTransitionController>();
         }
+=======
+        // Hide temp slider until explicitly needed
+        tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
+        if (tempSlider != null) {
+            tempSlider.style.display = DisplayStyle.None;
+            tempSlider.SetEnabled(false);
+        }
+        
+    }
+
+    public void InitializeGameManager()
+    {
+        Start();
+>>>>>>> Stashed changes
     }
 
     private void InitializeUIElements() {
@@ -315,6 +343,11 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        if (transitionInstance == null)
+        {
+            Debug.LogWarning("No transition instance assigned");
+            return;
+        }
         transitionInstance.FadeToScene(SceneManager.GetActiveScene().name); 
     }
     
@@ -322,10 +355,15 @@ public class GameManager : MonoBehaviour
 
     public void TransitionToNextScene()
     {
-        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextScene < SceneManager.sceneCount)
+        if (transitionInstance == null)
         {
-            transitionInstance.FadeToScene(nextScene);
+            Debug.LogWarning("No transition instance assigned");
+            return;
+        }
+        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextScene < SceneManager.sceneCountInBuildSettings)
+        {
+            transitionInstance.FadeToSceneInt(nextScene);
         }
         else 
             Debug.LogError($"Scene not found: {SceneManager.GetActiveScene().name}! Exceeded scene count: {SceneManager.sceneCount}");
@@ -340,6 +378,8 @@ public class GameManager : MonoBehaviour
         Debug.LogError($"Effect not found: {effect}");
         return 0f;
     }
+
+    public void SetUIDisplay(DisplayStyle display) { quickAccessDocument.rootVisualElement.style.display = display; }
 
     public void ResetAllSlidersToDefault() {
         for (int i = 0; i < currentHotBar.Count; i++) {
