@@ -62,7 +62,7 @@ public class BoxMovement : MonoBehaviour
         yield return new WaitForSeconds(initialDelay);
         
         _animator.SetBool("IsDown", true);
-        _detector.isSet = true;
+        _detector.isSet = false;
         
         // --- Move B→A ---
         yield return MoveBetween(targetPositions[1], targetPositions[0]);
@@ -73,7 +73,7 @@ public class BoxMovement : MonoBehaviour
         yield return MoveBetween(targetPositions[0], targetPositions[1]);
         
         if (_animator) _animator.SetBool("IsDown", false);
-        if (_detector) _detector.isSet = false; 
+        if (_detector) _detector.isSet = true; 
     }
 
     IEnumerator MoveBetween(Vector2 from, Vector2 to)
