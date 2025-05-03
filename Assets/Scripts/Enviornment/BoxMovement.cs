@@ -8,6 +8,7 @@ public class BoxMovement : MonoBehaviour
     [Header("Platform timing")]
     public float travelTime = 1f;      // seconds to go from A→B or B→A
     public float waitTime   = 2f;      // pause at each end
+    public float initialDelay = 1f;
 
     [Header("Waypoints (must be exactly 2)")]
     public List<Vector2> targetPositions;
@@ -58,7 +59,7 @@ public class BoxMovement : MonoBehaviour
             yield break;
         }
         
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(initialDelay);
         
         _animator.SetBool("IsDown", true);
         _detector.isSet = true;
