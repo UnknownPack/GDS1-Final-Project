@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviour
         else
             Debug.LogWarning("Transition Controller found");
          
+        
+        InitializeUIElements();
         InitializeUIElements();
         // Hide temp slider until explicitly needed
         tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
@@ -111,6 +113,11 @@ public class GameManager : MonoBehaviour
             tempSlider.SetEnabled(false);
         }
         
+    }
+
+    public void InitializeGameManager()
+    {
+        Start();
     }
  
 
