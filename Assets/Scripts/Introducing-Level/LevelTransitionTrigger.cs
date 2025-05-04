@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelTransitionTrigger : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class LevelTransitionTrigger : MonoBehaviour
         if (!triggered && other.CompareTag("Player"))
         {
             triggered = true;
-            GameManager.Instance.TransitionToNextScene();
+            //GameManager.Instance.TransitionToNextScene();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
