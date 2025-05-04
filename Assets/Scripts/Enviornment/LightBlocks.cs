@@ -16,21 +16,29 @@ public class LightBlocks : MonoBehaviour
     
     SpriteRenderer spriteRenderer;
     BoxCollider2D boxCollider2D;
+    PolygonCollider2D polyCollider2D;
     private float currentAlpha;
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        polyCollider2D = GetComponent<PolygonCollider2D>();
 
         switch (startingState)
         {
             case LightBlockState.DefaultEnabled:
                 currentAlpha = 1f;
-                boxCollider2D.enabled = true;
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = true;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = true; 
                 break;
             case LightBlockState.DefaultDisabled:
                 currentAlpha = 0f;
-                boxCollider2D.enabled = false;
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = false;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = false;
                 break;
         }
  
@@ -56,9 +64,15 @@ public class LightBlocks : MonoBehaviour
         Color colour = spriteRenderer.color;
         spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
         if (Mathf.Approximately(currentAlpha, 1f)) 
-            boxCollider2D.enabled = true; 
+            if(boxCollider2D != null)
+                boxCollider2D.enabled = true;
+        if(polyCollider2D != null)
+            polyCollider2D.enabled = true; 
         else if (Mathf.Approximately(currentAlpha, 0f)) 
-            boxCollider2D.enabled = false; 
+            if(boxCollider2D != null)
+                boxCollider2D.enabled = false;
+        if(polyCollider2D != null)
+            polyCollider2D.enabled = false;
     }
     
     private enum LightBlockState{
