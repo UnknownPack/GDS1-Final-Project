@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator DeathScene()
     { 
         animator.Play("Death");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         GameManager.Instance.RestartLevel();
     }
 
