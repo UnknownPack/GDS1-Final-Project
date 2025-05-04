@@ -55,8 +55,10 @@ public class PixelTransitionController : MonoBehaviour
             yield return null;
         }
         fadeMaterial.SetFloat("_Progress", 0f);
-        if(SceneManager.GetActiveScene().buildIndex != 2)
+        if(SceneManager.GetActiveScene().buildIndex > 1)
             GameManager.Instance.SetUiDispaly(DisplayStyle.Flex);
+        else 
+            GameManager.Instance.SetUiDispaly(DisplayStyle.None); 
     }
 
     private IEnumerator FadeAndSwitchScene(string sceneName)

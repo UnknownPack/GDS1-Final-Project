@@ -46,9 +46,10 @@ public class GameManager : MonoBehaviour
     #region Singleton Pattern
     public static GameManager Instance {
         get {
-            if (instance == null) {
-                GameObject gmObject = new GameObject("GameManager");
-                instance = gmObject.AddComponent<GameManager>();
+            if (instance == null) { 
+                GameObject gameManager = Instantiate(Resources.Load<GameObject>("PostProccessing"));
+                instance = gameManager.GetComponent<GameManager>(); 
+                instance.SetUiDispaly(DisplayStyle.None);
                 DontDestroyOnLoad(instance.gameObject);
                 instance.Initialize();
             }
@@ -320,7 +321,7 @@ public class GameManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            //Console.WriteLine(e);
             throw;
         } 
  
@@ -375,7 +376,20 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        transitionInstance.FadeToScene(SceneManager.GetActiveScene().name); 
+        if (transitionInstance == null)
+        { 
+            transitionInstance = FindFirstObjectByType<PixelTransitionController>();
+            if(transitionInstance != null)
+                transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex);
+            else
+            { 
+                Debug.LogError($"No transition instance found again");
+                return;
+            }
+        }
+        else 
+            transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex); 
+        
     }
     
     public void TransitionToDifferentScene(string scene) => transitionInstance.FadeToScene(scene);
