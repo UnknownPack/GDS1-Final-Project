@@ -1,5 +1,5 @@
 .sliderHotKey {
-    bottom: -150px;
+    /* bottom: -150px; */
     background-color: rgb(89, 170, 64);
     width: 100px;
     -unity-text-align: upper-left;
@@ -17,8 +17,8 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
-    transition-duration: 0.5s;
-    transition-timing-function: ease-in;
+    /* transition-duration: 0.5s;
+    transition-timing-function: ease-in; */
     height: 500px;
     min-height: 500px;
     max-height: 500px;
