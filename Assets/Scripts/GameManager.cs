@@ -399,7 +399,18 @@ public class GameManager : MonoBehaviour
         int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
         if (nextScene < SceneManager.sceneCountInBuildSettings)
         {
-            transitionInstance.FadeToScene(nextScene);
+            if (transitionInstance == null)
+            {
+                transitionInstance = FindFirstObjectByType<PixelTransitionController>();
+                if (transitionInstance != null)
+                    transitionInstance.FadeToScene(nextScene);
+                else
+                { 
+                    Debug.LogError($"No transition instance found again");
+                    return;
+                }
+                transitionInstance.FadeToScene(nextScene);
+            }
         }
         else 
             Debug.LogError($"Scene not found: {SceneManager.GetActiveScene().name}! Exceeded scene count: {SceneManager.sceneCount}");
