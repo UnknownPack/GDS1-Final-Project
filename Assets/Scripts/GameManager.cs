@@ -386,7 +386,8 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
-        transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex); 
+        else 
+            transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex); 
         
     }
     
