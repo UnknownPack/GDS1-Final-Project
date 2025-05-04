@@ -193,6 +193,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6715889609106719416, guid: 57a343ab848dbb14ca2a87fbc7f58d5a, type: 3}
   m_PrefabInstance: {fileID: 59906066}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &128888947 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9018344974416027585, guid: e4d7cbed10cb4b44db719d200dc27ad0, type: 3}
+  m_PrefabInstance: {fileID: 1789211538}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &248791147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4667880738938308132, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
+  m_PrefabInstance: {fileID: 932823809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &269419990
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,6 +885,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: purpleplatform_0
       objectReference: {fileID: 0}
+    - target: {fileID: 4667880738938308132, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
+      propertyPath: m_TagString
+      value: MovingPlatform
+      objectReference: {fileID: 0}
     - target: {fileID: 7162939606710736217, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5
@@ -922,13 +936,65 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4667880738938308132, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 932823812}
+    - targetCorrespondingSourceObject: {fileID: 4667880738938308132, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 932823811}
   m_SourcePrefab: {fileID: 100100000, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
 --- !u!4 &932823810 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7162939606710736217, guid: d4f51d0f92e284d48ad3ddbcfb0c4345, type: 3}
   m_PrefabInstance: {fileID: 932823809}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &932823811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248791147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 952291731928152b0b7ebc0ea1e8edb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  travelTime: 1
+  waitTime: 2
+  initialDelay: 1
+  targetPositions:
+  - {x: -2.5, y: -3}
+  - {x: -2.5, y: 5}
+  detectorPair: {fileID: 2081113322}
+--- !u!50 &932823812
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248791147}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &972303062
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1109,6 +1175,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 269419991}
     m_Modifications:
+    - target: {fileID: 1354899796208402418, guid: e4d7cbed10cb4b44db719d200dc27ad0, type: 3}
+      propertyPath: movingBoxPair
+      value: 
+      objectReference: {fileID: 248791147}
     - target: {fileID: 6592367152078437693, guid: e4d7cbed10cb4b44db719d200dc27ad0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
@@ -1618,9 +1688,9 @@ MonoBehaviour:
   waitTime: 2
   initialDelay: 1
   targetPositions:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  detectorPair: {fileID: 0}
+  - {x: 2.5, y: -5}
+  - {x: 11.5, y: -5}
+  detectorPair: {fileID: 128888947}
 --- !u!50 &1288690471
 Rigidbody2D:
   serializedVersion: 5
@@ -2286,6 +2356,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 269419991}
     m_Modifications:
+    - target: {fileID: 1354899796208402418, guid: e4d7cbed10cb4b44db719d200dc27ad0, type: 3}
+      propertyPath: movingBoxPair
+      value: 
+      objectReference: {fileID: 1288690469}
     - target: {fileID: 6592367152078437693, guid: e4d7cbed10cb4b44db719d200dc27ad0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 15
@@ -2606,6 +2680,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &2081113322 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9018344974416027585, guid: e4d7cbed10cb4b44db719d200dc27ad0, type: 3}
+  m_PrefabInstance: {fileID: 998393546}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
