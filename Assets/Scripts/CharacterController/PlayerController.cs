@@ -184,7 +184,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
     #region Public Methods
-    public void SetGravityStatus(bool status){noGravity = status; rigidbody2D.gravityScale = 0; rigidbody2D.linearVelocity = Vector2.zero;}
+    public void SetGravityStatus(bool status){noGravity = status; rigidbody2D.gravityScale = 0;}
     public void SetJumpStatus(bool status){canJump = status;}
 
     #endregion
