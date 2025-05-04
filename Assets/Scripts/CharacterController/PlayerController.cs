@@ -144,8 +144,9 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DeathScene()
     { 
-        animator.Play("Death");
-        yield return new WaitForSeconds(1f);
+        animator.Play("Death"); 
+        yield return new WaitForSeconds(0.25f); 
+        rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll; 
         GameManager.Instance.RestartLevel();
     }
 

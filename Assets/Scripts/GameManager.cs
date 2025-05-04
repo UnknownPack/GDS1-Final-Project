@@ -375,7 +375,19 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        transitionInstance.FadeToScene(SceneManager.GetActiveScene().name); 
+        if (transitionInstance == null)
+        { 
+            transitionInstance = FindFirstObjectByType<PixelTransitionController>();
+            if(transitionInstance != null)
+                transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex);
+            else
+            { 
+                Debug.LogError($"No transition instance found again");
+                return;
+            }
+        }
+        transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex); 
+        
     }
     
     public void TransitionToDifferentScene(string scene) => transitionInstance.FadeToScene(scene);
