@@ -1,15 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Collections.Generic; 
+using UnityEngine; 
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-using SimplePieMenu;
-using UnityEditorInternal;
-using UnityEngine.Rendering;
-using System;
-using Unity.VisualScripting;
+using UnityEngine.UIElements; 
+using System; 
 
 public class GameManager : MonoBehaviour
 {
