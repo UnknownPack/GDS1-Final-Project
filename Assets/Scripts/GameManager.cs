@@ -128,13 +128,16 @@ public class GameManager : MonoBehaviour
         quickAccessDocument = GetComponent<UIDocument>();
         GetUIReferences();
         currentHotBar.Clear();
-        for (int i = 0; i < maxHotBarSize && i < postProcessingSliderValues.Count; i++) {
+        for (int i = 0; i < maxHotBarSize && i < postProcessingSliderValues.Count && i < sliders.Count; i++)
+        {
             var slider = sliders[i];
-            if (i < unlockedSlots) {
+            if (i < unlockedSlots)
+            {
                 currentHotBar.Add(postProcessingSliderValues[i]);
                 SetupSlider(i, postProcessingSliderValues[i]);
             }
-            else {
+            else
+            {
                 HideSlider(i, false);
             }
         }
