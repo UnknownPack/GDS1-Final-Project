@@ -70,6 +70,16 @@ public class GameManager : MonoBehaviour
     public enum SliderType { Brightness, MotionBlur, FilmGrain }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        for (int i = 0; i < currentHotBar.Count; i++)
+        {
+            var existingCallback = sliderCallbacks[i];
+            if (existingCallback != null) {
+                // Unregister the previous value-changed callback
+                // sliders[i].value = oldHotBarPair.data.DefaultValue;
+                // Debug.Log($"Unregistering callback for {oldHotBarPair.type}");
+                sliders[i].UnregisterValueChangedCallback(existingCallback);
+            }
+        }
         UpdateUIReferences();
         
         HandleTutorialUI(scene.name);
