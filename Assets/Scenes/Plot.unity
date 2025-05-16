@@ -425,63 +425,6 @@ MonoBehaviour:
   cursorChar: '|'
   cursorBlinkInterval: 0.5
   typingSound: {fileID: 8300000, guid: bcac108ef6b85a84a9df03780b94f8c3, type: 3}
---- !u!1001 &507901652
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5081392259240308480, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_Name
-      value: 'PixelTransition '
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.8948013
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.065613896
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.005463008
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136303745395959521, guid: a32303822b4ddd04297272656d1237fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a32303822b4ddd04297272656d1237fe, type: 3}
 --- !u!1 &545779711
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aef9eb162a3b37e43a59925336a9837a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: SliderIntroScene
+  nextSceneName: SliderIntroScene
 --- !u!114 &926816319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,7 +661,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 926816318}
         m_TargetAssemblyTypeName: SkipPlotManager, Assembly-CSharp
-        m_MethodName: SkipPlot
+        m_MethodName: OnSkipButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1128,4 +1071,3 @@ SceneRoots:
   - {fileID: 4021396839719481317}
   - {fileID: 1293799118}
   - {fileID: 2070216789}
-  - {fileID: 507901652}

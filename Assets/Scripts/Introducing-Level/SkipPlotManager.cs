@@ -1,11 +1,13 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SkipPlotManager : MonoBehaviour
 {
-    public string targetSceneName = "SliderIntroScene";
+    [Header("Skip Scene")]
+    public string nextSceneName = "SliderIntroScene";
 
-    public void SkipPlot()
+    public void OnSkipButtonClicked()
     {
-        FindFirstObjectByType<PixelTransitionController>().FadeToScene(targetSceneName);
+        SceneManager.LoadScene(nextSceneName);
     }
 }

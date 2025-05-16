@@ -1739,6 +1739,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6715889609106719416, guid: 57a343ab848dbb14ca2a87fbc7f58d5a, type: 3}
   m_PrefabInstance: {fileID: 753132719}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &774952714 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 330175909225013647, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+  m_PrefabInstance: {fileID: 1379270666}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &809836236 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6962747925344250738, guid: 20ccff2348229914987fe05822452073, type: 3}
@@ -2360,7 +2365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   travelTime: 1
   waitTime: 2
-  initialDelay: 1
+  initialDelay: 0.5
   targetPositions:
   - {x: -10.5, y: -17}
   - {x: 1, y: -17}
@@ -2979,9 +2984,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952291731928152b0b7ebc0ea1e8edb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelTime: 1
+  travelTime: 0.5
   waitTime: 2
-  initialDelay: 1
+  initialDelay: 0.5
   targetPositions:
   - {x: -17.5, y: -16}
   - {x: -17.5, y: -19}
@@ -3192,6 +3197,14 @@ PrefabInstance:
     - target: {fileID: 3048559084950410238, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
       propertyPath: m_Name
       value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857145471434932032, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      propertyPath: PixelPrefab
+      value: 
+      objectReference: {fileID: 774952714}
+    - target: {fileID: 6632765895184719283, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3539,7 +3552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   travelTime: 1
   waitTime: 2
-  initialDelay: 1
+  initialDelay: 0.5
   targetPositions:
   - {x: -7, y: -1.5}
   - {x: -20, y: -1.5}
@@ -3590,7 +3603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   travelTime: 1
   waitTime: 2
-  initialDelay: 1
+  initialDelay: 0.5
   targetPositions:
   - {x: 10.5, y: -8}
   - {x: -10, y: -8}
@@ -4617,7 +4630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   travelTime: 1
   waitTime: 2
-  initialDelay: 1
+  initialDelay: 0.5
   targetPositions:
   - {x: -12.5, y: -12}
   - {x: -20, y: -12}
