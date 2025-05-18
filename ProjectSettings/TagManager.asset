@@ -15,6 +15,7 @@ TagManager:
   - Safe
   - TempSlider
   - AdditionPedestal
+  - BossNextLevel
   layers:
   - Default
   - TransparentFX

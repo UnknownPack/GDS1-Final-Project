@@ -173,7 +173,12 @@ public class PlayerController : MonoBehaviour
         {
             Trigger trigger = other.gameObject.GetComponent<Trigger>();
             GameManager.Instance.TransitionExternal(trigger.postProcessingEffect, trigger.setting, 0.5f);
-        } 
+        }
+        if (other.CompareTag("BossNextLevel"))
+        {
+            int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            SceneManager.LoadScene(nextSceneIndex);
+        }
     }
 
     #region Helper Methods
