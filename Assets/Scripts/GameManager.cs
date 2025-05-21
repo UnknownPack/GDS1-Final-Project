@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine; 
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements; 
-using System; 
+using System;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -70,36 +71,44 @@ public class GameManager : MonoBehaviour
     public enum SliderType { Brightness, MotionBlur, FilmGrain }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        for (int i = 0; i < currentHotBar.Count; i++)
+        // Clear any existing temp slider effects first
+        if (currentHotBar.All(pair => pair.type != tempEffect) && tempSlider != null)
         {
-            var existingCallback = sliderCallbacks[i];
-            if (existingCallback != null) {
-                // Unregister the previous value-changed callback
-                // sliders[i].value = oldHotBarPair.data.DefaultValue;
-                // Debug.Log($"Unregistering callback for {oldHotBarPair.type}");
-                sliders[i].UnregisterValueChangedCallback(existingCallback);
-            }
+            TransitionExternal(tempEffect, Setting.Default, 0);
         }
+    
+        // Get unlock manager to update unlocked slots
+        UnlockManager unlockManager = (UnlockManager)FindAnyObjectByType(typeof(UnlockManager));
+        if (unlockManager)
+        {
+            unlockedSlots = unlockManager.unlockedSlots;
+            maxHotBarSize = unlockManager.maxHotBarSize;
+        }
+    
+        // Update UI references (this will handle callbacks properly)
         UpdateUIReferences();
-        
+    
+        // Handle tutorial UI
         HandleTutorialUI(scene.name);
-        for (int i = 0; i < currentHotBar.Count; i++) {
-            Debug.Log(currentHotBar[i].type + " " + sliders[i].value);
+    
+        // Apply current values to post processing (after UI is set up)
+        for (int i = 0; i < currentHotBar.Count && i < sliders.Count; i++) {
+            Debug.Log($"Applying effect {i}: {currentHotBar[i].type} with value {sliders[i].value}");
             ApplyPostProcessingEffect(currentHotBar[i].type, sliders[i].value);
         }
+    
+        // Setup temp slider
         tempSlider = quickAccessDocument.rootVisualElement.Q<Slider>("TempSlider");
         HideTempSlider();
         isTempSliderActive = false;
-        
-        //Updates the playerpref so the player can access the most recent level they have played
+    
+        // Update player prefs for level progression
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
         if (PlayerPrefs.HasKey("CurrentLevelUnlocked") && PlayerPrefs.GetInt("CurrentLevelUnlocked") < currentLevelIndex)
         {
             PlayerPrefs.SetInt("CurrentLevelUnlocked", currentLevelIndex);  
             PlayerPrefs.Save();
         }
-        
-        
     }
     #endregion
 
@@ -145,6 +154,7 @@ public class GameManager : MonoBehaviour
             {
                 currentHotBar.Add(postProcessingSliderValues[i]);
                 SetupSlider(i, postProcessingSliderValues[i]);
+                HideSlider(i, true);
             }
             else
             {
@@ -157,63 +167,85 @@ public class GameManager : MonoBehaviour
     private void UpdateUIReferences() {
         quickAccessDocument = GetComponent<UIDocument>();
         GetUIReferences();
-        // GetUIReferences();
-        // SetupSlider(0, currentHotBar[0]);
-        // SetupSlider(1, currentHotBar[1]);
-        // if (sliders[2] != null) {
-        //     HotBarPair pair = postProcessingSliderValues.Find(p => p.type == currentHotBar[2].type);
-        //     TransitionExternal(pair.type, Setting.Default, 0.0f);
-        // }
     }
 
-    private void GetUIReferences() {        
+    private void GetUIReferences() {
+        // Unregister existing callbacks before clearing
+        for (int i = 0; i < sliders.Count && i < sliderCallbacks.Count; i++) {
+            if (sliderCallbacks[i] != null && sliders[i] != null) {
+                sliders[i].UnregisterValueChangedCallback(sliderCallbacks[i]);
+            }
+        }
+        
+        // Remove sliders that are no longer unlocked
+        for (int i = currentHotBar.Count - 1; i >= 0; i--) {
+            if (i >= unlockedSlots) {
+                TransitionExternal(currentHotBar[i].type, Setting.Default, 0);
+                Debug.Log("Removing slider " + currentHotBar[i].type + ", unlocked: " + unlockedSlots + ", i: " + i);
+                currentHotBar.RemoveAt(i);
+            }
+        }
+
+        // Clear and rebuild slider references
         sliders.Clear();
         sliderCallbacks.Clear();
 
+        // Rebuild all slider references
         for (int i = 1; i <= maxHotBarSize; i++) {
             var slider = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{i}");
             if (slider == null) continue;
-            sliderCallbacks.Add(null);
+            
             sliders.Add(slider);
+            sliderCallbacks.Add(null); // Add placeholder for callback
+            
             slider.RegisterCallback<PointerDownEvent>(e => e.PreventDefault());
             slider.RegisterCallback<PointerMoveEvent>(e => e.PreventDefault());
-
-            
         }
+        Debug.Log($"funny1 complete - unlockedSlots: {unlockedSlots}, currentHotBar.Count: {currentHotBar.Count}, sliders.Count: {sliders.Count}, postProcessingSliderValues.Count: {postProcessingSliderValues.Count}");
+
+        while (currentHotBar.Count < unlockedSlots && currentHotBar.Count < maxHotBarSize) {
+            Debug.Log($"While Loop: START. currentHotBar.Count: {currentHotBar.Count}, unlockedSlots: {unlockedSlots}");
+            int index = currentHotBar.Count;
+            Debug.Log($"While Loop: index = {index}. Checking postProcessingSliderValues[{index}].");
+
+            // Defensive check before accessing the list
+            if (index >= postProcessingSliderValues.Count) {
+                Debug.LogError($"CRITICAL ERROR: Trying to access postProcessingSliderValues[{index}] but Count is only {postProcessingSliderValues.Count}. This will crash. Ensure 'Post Processing Slider Values' list in GameManager Inspector has enough entries.");
+                return; // Exit GetUIReferences to prevent the crash and see this error.
+            }
+
+            currentHotBar.Add(postProcessingSliderValues[index]);
+            Debug.Log($"While Loop: Added {postProcessingSliderValues[index].type.ToString()} to currentHotBar.");
+
+            SetupSlider(index, currentHotBar[index]);
+            HideSlider(index, true);
+            Debug.Log($"Added slider {index}: {postProcessingSliderValues[index].type}"); // Your existing log
+            Debug.Log($"While Loop: END Iteration. currentHotBar.Count is now {currentHotBar.Count}");
+        }
+
+        Debug.Log($"funny complete - unlockedSlots: {unlockedSlots}, currentHotBar.Count: {currentHotBar.Count}, sliders.Count: {sliders.Count}");
+
+        // Setup ALL unlocked sliders with proper callbacks
+        Debug.Log($"funny complete - unlockedSlots: {unlockedSlots}, currentHotBar.Count: {currentHotBar.Count}, sliders.Count: {sliders.Count}");
+        for (int i = 0; i < unlockedSlots && i < currentHotBar.Count && i < sliders.Count; i++) {
+            SetupSlider(i, currentHotBar[i]);
+            HideSlider(i, true);
+            Debug.Log($"Setting up unlocked slider {i}: {currentHotBar[i].type}");
+        }
+
+        // Hide sliders that aren't unlocked
+        for (int i = unlockedSlots; i < sliders.Count; i++) {
+            HideSlider(i, false);
+        }
+
+        // Reset all hotbar effects to default
+        foreach (var hotbar in currentHotBar) {
+            TransitionExternal(hotbar.type, Setting.Default, 0f);
+        }
+        
+        Debug.Log($"GetUIReferences complete - unlockedSlots: {unlockedSlots}, currentHotBar.Count: {currentHotBar.Count}, sliders.Count: {sliders.Count}");
     }
-
-    // private void ShowAndSetupTempSlider() {
-    //     GameObject target = GameObject.FindWithTag(k_TempObjectTag);
-    //     if (tempSlider == null || target == null)
-    //     {
-    //         HideTempSlider();
-    //         return;
-    //     }
-
-    //     // configure range/label/callback exactly like your hotbar
-    //     var tempPair = postProcessingSliderValues
-    //         .Find(p => p.type == tempEffect);
-
-    //     tempSlider.label     = tempPair.type.ToString();
-    //     tempSlider.lowValue  = tempPair.data.MinValue;
-    //     tempSlider.highValue = tempPair.data.MaxValue;
-    //     tempSlider.value     = tempPair.data.DefaultValue;
-
-    //     // re-hook the change callback (if you want to guard against duplicates you could
-    //     // store the EventCallback reference and unregister first)
-    //     tempSlider.UnregisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
-    //     tempSlider.RegisterValueChangedCallback(evt => OnSliderChanged(evt, tempPair.type));
-
-    //     tempSlider.style.display = DisplayStyle.Flex;
-    //     tempSlider.SetEnabled(false);
-
-    //     tempSlider.RegisterCallback<PointerDownEvent>(e => e.StopPropagation());
-    //     tempSlider.RegisterCallback<PointerMoveEvent>(e => e.StopPropagation());
-    //     tempSlider.pickingMode = PickingMode.Ignore;
-
-    //     // position it immediately this frame, too
-    //     PositionAndSyncTempSlider();
-    // }
+    
 
     private void PositionAndSyncTempSlider()
     {
@@ -245,34 +277,68 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Slider Management
-    private void SetupSlider(int index, HotBarPair pair) {
-        if (index < 0 || index >= sliders.Count) return;
-        if (currentHotBar.Count <= index) return;
+    private void SetupSlider(int index, HotBarPair pair)
+    {
+        /*if (index < 0 || index >= sliders.Count)  return;
+        if (index >= sliderCallbacks.Count) return;
 
         var slider = sliders[index];
-        var oldHotBarPair = currentHotBar[index];
-        Debug.Log($"Setting up slider {index} for {pair.type} removing {oldHotBarPair.type}");
-        var callback = sliderCallbacks[index];
+    
+        // Unregister existing callback for this slider
         var existingCallback = sliderCallbacks[index];
         if (existingCallback != null) {
-            // Unregister the previous value-changed callback
-            slider.value = oldHotBarPair.data.DefaultValue;
-            Debug.Log($"Unregistering callback for {oldHotBarPair.type}");
             slider.UnregisterValueChangedCallback(existingCallback);
         }
 
-        currentHotBar[index] = pair;
-
+        // Setup slider properties
         slider.label = pair.type.ToString();
         slider.lowValue = pair.data.MinValue;
         slider.highValue = pair.data.MaxValue;
         slider.value = pair.data.DefaultValue;
 
+        // Create and register new callback
         EventCallback<ChangeEvent<float>> newCallback = evt => OnSliderChanged(evt, pair.type);
         sliderCallbacks[index] = newCallback;
         slider.RegisterValueChangedCallback(newCallback);
-        // TransitionExternal(oldHotBarPair.type, Setting.Default, 0.0f);
-        ApplyPostProcessingEffect(oldHotBarPair.type, oldHotBarPair.data.DefaultValue);
+    
+        // Apply the default value immediately
+        ApplyPostProcessingEffect(pair.type, pair.data.DefaultValue);
+    
+        Debug.Log($"Setup slider {index} for {pair.type} with callback registered");*/
+        
+        if (index < 0 || index >= sliders.Count) {
+            return;
+        }
+
+        if (index >= sliderCallbacks.Count) {
+            return;
+        }
+
+        var slider = sliders[index];
+
+        // Unregister existing callback for this slider
+        var existingCallback = sliderCallbacks[index];
+        if (existingCallback != null) {
+            slider.value = currentHotBar[index].data.DefaultValue;
+            slider.UnregisterValueChangedCallback(existingCallback);
+        }
+
+        // Setup slider properties
+        slider.label = pair.type.ToString();
+        slider.lowValue = pair.data.MinValue;
+        slider.highValue = pair.data.MaxValue;
+        slider.value = pair.data.DefaultValue;
+
+        // Create and register new callback
+        EventCallback<ChangeEvent<float>> newCallback = evt => OnSliderChanged(evt, pair.type);
+        sliderCallbacks[index] = newCallback;
+        slider.RegisterValueChangedCallback(newCallback);
+        
+        // Apply the default value immediately
+        slider.value = pair.data.DefaultValue;
+
+        Debug.Log($"Finished setting up slider {index} for {pair.type}");
+
     }
 
     private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect) {
@@ -514,6 +580,8 @@ public class GameManager : MonoBehaviour
 
     public void AddSlider(String effectName) {
         PostProcessingEffect effect = (PostProcessingEffect)Enum.Parse(typeof(PostProcessingEffect), effectName);
+        if (currentHotBar.Any(p => p.type == effect)) return;
+        if (unlockedSlots == maxHotBarSize) return;
         unlockedSlots++;
         if (currentHotBar.Count >= maxHotBarSize) return;
         HotBarPair newPair = postProcessingSliderValues.Find(p => p.type == effect);
