@@ -5,7 +5,6 @@
         <engine:VisualElement style="flex-grow: 1;">
             <engine:Button text="Start" name="start" class="button" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
             <engine:Button text="Level Select" name="LevelSelect" class="button" />
-            <engine:Button text="Settings" name="Settings" class="button" />
             <engine:Button text="Controls&#10;" name="Controls" class="button" />
             <engine:Button text="Exit" name="exit" class="button" />
         </engine:VisualElement>
