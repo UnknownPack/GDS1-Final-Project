@@ -384,6 +384,7 @@ public class GameManager : MonoBehaviour
             case PostProcessingEffect.ChromaticAberration: postProcessManager.ChangeChromaticAberration(value); break;
             case PostProcessingEffect.Bloom: postProcessManager.ChangeBloom(value); break;
         }
+        manageSliders();
     }
     #endregion
 
@@ -391,8 +392,6 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         HandleHotbarInput();
-        // I know it's inefficent but idgaf atp
-        manageSliders();
     }
 
  
