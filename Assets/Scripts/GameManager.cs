@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements; 
 using System;
 using System.Linq;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     private PostProccessManager postProcessManager; 
     private Dictionary<PostProcessingEffect, Coroutine> activeTransitions = new Dictionary<PostProcessingEffect, Coroutine>();
+    private Dictionary<PostProcessingEffect, Sprite> iconDictionary;
 
     [SerializeField] private GameObject transition;
     private PixelTransitionController transitionInstance;
@@ -129,7 +131,24 @@ public class GameManager : MonoBehaviour
         } 
         transitionInstance = FindFirstObjectByType<PixelTransitionController>(); 
         InitializeUIElements();
+        
+        iconDictionary = new Dictionary<PostProcessingEffect, Sprite>();
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites/MenuIconsNew");
+        // this shit is so fucking messy but can't organise sprites in folders in unity
+        iconDictionary[PostProcessingEffect.Brightness] = sprites[2];
+        iconDictionary[PostProcessingEffect.AntiAliasing] = sprites[6];
+        iconDictionary[PostProcessingEffect.MotionBlur] = sprites[5];
+        iconDictionary[PostProcessingEffect.FilmGrain] = sprites[4];
+        iconDictionary[PostProcessingEffect.ColorCorrection] = sprites[3];
+        iconDictionary[PostProcessingEffect.ChromaticAberration] = sprites[0];
+        iconDictionary[PostProcessingEffect.Bloom] = sprites[1];
+        
+        foreach (PostProcessingEffect effect in System.Enum.GetValues(typeof(PostProcessingEffect)))
+        {
+            Debug.Log(effect); // or do something with each effect
+        }
 
+        
         if (!PlayerPrefs.HasKey("CurrentLevelUnlocked"))
         {
             PlayerPrefs.SetInt("CurrentLevelUnlocked", 0);
@@ -340,6 +359,15 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Finished setting up slider {index} for {pair.type}");
 
     }
+    
+    private void manageSliders()
+    {
+        VisualElement image1 = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{1}").ElementAt(1);
+        VisualElement image2 = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{2}").ElementAt(1);
+        if(image1 == null || image2 == null) { Debug.LogError("Image of sliders not found");return; }
+        image1.style.backgroundImage = new StyleBackground(iconDictionary[currentHotBar[0].type]);
+        image2.style.backgroundImage = new StyleBackground(iconDictionary[currentHotBar[1].type]);
+    }
 
     private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect) {
         ApplyPostProcessingEffect(effect, evt.newValue);
@@ -360,8 +388,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Input Handling
-    private void Update() => HandleHotbarInput();
+    private void Update()
+    {
+        HandleHotbarInput();
+        // I know it's inefficent but idgaf atp
+        manageSliders();
+    }
 
+ 
     private void HandleHotbarInput() {
         HandleSelectionInput();
         HandleAdjustmentInput();
