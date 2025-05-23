@@ -107,6 +107,9 @@ MonoBehaviour:
       maxValue: 1
       defaultValue: 0
   sliderTutorialText: {fileID: 0}
+  maxHotBarSize: 7
+  unlockedSlots: 0
+  transition: {fileID: 0}
 --- !u!114 &3083590068151271766
 MonoBehaviour:
   m_ObjectHideFlags: 0

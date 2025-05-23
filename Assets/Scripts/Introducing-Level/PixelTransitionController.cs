@@ -55,10 +55,8 @@ public class PixelTransitionController : MonoBehaviour
             yield return null;
         }
         fadeMaterial.SetFloat("_Progress", 0f);
-        if(SceneManager.GetActiveScene().buildIndex > 1)
-            GameManager.Instance.SetUiDispaly(DisplayStyle.Flex);
-        else 
-            GameManager.Instance.SetUiDispaly(DisplayStyle.None); 
+        if (SceneManager.GetActiveScene().buildIndex > 1) ;
+        GameManager.Instance.SetUiDispaly(DisplayStyle.Flex); 
     }
 
     private IEnumerator FadeAndSwitchScene(string sceneName)
@@ -75,8 +73,9 @@ public class PixelTransitionController : MonoBehaviour
         }
 
         fadeMaterial.SetFloat("_Progress", 1f);
-        yield return new WaitForSeconds(0.2f); 
-        SceneManager.LoadScene(sceneName);
+        yield return new WaitForSeconds(0.2f);  
+        GameManager.Instance.SetUiDispaly(DisplayStyle.Flex);
+        SceneManager.LoadScene(sceneName); 
     }
     
     private IEnumerator FadeAndSwitchScene(int index)
@@ -93,7 +92,8 @@ public class PixelTransitionController : MonoBehaviour
         }
 
         fadeMaterial.SetFloat("_Progress", 1f);
-        yield return new WaitForSeconds(0.2f); 
+        yield return new WaitForSeconds(0.2f);  
+        GameManager.Instance.SetUiDispaly(DisplayStyle.Flex);
         SceneManager.LoadScene(index);
     }
 }
