@@ -679,7 +679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7215608963714352391, guid: 486a91773674e78409ac2ea44f62e3db, type: 3}
       propertyPath: triggers.Array.data[0].message
-      value: Another Tutorial Level - File grain, which can be jumped with this feature
+      value: Film Grain can make you jump
       objectReference: {fileID: 0}
     - target: {fileID: 7215608963714352391, guid: 486a91773674e78409ac2ea44f62e3db, type: 3}
       propertyPath: triggers.Array.data[1].message
