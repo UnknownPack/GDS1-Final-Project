@@ -453,16 +453,20 @@ public class GameManager : MonoBehaviour
         { 
             transitionInstance = FindFirstObjectByType<PixelTransitionController>();
             if(transitionInstance != null)
+            {
                 transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex);
+            }
             else
             { 
-                Debug.LogError($"No transition instance found again");
-                return;
+                // Fallback: If no transition system is available, just reload the scene directly
+                Debug.LogWarning("No transition instance found, falling back to direct scene reload");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
         else 
+        {
             transitionInstance.FadeToScene(SceneManager.GetActiveScene().buildIndex); 
-        
+        }
     }
     
     public void TransitionToDifferentScene(string scene) => transitionInstance.FadeToScene(scene);
