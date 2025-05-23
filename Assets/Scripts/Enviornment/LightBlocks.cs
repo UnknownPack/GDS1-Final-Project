@@ -12,6 +12,8 @@ public class LightBlocks : MonoBehaviour
     
     [SerializeField] private float enableThreshold = 0.9f;
     [SerializeField] private float disableThreshold = 0.1f;
+    private const float BRIGHTNESS_TOLERANCE = 0.025f;
+    private const float MAX_BRIGHTNESS = 2.0f;
 
     
     SpriteRenderer spriteRenderer;
@@ -52,27 +54,64 @@ public class LightBlocks : MonoBehaviour
     }
 
     public void ChangeBrightness(float brightness) {
-        if (spriteRenderer == null || boxCollider2D == null) {
+        if (spriteRenderer == null) {
             return;
         }
-        brightness = brightness / 2;
-        if (activationState == Activation.FullLight) 
-            currentAlpha = 1f - brightness;  
-        else 
-            currentAlpha = brightness;  
+
+        float normalizedBrightness = brightness / MAX_BRIGHTNESS;
+        Debug.Log($"Yellow Block - Raw Brightness: {brightness}, Normalized: {normalizedBrightness}, EnableThreshold: {enableThreshold}, DisableThreshold: {disableThreshold}");
+
+        if (activationState == Activation.FullLight) {
+            currentAlpha = 1.0f - normalizedBrightness;
+            
+            if (normalizedBrightness <= (disableThreshold + BRIGHTNESS_TOLERANCE)) {
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = true;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = true;
+                Debug.Log("Yellow Block Enabled");
+            }
+            else if (normalizedBrightness >= (enableThreshold - BRIGHTNESS_TOLERANCE)) {
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = false;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = false;
+                Debug.Log("Yellow Block Disabled");
+            }
+            else {
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = true;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = true;
+                Debug.Log("Yellow Block Default State (Enabled)");
+            }
+        } else {
+            currentAlpha = normalizedBrightness;
+            if (currentAlpha >= (enableThreshold - BRIGHTNESS_TOLERANCE)) {
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = true;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = true;
+                Debug.Log("Blue Block Enabled");
+            }
+            else if (currentAlpha <= (disableThreshold + BRIGHTNESS_TOLERANCE)) {
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = false;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = false;
+                Debug.Log("Blue Block Disabled");
+            }
+            else {
+                if(boxCollider2D != null)
+                    boxCollider2D.enabled = true;
+                if(polyCollider2D != null)
+                    polyCollider2D.enabled = true;
+                Debug.Log("Blue Block Default State (Enabled)");
+            }
+        }
         
         Color colour = spriteRenderer.color;
         spriteRenderer.color = new Color(colour.r, colour.g, colour.b, currentAlpha); 
-        if (Mathf.Approximately(currentAlpha, 1f)) 
-            if(boxCollider2D != null)
-                boxCollider2D.enabled = true;
-        if(polyCollider2D != null)
-            polyCollider2D.enabled = true; 
-        else if (Mathf.Approximately(currentAlpha, 0f)) 
-            if(boxCollider2D != null)
-                boxCollider2D.enabled = false;
-        if(polyCollider2D != null)
-            polyCollider2D.enabled = false;
     }
     
     private enum LightBlockState{

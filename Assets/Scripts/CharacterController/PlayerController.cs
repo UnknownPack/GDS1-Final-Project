@@ -134,12 +134,6 @@ public class PlayerController : MonoBehaviour
                 // rigidbody2D.AddForce(direction * forceProject, ForceMode2D.Impulse); 
             } 
         }  
-        if (other.gameObject.CompareTag("DeathBox"))
-        {
-            StartCoroutine(DeathScene()); 
-        }
-             
- 
     }
 
     IEnumerator DeathScene()

@@ -780,7 +780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4095828922072615086, guid: 0472bfd88e575cf46bb98cd41982939a, type: 3}
       propertyPath: m_Size.y
-      value: 26.774937
+      value: 31.478329
       objectReference: {fileID: 0}
     - target: {fileID: 4095828922072615086, guid: 0472bfd88e575cf46bb98cd41982939a, type: 3}
       propertyPath: m_Offset.x
@@ -788,7 +788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4095828922072615086, guid: 0472bfd88e575cf46bb98cd41982939a, type: 3}
       propertyPath: m_Offset.y
-      value: -10.115362
+      value: -7.7636657
       objectReference: {fileID: 0}
     - target: {fileID: 6108575304464096814, guid: 0472bfd88e575cf46bb98cd41982939a, type: 3}
       propertyPath: m_Name
@@ -2628,6 +2628,7 @@ GameObject:
   - component: {fileID: 1840145452}
   - component: {fileID: 1840145451}
   - component: {fileID: 1840145450}
+  - component: {fileID: 1840145453}
   m_Layer: 0
   m_Name: NextLevelTrigger
   m_TagString: BossNextLevel
@@ -2751,6 +2752,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1840145453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840145449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d827c667acfa25a4c8ad440349c2371a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PixelPrefab: {fileID: 5081392259240308480, guid: a32303822b4ddd04297272656d1237fe, type: 3}
 --- !u!1001 &1887326565
 PrefabInstance:
   m_ObjectHideFlags: 0
