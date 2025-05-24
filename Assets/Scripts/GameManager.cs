@@ -348,6 +348,9 @@ public class GameManager : MonoBehaviour
         slider.highValue = pair.data.MaxValue;
         slider.value = pair.data.DefaultValue;
 
+        VisualElement image = quickAccessDocument.rootVisualElement.Q<VisualElement>($"image{index + 1}");
+        image.style.backgroundImage = new StyleBackground(iconDictionary[pair.type]);
+
         // Create and register new callback
         EventCallback<ChangeEvent<float>> newCallback = evt => OnSliderChanged(evt, pair.type);
         sliderCallbacks[index] = newCallback;
@@ -362,11 +365,11 @@ public class GameManager : MonoBehaviour
     
     private void manageSliders()
     {
-        VisualElement image1 = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{1}").ElementAt(1);
+        /*VisualElement image1 = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{1}").ElementAt(1);
         VisualElement image2 = quickAccessDocument.rootVisualElement.Q<Slider>($"hotkey{2}").ElementAt(1);
         if(image1 == null || image2 == null) { Debug.LogError("Image of sliders not found");return; }
         image1.style.backgroundImage = new StyleBackground(iconDictionary[currentHotBar[0].type]);
-        image2.style.backgroundImage = new StyleBackground(iconDictionary[currentHotBar[1].type]);
+        image2.style.backgroundImage = new StyleBackground(iconDictionary[currentHotBar[1].type]);*/
     }
 
     private void OnSliderChanged(ChangeEvent<float> evt, PostProcessingEffect effect) {
@@ -457,7 +460,7 @@ public class GameManager : MonoBehaviour
             next = current == Setting.Max ? (minEqualsDefault ? Setting.Min : Setting.Default) :
                 current == Setting.Default ? Setting.Min : Setting.Min;
         }
-
+        Debug.Log("hotbar type " + pair.type + " new value " + next);
         TransitionExternal(pair.type, next, 0.1f);
     }
 
