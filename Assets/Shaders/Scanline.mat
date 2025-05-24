@@ -55,7 +55,7 @@ Material:
     - _FlickerAmount: 0.1
     - _FlickerSpeed: 60
     - _GhostingAmount: 0.0056
-    - _Intensity: 0
+    - _Intensity: 1
     - _JitterAmount: 0.00023
     - _JitterSpeed: 50
     - _LineCount: 14.6
