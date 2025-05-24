@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TypingSequenceController : MonoBehaviour
 {
@@ -27,16 +28,7 @@ public class TypingSequenceController : MonoBehaviour
 
             currentLineIndex++;
         }
-
-        TriggerPixelFade();
-    }
-
-    void TriggerPixelFade()
-    {
-        PixelFadeController pixelFade = FindFirstObjectByType<PixelFadeController>();
-        if (pixelFade != null)
-        {
-            pixelFade.StartFade();
-        }
+        
+        SceneManager.LoadScene("SliderIntroScene");
     }
 }

@@ -126,6 +126,10 @@ public class PlayerController : MonoBehaviour
         { 
             rigidbody2D.AddForce(transform.up * GreenBouncePadPower * 10, ForceMode2D.Impulse); 
         } 
+        if (other.gameObject.CompareTag("Spikes") || other.gameObject.CompareTag("DeathBox")) 
+        { 
+            StartCoroutine(DeathScene()); 
+        }
         else{
             if (rb != null)
             {
@@ -146,11 +150,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        if (other.CompareTag("Spikes") || other.CompareTag("DeathBox")) 
-        { 
-            StartCoroutine(DeathScene()); 
-        }
-
         if (other.CompareTag("Pedestal"))
         {
             animator.SetTrigger("Interact");
