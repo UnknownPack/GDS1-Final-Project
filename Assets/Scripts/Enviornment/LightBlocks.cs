@@ -36,7 +36,7 @@ public class LightBlocks : MonoBehaviour
                     polyCollider2D.enabled = true; 
                 break;
             case LightBlockState.DefaultDisabled:
-                currentAlpha = 0f;
+                currentAlpha = 0.3f;
                 if(boxCollider2D != null)
                     boxCollider2D.enabled = false;
                 if(polyCollider2D != null)
@@ -79,11 +79,13 @@ public class LightBlocks : MonoBehaviour
                 Debug.Log("Yellow Block Disabled");
             }
             else {
+                // Return to starting state when in default brightness range
+                bool shouldBeEnabled = (startingState == LightBlockState.DefaultEnabled);
                 if(boxCollider2D != null)
-                    boxCollider2D.enabled = true;
+                    boxCollider2D.enabled = shouldBeEnabled;
                 if(polyCollider2D != null)
-                    polyCollider2D.enabled = true;
-                Debug.Log("Yellow Block Default State (Enabled)");
+                    polyCollider2D.enabled = shouldBeEnabled;
+                Debug.Log($"Yellow Block Default State ({(shouldBeEnabled ? "Enabled" : "Disabled")})");
             }
         } else {
             currentAlpha = normalizedBrightness;
@@ -102,11 +104,13 @@ public class LightBlocks : MonoBehaviour
                 Debug.Log("Blue Block Disabled");
             }
             else {
+                // Return to starting state when in default brightness range
+                bool shouldBeEnabled = (startingState == LightBlockState.DefaultEnabled);
                 if(boxCollider2D != null)
-                    boxCollider2D.enabled = true;
+                    boxCollider2D.enabled = shouldBeEnabled;
                 if(polyCollider2D != null)
-                    polyCollider2D.enabled = true;
-                Debug.Log("Blue Block Default State (Enabled)");
+                    polyCollider2D.enabled = shouldBeEnabled;
+                Debug.Log($"Blue Block Default State ({(shouldBeEnabled ? "Enabled" : "Disabled")})");
             }
         }
         
