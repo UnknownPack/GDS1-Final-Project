@@ -140,6 +140,14 @@ public class PlayerController : MonoBehaviour
         }  
     }
 
+    private void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.CompareTag("Spikes") || other.gameObject.CompareTag("DeathBox")) 
+        { 
+            StartCoroutine(DeathScene()); 
+        }
+    }
+
     IEnumerator DeathScene()
     { 
         animator.Play("Death"); 
