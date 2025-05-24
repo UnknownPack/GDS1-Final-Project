@@ -1026,6 +1026,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1309409375}
     m_Modifications:
+    - target: {fileID: 349655924673544147, guid: eed64a6c2ceb2ae4fb2e2ffce04ce5ac, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: efac17281c1f1a14e899489524d038c8, type: 2}
     - target: {fileID: 8511070562854230623, guid: eed64a6c2ceb2ae4fb2e2ffce04ce5ac, type: 3}
       propertyPath: m_Name
       value: FloorClosed (2)
@@ -2556,6 +2560,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 899743901896727314, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a8a9e19dec7e8ba4aad09076830db6e1, type: 2}
     - target: {fileID: 3048559084950410238, guid: 80defc4d9a75c2940b83eee5e7f5378b, type: 3}
       propertyPath: m_Name
       value: Door
@@ -3006,6 +3014,10 @@ PrefabInstance:
     - target: {fileID: 7540350546025439166, guid: 42981eec54ab347468da612002336b1f, type: 3}
       propertyPath: fullText
       value: Stand here and get slider
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540350546025439166, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: typingSpeed
+      value: 0.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

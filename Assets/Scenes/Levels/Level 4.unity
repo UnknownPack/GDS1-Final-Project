@@ -2924,6 +2924,10 @@ PrefabInstance:
       propertyPath: fullText
       value: Stand here and get slider
       objectReference: {fileID: 0}
+    - target: {fileID: 7540350546025439166, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: typingSpeed
+      value: 0.01
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
