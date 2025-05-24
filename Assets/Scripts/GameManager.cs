@@ -243,18 +243,38 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"funny complete - unlockedSlots: {unlockedSlots}, currentHotBar.Count: {currentHotBar.Count}, sliders.Count: {sliders.Count}");
-
+        
+        VisualElement helperIcon1 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons1");
+        VisualElement helperIcon2 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons2");
         // Setup ALL unlocked sliders with proper callbacks
         Debug.Log($"funny complete - unlockedSlots: {unlockedSlots}, currentHotBar.Count: {currentHotBar.Count}, sliders.Count: {sliders.Count}");
         for (int i = 0; i < unlockedSlots && i < currentHotBar.Count && i < sliders.Count; i++) {
             SetupSlider(i, currentHotBar[i]);
             HideSlider(i, true);
             Debug.Log($"Setting up unlocked slider {i}: {currentHotBar[i].type}");
+            if (i == 0)
+            {
+                helperIcon1.style.display = DisplayStyle.Flex;
+            }
+
+            if (i == 1)
+            {
+                helperIcon2.style.display = DisplayStyle.Flex;
+            }
+            
         }
 
         // Hide sliders that aren't unlocked
         for (int i = unlockedSlots; i < sliders.Count; i++) {
             HideSlider(i, false);
+            if (i == 0)
+            {
+                helperIcon1.style.display = DisplayStyle.None;
+            }
+            if (i == 1)
+            {
+                helperIcon2.style.display = DisplayStyle.None;
+            }
         }
 
         // Reset all hotbar effects to default
@@ -655,6 +675,9 @@ public class GameManager : MonoBehaviour
         tempSlider.highValue = pair.data.MaxValue;
         tempSlider.value = pair.data.DefaultValue;
         tempSlider.label = effect.ToString();
+        
+        VisualElement image = quickAccessDocument.rootVisualElement.Q<VisualElement>("Tempimage");
+        image.style.backgroundImage = new StyleBackground(iconDictionary[effect]);
 
         // Re-hook callback
         tempSlider.UnregisterValueChangedCallback(OnTempSliderChanged);
@@ -662,8 +685,8 @@ public class GameManager : MonoBehaviour
 
         // Show and enable interaction
         tempSlider.style.display = DisplayStyle.Flex;
-        tempSlider.SetEnabled(true);
-        tempSlider.pickingMode = PickingMode.Position;
+        tempSlider.SetEnabled(false);
+        tempSlider.pickingMode = PickingMode.Ignore;
 
         return tempSlider;
     }
