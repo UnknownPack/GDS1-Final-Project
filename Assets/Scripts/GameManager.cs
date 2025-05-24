@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
             tempSlider.SetEnabled(false);
         } 
         transitionInstance = FindFirstObjectByType<PixelTransitionController>(); 
-        InitializeUIElements();
+        
         
         iconDictionary = new Dictionary<PostProcessingEffect, Sprite>();
         Sprite[] sprites = Resources.LoadAll<Sprite>("Sprites/MenuIconsNew");
@@ -142,6 +142,8 @@ public class GameManager : MonoBehaviour
         iconDictionary[PostProcessingEffect.ColorCorrection] = sprites[3];
         iconDictionary[PostProcessingEffect.ChromaticAberration] = sprites[0];
         iconDictionary[PostProcessingEffect.Bloom] = sprites[1];
+        
+        InitializeUIElements();
         
         foreach (PostProcessingEffect effect in System.Enum.GetValues(typeof(PostProcessingEffect)))
         {
@@ -369,6 +371,7 @@ public class GameManager : MonoBehaviour
         slider.value = pair.data.DefaultValue;
 
         VisualElement image = quickAccessDocument.rootVisualElement.Q<VisualElement>($"image{index + 1}");
+        Debug.Log(iconDictionary[pair.type]);
         image.style.backgroundImage = new StyleBackground(iconDictionary[pair.type]);
 
         // Create and register new callback
