@@ -3011,15 +3011,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: WordSpaceText
       objectReference: {fileID: 0}
+    - target: {fileID: 3485662057870749350, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: m_text
+      value: 'Stand here and get slider
+
+
+        Use Q W E to quickly switch values'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3485662057870749350, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: m_margin.w
+      value: -74.03579
+      objectReference: {fileID: 0}
+    - target: {fileID: 3485662057870749350, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: m_margin.x
+      value: 7.654167
+      objectReference: {fileID: 0}
+    - target: {fileID: 3485662057870749350, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7540350546025439166, guid: 42981eec54ab347468da612002336b1f, type: 3}
       propertyPath: fullText
-      value: Stand here and get slider
+      value: 'Stand here and get slider
+
+
+        Use Q W E to quickly switch values'
       objectReference: {fileID: 0}
     - target: {fileID: 7540350546025439166, guid: 42981eec54ab347468da612002336b1f, type: 3}
       propertyPath: typingSpeed
       value: 0.01
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8120682473739104138, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -263
+      objectReference: {fileID: 0}
+    - target: {fileID: 8120682473739104138, guid: 42981eec54ab347468da612002336b1f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 69
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7540350546025439166, guid: 42981eec54ab347468da612002336b1f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
