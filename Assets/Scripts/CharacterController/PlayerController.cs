@@ -120,7 +120,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        
         Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
         if(other.gameObject.CompareTag("Bounce"))
         { 
@@ -142,6 +141,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay(Collision other)
     {
+        if(other.gameObject.CompareTag("Bounce"))
+        { 
+            rigidbody2D.AddForce(transform.up * GreenBouncePadPower * 10, ForceMode2D.Impulse); 
+        } 
         if (other.gameObject.CompareTag("Spikes") || other.gameObject.CompareTag("DeathBox")) 
         { 
             StartCoroutine(DeathScene()); 
