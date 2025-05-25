@@ -102,6 +102,9 @@ public class BossEventTrigger : MonoBehaviour
         playerRb.constraints = RigidbodyConstraints2D.None;
         playerController.enabled = true;
         cameraFollow.enabled = true;
+        
+        // Wait a bit before destroying to let boss movement complete
+        yield return new WaitForSeconds(5f);
         Destroy(gameObject);
     }
 
@@ -113,25 +116,23 @@ public class BossEventTrigger : MonoBehaviour
             yield break;
         }
 
-        Vector3 startPosition = boss.transform.position;
-        Vector3 endPosition = bossTarget.position;
-        
-        float distance = Vector3.Distance(startPosition, endPosition);
-        float totalTime = distance / bossMoveSpeed;
-        float elapsedTime = 0f;
+        Vector3 targetPosition = bossTarget.position;
+        float stoppingDistance = 0.1f; // How close to consider "reached"
 
-        while (elapsedTime < totalTime)
+        // Move until we reach the target position
+        while (Vector3.Distance(boss.transform.position, targetPosition) > stoppingDistance)
         {
-            elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / totalTime;
-            
-            // Use smooth interpolation
-            boss.transform.position = Vector3.Lerp(startPosition, endPosition, progress);
+            // Move towards target at constant speed
+            boss.transform.position = Vector3.MoveTowards(
+                boss.transform.position, 
+                targetPosition, 
+                bossMoveSpeed * Time.deltaTime
+            );
             yield return null;
         }
 
         // Ensure boss reaches exact target position
-        boss.transform.position = endPosition;
+        boss.transform.position = targetPosition;
         Debug.Log("Boss has reached target position!");
     }
 }
