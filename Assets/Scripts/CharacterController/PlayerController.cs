@@ -125,6 +125,10 @@ public class PlayerController : MonoBehaviour
         { 
             rigidbody2D.AddForce(transform.up * GreenBouncePadPower * 10, ForceMode2D.Impulse); 
         } 
+        if (other.gameObject.CompareTag("Danger")) 
+        { 
+            StartCoroutine(DeathScene()); 
+        }
         else{
             if (rb != null)
             {
@@ -141,10 +145,7 @@ public class PlayerController : MonoBehaviour
         { 
             rigidbody2D.AddForce(transform.up * GreenBouncePadPower * 10, ForceMode2D.Impulse); 
         } 
-        if (other.gameObject.CompareTag("Danger")) 
-        { 
-            StartCoroutine(DeathScene()); 
-        }
+
     }
 
     IEnumerator DeathScene()
