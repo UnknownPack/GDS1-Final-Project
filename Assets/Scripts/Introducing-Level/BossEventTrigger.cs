@@ -14,11 +14,14 @@ public class BossEventTrigger : MonoBehaviour
     [Header("Target")]
     public Transform cameraTarget;
 
-    [Header("Stay Time")]
+    [Header("HoldTime")]
     public float holdTime = 10f;
 
-    [Header("Camera Speed")]
+    [Header("Duration")]
     public float panDuration = 1f;
+
+    [Header("Delay")]
+    public float triggerDelay = 1f;
 
     private Vector3 camStartPos;
     private bool triggered = false;
@@ -35,11 +38,17 @@ public class BossEventTrigger : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         triggered = true;
 
+        StartCoroutine(DelayedStart());
+    }
+
+    private IEnumerator DelayedStart()
+    {
+        yield return new WaitForSeconds(triggerDelay);
+
         camStartPos = playerController.transform.position
                     + cameraFollow.offset;
 
         cameraFollow.enabled = false;
-
         playerController.enabled = false;
         playerRb.linearVelocity = Vector2.zero;
         playerRb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -78,10 +87,10 @@ public class BossEventTrigger : MonoBehaviour
                 Vector3.Lerp(returnStart, returnEnd, frac);
             yield return null;
         }
+
         playerRb.constraints = RigidbodyConstraints2D.None;
         playerController.enabled = true;
         cameraFollow.enabled = true;
-
         Destroy(gameObject);
     }
 }
