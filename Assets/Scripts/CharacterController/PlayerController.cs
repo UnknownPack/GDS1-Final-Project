@@ -204,7 +204,9 @@ public class PlayerController : MonoBehaviour
     #endregion
     #region Public Methods
     public void SetGravityStatus(bool status){noGravity = status; rigidbody2D.gravityScale = 0;}
-    public void SetJumpStatus(bool status){canJump = status;}
+    public void SetJumpStatus(bool status){canJump = status; animator.SetBool("Jump", false);
+        currentJumpCharge = 0;
+    }
 
     #endregion
 }
