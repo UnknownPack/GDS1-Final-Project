@@ -186,6 +186,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("DeathBox") || other.gameObject.CompareTag("Spikes")) 
+        { 
+            StartCoroutine(DeathScene()); 
+        }
+    }
+
     #region Helper Methods
     private bool IsGrounded() 
     { 
