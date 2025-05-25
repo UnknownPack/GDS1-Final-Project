@@ -14,15 +14,8 @@ public class MainMenu : MonoBehaviour
         uiDocument = GetComponent<UIDocument>();
         playButton = uiDocument.rootVisualElement.Q<Button>("start");
         exitButton = uiDocument.rootVisualElement.Q<Button>("exit");
-        //levelSelect = uiDocument.rootVisualElement.Q<Button>("LevelSelect");
         levelSelector = uiDocument.rootVisualElement.Q<VisualElement>("LevelSelects");
         levelSelector.style.display = DisplayStyle.None;
-        /*
-        levelSelect.clicked += () =>
-        {
-            levelSelector.style.display = DisplayStyle.Flex;
-        };
-        */
         playButton.clicked += () =>
         {
             SceneManager.LoadScene("Plot");
