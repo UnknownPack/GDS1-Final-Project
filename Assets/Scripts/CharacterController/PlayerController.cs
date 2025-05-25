@@ -183,6 +183,10 @@ public class PlayerController : MonoBehaviour
             int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
             SceneManager.LoadScene(nextSceneIndex);
         }
+        if (other.gameObject.CompareTag("DeathBox") || other.gameObject.CompareTag("Spikes")) 
+        { 
+            StartCoroutine(DeathScene()); 
+        }
     }
 
     #region Helper Methods
