@@ -21,9 +21,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForceHorizontal = 25f; 
     [SerializeField] private float GreenBouncePadPower = 50f; 
     
+    [Header("Boss Enter Settings")]
+    [SerializeField] private float freezeTime = 3f;
+    
     private Vector2 currentMovementVector;
     private float currentSpeed, currentJumpCharge = 0, currentJumpDirection = 0;
     private bool isCharging = false; 
+    private bool isFrozen = false;
     
     [SerializeField]private bool noGravity = false;
 
@@ -50,6 +54,12 @@ public class PlayerController : MonoBehaviour
     } 
     void Update()
     { 
+        // If player is frozen, don't process movement input
+        if (isFrozen)
+        {
+            rigidbody2D.linearVelocity = Vector2.zero;
+            return;
+        }
         
         currentMovementVector = moveAction.ReadValue<Vector2>();
         if (!noGravity)
@@ -156,6 +166,14 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.RestartLevel();
     }
 
+    IEnumerator FreezePlayer()
+    {
+        isFrozen = true;
+        rigidbody2D.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(freezeTime);
+        isFrozen = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.CompareTag("Pedestal"))
@@ -183,6 +201,10 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("DeathBox") || other.gameObject.CompareTag("Spikes")) 
         { 
             StartCoroutine(DeathScene()); 
+        }
+        if (other.gameObject.CompareTag("BossEnter"))
+        {
+            StartCoroutine(FreezePlayer());
         }
     }
 
