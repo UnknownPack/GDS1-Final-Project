@@ -251,11 +251,16 @@ public class PostProccessManager : MonoBehaviour
         } 
         playerController.SetGravityStatus(value >= 0.75f); 
     }
+    
+
     public void ChangeBloom(float value)
     {
-        bloom.intensity.value = value;
-        //add method to crash
+        // Exponential ease-in: starts low and ramps up quickly at the end
+        float t = 1f - Mathf.Pow(2f, -10f * value); // value ∈ [0,1]
+        /*bloom.intensity.value = Mathf.Lerp(0f, 1000f, t);*/
+        bloom.intensity.value = Mathf.Lerp(0f, 100000000000f, t);
     }
+
     
     public ColourCorrectionBlocks.ColorChannelMatrix GetCurrentColorChannelMatrix(){return currentColorChannelMatrix;}
     

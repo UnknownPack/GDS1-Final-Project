@@ -411,7 +411,30 @@ public class GameManager : MonoBehaviour
             case PostProcessingEffect.Bloom: postProcessManager.ChangeBloom(value); break;
         }
         manageSliders();
+        CheckValues();
     }
+
+    private void CheckValues()
+    {
+        if (currentHotBar.Count != maxHotBarSize) return;
+        int counter = 0;
+        for (int i = 0; i < maxHotBarSize; i++)
+        {
+            if (sliders[i].value == currentHotBar[i].data.MaxValue) counter++;
+        }
+
+        if (counter == maxHotBarSize)
+        {
+            StartCoroutine(FinalScene());
+        }
+    }
+
+    private IEnumerator FinalScene()
+    {
+        yield return new WaitForSeconds(1f);
+        LoadNextScene();
+    }
+    
     #endregion
 
     #region Input Handling
