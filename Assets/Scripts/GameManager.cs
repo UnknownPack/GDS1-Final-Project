@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private int maxHotBarSize = 7;
     [SerializeField]
     private int unlockedSlots = 2;
-
+    [SerializeField]
     private float waitForSlidersToDissapear = 2f;
     private int selectedSliderIndex = 0;
     
