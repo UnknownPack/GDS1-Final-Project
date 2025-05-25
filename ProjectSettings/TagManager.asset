@@ -17,6 +17,8 @@ TagManager:
   - AdditionPedestal
   - BossNextLevel
   - BossEnter
+  - Boss
+  - BossTargetPos
   layers:
   - Default
   - TransparentFX

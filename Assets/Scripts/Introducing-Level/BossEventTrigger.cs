@@ -11,25 +11,33 @@ public class BossEventTrigger : MonoBehaviour
     [Header("Camera Follow Script")]
     public CameraFollow cameraFollow;
 
-    [Header("Target")]
+    [Header("Camera Target")]
     public Transform cameraTarget;
 
-    [Header("HoldTime")]
+    [Header("Boss Settings")]
+    public Transform bossTarget;
+    public float bossMoveSpeed = 2f;
+
+    [Header("Timing")]
     public float holdTime = 10f;
-
-    [Header("Duration")]
     public float panDuration = 1f;
-
-    [Header("Delay")]
     public float triggerDelay = 1f;
 
     private Vector3 camStartPos;
     private bool triggered = false;
+    private GameObject boss;
 
     private void Awake()
     {
         var col = GetComponent<BoxCollider2D>();
         col.isTrigger = true;
+        
+        // Find the boss GameObject
+        boss = GameObject.FindWithTag("Boss");
+        if (boss == null)
+        {
+            Debug.LogWarning("BossEventTrigger: No GameObject with 'Boss' tag found!");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -76,6 +84,9 @@ public class BossEventTrigger : MonoBehaviour
 
         yield return new WaitForSeconds(holdTime);
 
+        // Start boss movement and camera return simultaneously
+        StartCoroutine(MoveBossToTarget());
+
         t = 0f;
         Vector3 returnStart = Camera.main.transform.position;
         Vector3 returnEnd = camStartPos;
@@ -92,5 +103,35 @@ public class BossEventTrigger : MonoBehaviour
         playerController.enabled = true;
         cameraFollow.enabled = true;
         Destroy(gameObject);
+    }
+
+    private IEnumerator MoveBossToTarget()
+    {
+        if (boss == null || bossTarget == null)
+        {
+            Debug.LogWarning("BossEventTrigger: Boss or Boss Target is null, cannot move boss!");
+            yield break;
+        }
+
+        Vector3 startPosition = boss.transform.position;
+        Vector3 endPosition = bossTarget.position;
+        
+        float distance = Vector3.Distance(startPosition, endPosition);
+        float totalTime = distance / bossMoveSpeed;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < totalTime)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / totalTime;
+            
+            // Use smooth interpolation
+            boss.transform.position = Vector3.Lerp(startPosition, endPosition, progress);
+            yield return null;
+        }
+
+        // Ensure boss reaches exact target position
+        boss.transform.position = endPosition;
+        Debug.Log("Boss has reached target position!");
     }
 }
