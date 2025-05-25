@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
         { 
             rigidbody2D.AddForce(transform.up * GreenBouncePadPower * 10, ForceMode2D.Impulse); 
         } 
-        if (other.gameObject.CompareTag("Spikes") || other.gameObject.CompareTag("DeathBox")) 
+        if (other.gameObject.CompareTag("DeathBox")) 
         { 
             StartCoroutine(DeathScene()); 
         }
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.CompareTag("Spikes") || other.gameObject.CompareTag("DeathBox")) 
+        if (other.gameObject.CompareTag("DeathBox")) 
         { 
             StartCoroutine(DeathScene()); 
         }
