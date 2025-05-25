@@ -26,6 +26,9 @@ public class PauseView : MonoBehaviour
         reset = uiDocument.rootVisualElement.Q<Button>("Restart");
         reset.clicked += () => {
             Debug.Log("Reset button clicked"); 
+            Time.timeScale = 1f;
+            currentlyPaused = false;
+            uiDocument.rootVisualElement.style.display = DisplayStyle.None; 
             GameManager.Instance.RestartLevel(); 
         }; 
         
