@@ -17,6 +17,7 @@ TagManager:
   - AdditionPedestal
   - BossNextLevel
   - BossEnter
+  - HideSliders
   layers:
   - Default
   - TransparentFX
