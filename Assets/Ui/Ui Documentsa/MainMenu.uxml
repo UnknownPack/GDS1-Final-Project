@@ -5,7 +5,6 @@
             <engine:Label name="Label" style="padding-bottom: 0; padding-top: 0; padding-right: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 75px; margin-left: 0; font-size: 150px; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Electronic%20Highway%20Sign.TTF?fileID=12800000&amp;guid=8a2b9e2a607dd2143b58c44bc32410b4&amp;type=3#Electronic Highway Sign&quot;); -unity-text-align: middle-center; -unity-text-outline-color: rgb(89, 170, 64); -unity-text-outline-width: 5px; background-color: rgba(151, 151, 151, 0); justify-content: flex-start; align-self: center; align-content: center; background-image: url(&quot;project://database/Assets/Sprites/MenuFiles/postprocesslogo.png?fileID=2800000&amp;guid=d7e1781e93b4c8b49938db828e2e54f4&amp;type=3#postprocesslogo&quot;); width: 325%; height: 35%; max-height: 35%; min-height: 35%;" />
             <engine:VisualElement style="flex-grow: 1; justify-content: flex-start; flex-direction: column; align-items: flex-start;">
                 <engine:Button text="Start" name="start" class="button" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-                <engine:Button text="Level Select" name="LevelSelect" enabled="true" class="button" />
                 <engine:Button text="Exit" name="exit" class="button" />
             </engine:VisualElement>
         </engine:VisualElement>
