@@ -547,7 +547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7036847696734677253, guid: 27917b41c0e03f238a26a4583f2a79db, type: 3}
       propertyPath: unlockedSlots
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
