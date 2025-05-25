@@ -123,9 +123,6 @@ public class PlayerController : MonoBehaviour
         
         float dir = (lastDirection > 0) ? 0 : 180;
         transform.rotation = Quaternion.Euler(0f, dir, 0f);
-
-        if (Camera.main != null)
-            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10f);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
