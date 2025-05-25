@@ -542,12 +542,14 @@ public class GameManager : MonoBehaviour
         {
             HideSlider(i, false);
         }
-        currentHotBar.Clear();
+
+        unlockedSlots = 0;
+        UpdateUIReferences();
         
-        VisualElement helperIcon1 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons1");
+        /*VisualElement helperIcon1 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons1");
         VisualElement helperIcon2 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons2");
         helperIcon1.style.display = DisplayStyle.None;
-        helperIcon2.style.display = DisplayStyle.None;
+        helperIcon2.style.display = DisplayStyle.None;*/
         
     }
 
