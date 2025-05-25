@@ -2571,7 +2571,7 @@ Transform:
   m_GameObject: {fileID: 1442764435}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.26508808, y: 2.2842877, z: -0.04967347}
+  m_LocalPosition: {x: 0.26508808, y: 0.36, z: -0.04967347}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2807,7 +2807,7 @@ MonoBehaviour:
   bossMoveSpeed: 15
   holdTime: 10
   panDuration: 1
-  triggerDelay: 1
+  triggerDelay: 0
 --- !u!61 &1573797189
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3298,7 +3298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7036847696734677253, guid: 27917b41c0e03f238a26a4583f2a79db, type: 3}
       propertyPath: unlockedSlots
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
