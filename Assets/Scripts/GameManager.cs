@@ -542,6 +542,7 @@ public class GameManager : MonoBehaviour
         {
             HideSlider(i, false);
         }
+        currentHotBar.Clear();
         
         VisualElement helperIcon1 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons1");
         VisualElement helperIcon2 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons2");
