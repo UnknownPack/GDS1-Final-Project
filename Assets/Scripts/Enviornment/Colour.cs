@@ -41,7 +41,7 @@ public class Colour : MonoBehaviour
         switch (currentState)
         {
             case ColorState.Red: 
-                gameObject.tag = "DeathBox";
+                gameObject.tag = "Danger";
                 return Color.red;
             case ColorState.Green: 
                 gameObject.tag = "Bounce";
