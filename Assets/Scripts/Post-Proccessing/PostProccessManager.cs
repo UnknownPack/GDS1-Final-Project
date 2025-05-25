@@ -106,9 +106,13 @@ public class PostProccessManager : MonoBehaviour
         //float brightnessValue = brightnessSlider.value;
         if (value > 1) {
             // brightnessValue = 1 + (brightnessValue - 1)/;
-            value = ScaleBrightness(value, finalBrightness);
+            light2D.intensity = ScaleBrightness(value, finalBrightness);
         }
-        light2D.intensity = value;
+        else
+        {
+            light2D.intensity = Mathf.Lerp(0.1f, 1,value);
+        }
+        
     }
 
     public void ChangeMotionBlur (float value) {    

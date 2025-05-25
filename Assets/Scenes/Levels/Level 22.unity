@@ -2024,8 +2024,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952291731928152b0b7ebc0ea1e8edb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelTime: 1
-  waitTime: 2
+  travelTime: 3
+  waitTime: 0
   initialDelay: 1
   targetPositions:
   - {x: 2.5, y: -5}
