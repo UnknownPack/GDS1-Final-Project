@@ -19,7 +19,7 @@ PrefabInstance:
     - target: {fileID: 4124058730738416425, guid: 3511fd1a71087da4081182d685ec5d38, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: e6680d2ca5c5fa246ae5e519c8acc4ce, type: 3}
+      objectReference: {fileID: -600398653, guid: b99edce40c5192e47bc11f9f38feb4d9, type: 3}
     - target: {fileID: 4543307821599209606, guid: 3511fd1a71087da4081182d685ec5d38, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -67,6 +67,10 @@ PrefabInstance:
     - target: {fileID: 7587229121477721480, guid: 3511fd1a71087da4081182d685ec5d38, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7587229121477721480, guid: 3511fd1a71087da4081182d685ec5d38, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -123,7 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d827c667acfa25a4c8ad440349c2371a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PixelPrefab: {fileID: 0}
 --- !u!1001 &4760795648260804239
 PrefabInstance:
   m_ObjectHideFlags: 0
