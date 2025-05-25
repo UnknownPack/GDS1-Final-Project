@@ -1004,6 +1004,7 @@ MonoBehaviour:
   - You will erode the core of this computer, layer by layer
   - Eventually, take control of its graphics processing unit (GPU)
   - Make it overheat, crash, and melt down
+  startDelay: 0
   delayBetweenLines: 1
 --- !u!1001 &4021396839719481317
 PrefabInstance:
