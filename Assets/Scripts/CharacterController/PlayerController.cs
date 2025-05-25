@@ -203,6 +203,10 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(FreezePlayer());
         }
+        if (other.gameObject.CompareTag("HideSliders"))
+        {
+            GameManager.Instance.StartHideSliders();
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)

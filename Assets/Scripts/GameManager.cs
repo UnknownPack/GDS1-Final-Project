@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     private int maxHotBarSize = 7;
     [SerializeField]
     private int unlockedSlots = 2;
+
+    private float waitForSlidersToDissapear = 2f;
     private int selectedSliderIndex = 0;
     
     private Coroutine sliderTutorialCoroutine;
@@ -527,6 +529,31 @@ public class GameManager : MonoBehaviour
         }
         Debug.LogError($"Effect not found: {effect}");
         return 0;
+    }
+
+    public void StartHideSliders()
+    {
+        StartCoroutine(HideSlidersRoutine());
+    }
+
+    private void HideSliders()
+    {
+        for (int i = 0; i < currentHotBar.Count; i++)
+        {
+            HideSlider(i, false);
+        }
+        
+        VisualElement helperIcon1 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons1");
+        VisualElement helperIcon2 = quickAccessDocument.rootVisualElement.Q<VisualElement>("HelperIcons2");
+        helperIcon1.style.display = DisplayStyle.None;
+        helperIcon2.style.display = DisplayStyle.None;
+        
+    }
+
+    private IEnumerator HideSlidersRoutine()
+    {
+        yield return new WaitForSeconds(waitForSlidersToDissapear);
+        HideSliders();
     }
 
     public void RestartLevel()
