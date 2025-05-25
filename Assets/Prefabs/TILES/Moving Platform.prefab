@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7822427441095118706}
   - component: {fileID: 5588981741306070529}
   - component: {fileID: 2911388452515290046}
+  - component: {fileID: 4102430099550658734}
   m_Layer: 0
   m_Name: Moving Platform
   m_TagString: MovingPlatform
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5813019245316063845, guid: e15f81efa3b0c844ab4daff5017c2af7, type: 3}
+  m_Sprite: {fileID: 8727268622427413513, guid: e9b82ef710f977f40b09e50be2f57914, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -147,8 +148,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952291731928152b0b7ebc0ea1e8edb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  travelTime: 1
   waitTime: 2
+  initialDelay: 1
   targetPositions:
   - {x: 18.5, y: -1}
   - {x: 10.5, y: -1}
+  detectorPair: {fileID: 0}
+--- !u!50 &4102430099550658734
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8570806453520723374}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
