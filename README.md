@@ -3,6 +3,6 @@ This is a repo for the final submission/ project for Game Design Studio One, a u
 
 This repo contains the unity project, NOT THE EXECUTABLE!
 
-Once you extract the project, you HAVE can open the project with the unity editor ver. 6000.0.40f1
+Either Download a Zip file or clone the repo of the project from the 'new-dev-branch'. Once you extract or clone the project, you HAVE can open the project with the unity editor ver. 6000.0.40f1
 
 Credits: Nestor Batoon Daniel James Martirosov Aidan Watkins Zihan Liu Kynan Abdul
